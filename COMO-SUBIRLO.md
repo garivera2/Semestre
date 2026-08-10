@@ -1,67 +1,90 @@
-# Cómo tener el dashboard en tu celular
+# Semestre 2026-II — despliegue y sincronización
 
-## Parte 1 — Publicarlo (2 minutos, gratis, sin cuenta)
+## Parte 1 — Publicación automática con GitHub (recomendado)
 
-1. Abre **netlify.com/drop** en tu computador.
-2. Arrastra la carpeta completa **`semestre`** (no los archivos sueltos, la carpeta entera) a la zona que dice "Drag and drop your site output folder here".
-3. Espera ~20 segundos. Netlify te da una URL tipo `https://algo-random-123.netlify.app`.
-4. Copia esa URL.
+La carpeta `Semestre` ya es un repositorio Git con el primer commit hecho. Solo falta conectarla.
 
-**Ojo:** sin cuenta, el sitio dura unas horas. Para que sea permanente, dale a "Sign up" (con Google o GitHub, gratis) y el sitio queda tuyo para siempre. También podrás cambiarle el nombre a algo como `gabo-semestre.netlify.app` en Site settings → Change site name.
+**Una sola vez:**
 
-## Parte 2 — Instalarlo como app
+1. Descarga **GitHub Desktop** desde desktop.github.com e inicia sesión con tu cuenta **gscky**.
+2. Menú `File → Add Local Repository`. Elige la carpeta `Escritorio/Semestre`. Va a reconocer que ya es un repo.
+3. Botón **Publish repository**. Nombre: `semestre`. Puedes dejarlo privado si quieres — Netlify igual lo lee.
+4. Entra a Netlify → tu sitio → `Site configuration → Build & deploy → Continuous deployment` → **Link repository** → GitHub → autoriza → elige `gscky/semestre`.
+5. En la configuración de build:
+   - **Build command:** déjalo vacío
+   - **Publish directory:** escribe `app`
+6. Deploy.
 
-**iPhone:**
-1. Abre la URL en **Safari** (tiene que ser Safari, no Chrome).
-2. Toca el botón compartir (el cuadrito con la flecha hacia arriba).
-3. "Añadir a pantalla de inicio" → Añadir.
+**De ahí en adelante**, cada vez que actualice algo:
 
-**Android:**
-1. Abre la URL en Chrome.
-2. Menú de tres puntos → "Instalar app" o "Añadir a pantalla de inicio".
+1. Abres GitHub Desktop
+2. Ves los cambios listados, botón **Commit to main**
+3. Botón **Push origin**
+4. Netlify publica solo en ~30 segundos
 
-Queda con ícono propio, se abre a pantalla completa sin barra del navegador, y funciona sin internet.
+Tres clics, sin buscar archivos ni arrastrar carpetas.
 
-## Parte 3 — Sincronizar entre celular y computador
-
-Sin esto, cada dispositivo guarda sus propias notas por separado.
-
-1. Crea una cuenta gratis en **supabase.com** y un proyecto nuevo (elige la región más cercana, South America si aparece).
-2. Menú lateral → **SQL Editor** → New query. Pega esto y dale Run:
-
-```sql
-create table estado (
-  id text primary key,
-  data jsonb,
-  updated_at timestamptz default now()
-);
-alter table estado enable row level security;
-create policy p on estado for all using (true) with check (true);
-```
-
-3. Consigue la **Project URL**. La forma más rápida: mira la barra de direcciones estando dentro del proyecto. Si dice `supabase.com/dashboard/project/abcdxyz`, tu URL es `https://abcdxyz.supabase.co`. También aparece en el botón **Connect** del header, o en **Settings (⚙️) → API Keys**.
-4. Copia la **clave pública**. En Settings → API Keys verás una de estas dos, cualquiera sirve:
-   - `sb_publishable_...` (la nueva)
-   - `anon` / `eyJ...` (la antigua, en la pestaña *Legacy API Keys*)
-5. En el dashboard, pestaña **Notas** → "Sincronizar entre dispositivos". Pega la URL y la clave, escribe un código propio (por ejemplo `gabo-2026-x7k`) y dale a **⚙ Probar conexión**. Te dirá exactamente qué falla si algo falla.
-6. Repite el paso 5 en el celular con **los mismos tres valores**.
-
-Listo: anotas algo en el celular y aparece en el computador.
-
-### Si sale error
-
-Dale a **⚙ Probar conexión** y lee el mensaje:
-
-| Mensaje | Qué pasa |
-|---|---|
-| HTTP 404 | No existe la tabla `estado`. Falta correr el SQL del paso 2. |
-| HTTP 401 o 403 | La clave está incompleta o no corriste la línea del `create policy`. |
-| No se pudo conectar | La URL está mal escrita. Tiene que ser `https://xxxx.supabase.co`, sin `/rest` ni barra al final. |
-
-**Sobre seguridad:** la clave `anon` está diseñada para vivir dentro de apps de navegador, no es un secreto grave. Pero con la política de arriba, cualquiera que tenga tu URL + clave + código podría leer o escribir tus notas. Por eso conviene que el código no sea obvio: usa algo como `gabo-2026-x7k`, no `gabo`.
+> El publish directory tiene que ser `app` porque el sitio vive en esa subcarpeta. Si lo dejas vacío, Netlify va a servir el repositorio completo y la app no cargará.
 
 ---
 
-## Si prefieres no publicar nada
+## Parte 2 — Instalarla como app en el celular
 
-El archivo funciona abriéndolo directo con doble clic en el computador. Guarda tus datos igual. Lo que no puedes hacer así es tenerlo en el celular ni sincronizar — para eso necesitas la URL.
+**iPhone:** abre la URL en **Safari** (no Chrome) → botón compartir → *Añadir a pantalla de inicio*.
+
+**Android:** abre la URL en Chrome → menú de tres puntos → *Instalar app*.
+
+Queda con ícono propio, a pantalla completa y funciona sin internet.
+
+Si después de una actualización sigue mostrando la versión vieja: cierra la app del todo. Si insiste, borra el ícono y vuelve a agregarla. Puedes confirmar qué versión estás viendo mirando el número arriba a la derecha.
+
+---
+
+## Parte 3 — Sincronización entre celular y computador
+
+Ya está configurada. Los datos viven en tu proyecto de Supabase:
+
+```
+https://dgyorqgaacjmfvbxujup.supabase.co
+```
+
+**Cómo funciona:**
+
+- Lo que escribes se sube solo, más o menos un segundo después
+- Se baja solo al abrir la app, al volver a la pestaña, y cada 45 segundos
+- Si lo que tienes local es más nuevo que la nube, no te lo sobrescribe
+- Los botones *Subir* y *Bajar* son el modo manual por si algo se traba
+
+**Si sale error**, usa `⚙ Probar conexión` en la pestaña Notas:
+
+| Mensaje | Qué significa |
+|---|---|
+| HTTP 404 | No existe la tabla `estado` en ese proyecto |
+| HTTP 401 o 403 | La clave está mal copiada, o falta la política RLS |
+| No se pudo conectar | La URL está mal. Tiene que ser `https://xxxx.supabase.co`, sin `/rest` ni barra final |
+
+SQL de referencia, seguro de correr las veces que sea:
+
+```sql
+alter table public.estado enable row level security;
+drop policy if exists p on public.estado;
+create policy p on public.estado for all using (true) with check (true);
+grant all on public.estado to anon, authenticated;
+notify pgrst, 'reload schema';
+```
+
+---
+
+## Estructura de la carpeta
+
+```
+Semestre/
+├── app/                 ← esto es lo que se publica
+│   ├── index.html       la app completa
+│   ├── guias.js         contenido de las guías de estudio
+│   ├── sw.js            permite que funcione sin internet
+│   ├── manifest.json    para instalarla como app
+│   └── icon.svg
+├── semestre.zip         respaldo por si prefieres subir a mano
+└── COMO-SUBIRLO.md      este archivo
+```
