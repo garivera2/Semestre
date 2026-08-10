@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<title>Semestre · Gabo</title>
+<meta name="theme-color" content="#0b0e14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Semestre">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230b0e14'/%3E%3Cpath d='M40 128V52h18l32 48 32-48h18v76h-18V84l-26 40h-12L58 84v44z' fill='%236c8cff'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<script src="guias.js"></script>
+<style>
+:root{
+  --bg:#0b0e14; --bg2:#070910; --panel:#141926; --panel2:#1c2333; --panel3:#232c3f;
+  --line:#242d3f; --line2:#2f3a50;
+  --tx:#eef2f8; --tx2:#96a3b8; --tx3:#5d6b82;
+  --bd:#6c8cff; --mn:#ffa23e; --me:#2fdca4; --pm:#b388ff; --mi:#ff7eb6;
+  --danger:#ff5f6d; --ok:#2fdca4; --warn:#ffcc4d;
+  --r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 500px at 15% -8%,#6c8cff1c,transparent 60%),radial-gradient(700px 480px at 95% 8%,#2fdca414,transparent 62%)}
+h1,h2,h3{margin:0;letter-spacing:-.35px}
+.wrap{max-width:940px;margin:0 auto;padding:0 15px}
+header{padding:calc(20px + env(safe-area-inset-top)) 15px 6px;max-width:940px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font-size:23px}
+.sub{color:var(--tx2);font-size:12.5px;margin-top:3px}
+h2{font-size:18px;margin:24px 0 11px}
+.eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:1.1px;color:var(--tx3);font-weight:700;margin:22px 0 9px}
+
+/* ---- nav ---- */
+nav{position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;
+  background:#0d1119f2;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;color:var(--tx3);padding:9px 2px 10px;font:inherit;font-size:9.5px;
+  font-weight:600;letter-spacing:.2px;cursor:pointer;position:relative;transition:color .18s}
+nav button svg{display:block;margin:0 auto 3px;width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{color:var(--bd)}
+nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:26px;height:2.5px;border-radius:0 0 3px 3px;background:var(--bd)}
+@media(min-width:760px){
+  nav{position:sticky;top:0;bottom:auto;max-width:940px;margin:6px auto 0;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  nav button{font-size:12.5px;padding:12px 4px;display:flex;align-items:center;justify-content:center;gap:7px}
+  nav button svg{margin:0;width:17px;height:17px}
+  body{padding-bottom:44px}
+}
+
+/* ---- cards ---- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;margin-bottom:11px;position:relative;overflow:hidden}
+.card.t{padding:12px 14px}
+.grid{display:grid;gap:11px}
+@media(min-width:640px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
+.row{display:flex;gap:11px;align-items:center}
+.row.sb{justify-content:space-between}
+.row.top{align-items:flex-start}
+.sp{flex:1}
+.muted{color:var(--tx2)} .small{font-size:12.5px} .xs{font-size:11px}
+.mono{font-variant-numeric:tabular-nums}
+
+.pill{display:inline-flex;align-items:center;font-size:10px;font-weight:800;letter-spacing:.7px;padding:3.5px 9px;border-radius:20px;text-transform:uppercase}
+.p-bd{background:#6c8cff26;color:var(--bd)} .p-mn{background:#ffa23e26;color:var(--mn)} .p-me{background:#2fdca426;color:var(--me)}
+.p-pm{background:#b388ff26;color:var(--pm)} .p-mi{background:#ff7eb626;color:var(--mi)}
+
+/* ---- segmented control ---- */
+.seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:13px}
+.seg button{flex:1;background:none;border:0;color:var(--tx2);font:inherit;font-size:13px;font-weight:650;
+  padding:8px 6px;border-radius:9px;cursor:pointer;transition:background .16s,color .16s}
+.seg button.on{background:var(--panel3);color:var(--tx)}
+
+/* ---- grilla de horario ---- */
+.hgrid{display:grid;grid-template-columns:44px repeat(5,1fr);gap:2px;font-size:11px}
+.hgrid .hh{font-size:9px;color:var(--tx3);text-align:right;padding:3px 5px 0 0;font-variant-numeric:tabular-nums;line-height:1.2}
+.hgrid .dh{text-align:center;font-size:10px;font-weight:800;color:var(--tx3);letter-spacing:.5px;padding:0 0 5px}
+.hgrid .sl{min-height:38px;border-radius:6px;background:#ffffff05;border:1px solid transparent}
+.hgrid .sl.f{border-color:transparent;padding:3px 4px;overflow:hidden}
+.hgrid .sl.top{border-radius:8px 8px 0 0} .hgrid .sl.bot{border-radius:0 0 8px 8px}
+.hgrid .sl.mid{border-radius:0}
+.hgrid .sl .nm{font-weight:800;font-size:10px;line-height:1.2;letter-spacing:-.1px}
+.hgrid .sl .mt{font-size:8.5px;opacity:.85;margin-top:1px;line-height:1.2}
+.hgrid .sl.hoy{outline:1.5px solid var(--tx);outline-offset:-1px}
+@media(min-width:620px){.hgrid{font-size:12px}.hgrid .sl{min-height:46px}.hgrid .sl .nm{font-size:11.5px}.hgrid .sl .mt{font-size:10px}}
+.sec-desc{font-size:12.5px;color:var(--tx2);margin:-4px 2px 12px;line-height:1.55}
+
+/* ---- guías ---- */
+.gnum{width:22px;height:22px;flex:none;border-radius:50%;background:var(--panel3);color:var(--tx3);
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.gnum.ok{background:#2fdca426;color:var(--ok)}
+.guia{font-size:14px;line-height:1.68}
+.guia p{margin:11px 0}
+.guia ul,.guia ol{margin:11px 0;padding-left:20px}
+.guia li{margin:6px 0}
+.guia b{color:var(--tx);font-weight:670}
+.guia code{background:var(--panel2);padding:1.5px 5px;border-radius:5px;font-size:12.5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#a9c7ff}
+.guia kbd{background:var(--panel3);border:1px solid var(--line2);border-bottom-width:2px;padding:1px 6px;
+  border-radius:5px;font-size:11.5px;font-family:inherit}
+.guia .fx{text-align:center;background:var(--panel2);border-radius:10px;padding:12px 10px;margin:13px 0;
+  font-size:15px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#ffd9a3;overflow-x:auto}
+.guia .fx-i{font-family:ui-monospace,Menlo,monospace;color:#ffd9a3}
+.guia .pseudo{background:var(--panel2);border-left:2.5px solid var(--mn);border-radius:0 10px 10px 0;
+  padding:12px 14px;margin:13px 0;font-size:12.5px;line-height:1.75;white-space:pre-wrap;
+  font-family:ui-monospace,Menlo,monospace;color:var(--tx2);overflow-x:auto}
+.codewrap{position:relative;margin:13px 0}
+.codewrap pre{background:#0a0d14;border:1px solid var(--line);border-radius:12px;padding:14px 13px;
+  overflow-x:auto;margin:0;font-size:12px;line-height:1.62}
+.codewrap code{background:none;padding:0;color:#d7e3f4;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.cp{position:absolute;top:8px;right:8px;background:var(--panel2);border:1px solid var(--line);color:var(--tx2);
+  border-radius:7px;padding:4px 9px;font:inherit;font-size:10.5px;cursor:pointer;z-index:2}
+.cp:hover{color:var(--tx);border-color:var(--bd)}
+.ejer{border-top:1px solid var(--line);padding:14px 0 4px}
+.ejer .q{font-size:13.5px;line-height:1.6}
+.sol{margin-top:10px}
+.sol>summary{list-style:none;cursor:pointer;font-size:12.5px;color:var(--bd);font-weight:650;padding:5px 0}
+.sol>summary::-webkit-details-marker{display:none}
+.sol[open]>summary{color:var(--tx2)}
+.sb2{background:var(--panel2);border-radius:11px;padding:13px;font-size:13px;line-height:1.7;margin-top:6px}
+.sb2 pre{background:#0a0d14;border-radius:9px;padding:11px;overflow-x:auto;font-size:11.5px;line-height:1.6;margin:9px 0}
+.sb2 code{font-family:ui-monospace,Menlo,monospace}
+.chip{font-size:11px;color:var(--tx2);background:var(--panel2);border:1px solid var(--line);padding:3px 9px;border-radius:8px;display:inline-block}
+
+/* ---- hero countdown ---- */
+.hero{background:linear-gradient(140deg,#1b2337 0%,#141926 100%);border:1px solid var(--line2);border-radius:20px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,#6c8cff2e,transparent 70%)}
+.hero .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1.1px;color:var(--tx3);font-weight:700}
+.hero .n{font-size:46px;font-weight:800;line-height:1;letter-spacing:-2.4px;margin:7px 0 2px}
+.hero .t{font-size:15.5px;font-weight:650}
+.hero .d{font-size:12.5px;color:var(--tx2);margin-top:3px}
+
+.ring{width:54px;height:54px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .v{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
+
+/* ---- event row ---- */
+.ev{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ev:last-child{border-bottom:0}
+.bar{width:3px;border-radius:3px;flex:none;align-self:stretch}
+.ev .k{font-size:10.5px;color:var(--tx3);font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.ev .ti{font-size:14px;font-weight:640;margin:2px 0 1px}
+.ev .de{font-size:12.5px;color:var(--tx2)}
+.dd{text-align:right;flex:none}
+.dd .day{font-size:11.5px;color:var(--tx2)}
+.dd .cnt{font-size:13px;font-weight:800}
+.c-soon{color:var(--danger)} .c-mid{color:var(--warn)} .c-far{color:var(--tx3)}
+
+/* ---- calendar ---- */
+.calnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+.calnav b{font-size:17px}
+.nb{width:36px;height:36px;border-radius:11px;background:var(--panel2);border:1px solid var(--line);color:var(--tx);font-size:16px;cursor:pointer;line-height:1}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .hd{text-align:center;font-size:10px;color:var(--tx3);font-weight:800;letter-spacing:.6px;padding:4px 0 6px;text-transform:uppercase}
+.cel{aspect-ratio:1/1.08;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:5px 4px 4px;
+  display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .12s,border-color .12s;min-height:52px}
+.cel:active{transform:scale(.94)}
+.cel.off{opacity:.25;pointer-events:none;background:transparent;border-color:transparent}
+.cel .num{font-size:13px;font-weight:650;line-height:1.25}
+.cel.today{border-color:var(--bd);background:#6c8cff14}
+.cel.today .num{color:var(--bd);font-weight:800}
+.cel.sel{border-color:var(--tx);background:var(--panel3)}
+.cel.hasEval::after{content:'';position:absolute}
+.cel .ds{display:flex;gap:2.5px;margin-top:3px;flex-wrap:wrap;justify-content:center}
+.cel .d{width:5px;height:5px;border-radius:50%}
+.cel .d.sq{border-radius:1.5px;width:6px;height:6px}
+.cel .lb{font-size:8px;font-weight:800;letter-spacing:.2px;margin-top:auto;color:var(--tx3);line-height:1.15;text-align:center}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--tx2);margin:12px 2px 0}
+.legend i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+
+/* ---- day sheet ---- */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--panel);border-radius:22px 22px 0 0;
+  border-top:1px solid var(--line2);padding:8px 16px calc(22px + env(safe-area-inset-bottom));
+  transform:translateY(102%);transition:transform .26s cubic-bezier(.32,.72,0,1);max-height:78vh;overflow-y:auto;box-shadow:0 -18px 44px #0009}
+.sheet.on{transform:translateY(0)}
+.sheet .grab{width:38px;height:4px;border-radius:4px;background:var(--line2);margin:0 auto 12px}
+.ovl{position:fixed;inset:0;background:#000a;z-index:79;opacity:0;pointer-events:none;transition:opacity .26s}
+.ovl.on{opacity:1;pointer-events:auto}
+
+/* ---- forms ---- */
+input,select,textarea{background:var(--panel2);border:1px solid var(--line);color:var(--tx);border-radius:10px;
+  padding:8px 10px;font:inherit;font-size:13.5px;width:100%;outline:none;transition:border-color .15s}
+input:focus,select,textarea:focus{border-color:var(--bd)}
+input[type=number]{width:74px;text-align:center;font-variant-numeric:tabular-nums}
+input[type=time]{width:auto}
+textarea{min-height:76px;resize:vertical;font-size:13px;line-height:1.55}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--tx3);font-weight:800;padding:0 6px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:7px 6px 7px 0;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+.btn{background:var(--panel2);border:1px solid var(--line);color:var(--tx);border-radius:11px;padding:9px 14px;
+  font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--bd)} .btn:active{background:var(--panel3)}
+.btn.pri{background:var(--bd);border-color:var(--bd);color:#08101f}
+.btn.sm{padding:6px 11px;font-size:12px;border-radius:9px}
+
+.res{background:linear-gradient(150deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:13px}
+.nota{font-size:38px;font-weight:850;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.kv:last-child{border-bottom:0}
+.bar2{height:7px;border-radius:5px;background:var(--panel3);overflow:hidden;margin:9px 0 3px}
+.bar2 i{display:block;height:100%;border-radius:5px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:13.5px;border-bottom:1px solid var(--line)}
+.chk:last-of-type{border-bottom:0}
+.chk input{margin:2px 0 0;width:18px;height:18px;accent-color:var(--bd);flex:none}
+.chk.done>span{opacity:.42;text-decoration:line-through}
+.note{background:#ffcc4d12;border:1px solid #ffcc4d30;border-radius:12px;padding:11px 13px;font-size:12.5px;color:#ffdf9e;margin:11px 0}
+.note.ok{background:#2fdca412;border-color:#2fdca430;color:#a8f0d5}
+.note.bad{background:#ff5f6d12;border-color:#ff5f6d30;color:#ffc0c4}
+.hide{display:none!important}
+ul.tidy{margin:7px 0;padding-left:19px} ul.tidy li{margin:5px 0;font-size:13.5px}
+details.acc{border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-bottom:10px;overflow:hidden}
+details.acc>summary{padding:13px 15px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;font-size:14px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc[open]>summary{border-bottom:1px solid var(--line)}
+details.acc .bd{padding:5px 15px 14px}
+.now{outline:1.5px solid var(--bd);outline-offset:-1px}
+.badge{font-size:9.5px;font-weight:800;padding:2.5px 7px;border-radius:6px;background:var(--danger);color:#fff;letter-spacing:.3px}
+.badge.g{background:var(--panel3);color:var(--tx2)}
+#syncdot{width:8px;height:8px;border-radius:50%;background:var(--tx3);flex:none}
+footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
+.toast{position:fixed;left:50%;transform:translate(-50%,80px);bottom:calc(90px + env(safe-area-inset-bottom));z-index:99;
+  background:var(--panel3);border:1px solid var(--line2);border-radius:12px;padding:10px 16px;font-size:13px;
+  opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Semestre 2026-II</h1>
+    <div class="sub" id="today"></div>
+  </div>
+  <div style="text-align:right">
+    <div class="row" style="gap:7px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
+    <div class="xs" style="color:var(--tx3);margin-top:3px">v7</div>
+  </div>
+</header>
+
+<nav>
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Hoy</button>
+  <button data-v="cal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendario</button>
+  <button data-v="notas"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Notas</button>
+  <button data-v="estudio"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v16H6.5A2.5 2.5 0 004 21.5z"/><path d="M9 8h7M9 12h5"/></svg>Estudio</button>
+  <button data-v="guias"><svg viewBox="0 0 24 24"><path d="M12 7c-2-1.5-4.5-2-7-2v13c2.5 0 5 .5 7 2 2-1.5 4.5-2 7-2V5c-2.5 0-5 .5-7 2z"/><path d="M12 7v13"/></svg>Guías</button>
+  <button data-v="ramos"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Ramos</button>
+</nav>
+
+<div class="wrap">
+
+<section id="v-home">
+  <div class="eyebrow" style="margin-top:14px">Tu día</div><div id="hoy"></div>
+  <div id="hero"></div>
+  <div class="eyebrow">Próximas evaluaciones</div><div id="next"></div>
+  <div class="eyebrow">Próximos 7 días</div><div id="week7"></div>
+  <div class="eyebrow">Tus ramos</div><div id="cards"></div>
+</section>
+
+<section id="v-cal" class="hide">
+  <div class="seg" id="segcal">
+    <button data-t="mes" class="on">Mes</button>
+    <button data-t="sem">Horario semanal</button>
+  </div>
+
+  <div id="t-mes">
+    <div class="sec-desc">Toca cualquier día para ver tus clases de ese día, las evaluaciones que caen ahí y qué materia entra en cada una.</div>
+    <div class="calnav"><button class="nb" id="pm">‹</button><b id="mlbl"></b><button class="nb" id="nm">›</button></div>
+    <div class="cal" id="cal"></div>
+    <div class="legend" id="leg"></div>
+  </div>
+
+  <div id="t-sem" class="hide">
+    <div class="sec-desc">Tu semana tipo: los bloques que se repiten todas las semanas. Es lo que alimenta el calendario, así que al tocar un día ya sabe qué clases tienes.</div>
+    <div class="card" style="padding:13px 11px"><div id="hgrid"></div></div>
+    <div class="eyebrow">Editar bloques</div>
+    <div class="sec-desc">Ya cargué tu horario oficial con salas. Si cambia algo, edítalo acá y la grilla y el calendario se actualizan solos.</div>
+    <div class="card"><div id="hor"></div>
+      <button class="btn sm" style="margin-top:11px" onclick="addHor()">+ Agregar bloque</button>
+    </div>
+  </div>
+</section>
+
+<section id="v-notas" class="hide">
+  <div class="sec-desc" style="margin-top:16px">Escribe solo las notas que ya tengas. Calcula tu promedio en vivo y te dice cuánto necesitas en lo que falta para aprobar.</div>
+  <div id="calcs"></div>
+  <div class="eyebrow">Datos</div>
+  <div class="card">
+    <div class="row" style="flex-wrap:wrap;gap:8px">
+      <button class="btn sm" onclick="expo()">↓ Exportar</button>
+      <button class="btn sm" onclick="document.getElementById('imp').click()">↑ Importar</button>
+      <input type="file" id="imp" accept=".json" class="hide" onchange="impo(this)">
+      <button class="btn sm" onclick="if(confirm('¿Borrar todo lo que has escrito?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar</button>
+    </div>
+  </div>
+  <div class="eyebrow">Sincronizar entre dispositivos</div>
+  <div id="syncpanel"></div>
+</section>
+
+<section id="v-estudio" class="hide">
+  <div class="eyebrow">Plan semana a semana</div>
+  <div class="sec-desc">Qué estudiar cada semana, armado desde el cronograma de tus ramos: pre-estudio antes de cada clase, repaso de lo anterior y preparación de lo que se viene. Marca lo que vas cumpliendo.</div>
+  <div id="plan"></div>
+</section>
+
+<section id="v-guias" class="hide">
+  <div class="sec-desc" style="margin-top:16px">Material escrito para ti siguiendo el temario del libro guía. Teoría, código que puedes copiar y correr, y ejercicios con solución.</div>
+  <div id="guias"></div>
+  <div id="guiadet" class="hide"></div>
+</section>
+
+<section id="v-ramos" class="hide">
+  <div class="sec-desc" style="margin-top:16px">De qué trata cada ramo, por qué importa, cómo conviene estudiarlo y el temario completo.</div>
+  <div id="ramos"></div></section>
+
+<footer>Datos de Canvas UAndes + syllabus IOC 3205 · v2</footer>
+</div>
+
+<div class="ovl" id="ovl" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet"><div class="grab"></div><div id="sheetc"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ESTADO
+============================================================ */
+const KEY='gabo-sem-2026-2';
+let S=JSON.parse(localStorage.getItem(KEY)||'{}');
+S.notas=S.notas||{}; S.chk=S.chk||{}; S.notes=S.notes||{}; S.hor=S.hor||null; S.sync=S.sync||{};
+let saveT;
+function save(push){
+  localStorage.setItem(KEY,JSON.stringify(S));
+  if(push!==false){clearTimeout(saveT);saveT=setTimeout(pushCloud,1200);}
+}
+const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
+
+/* ============================================================
+   RAMOS
+============================================================ */
+const R={
+ bd:{n:'Bases de Datos',s:'BD',c:'var(--bd)',hex:'#6c8cff',cls:'p-bd'},
+ mn:{n:'Métodos Numéricos',s:'MN',c:'var(--mn)',hex:'#ffa23e',cls:'p-mn'},
+ me:{n:'Modelos Estocásticos',s:'ME',c:'var(--me)',hex:'#2fdca4',cls:'p-me'},
+ pm:{n:'Programación Matemática',s:'PM',c:'var(--pm)',hex:'#b388ff',cls:'p-pm'},
+ mi:{n:'Microeconomía',s:'MI',c:'var(--mi)',hex:'#ff7eb6',cls:'p-mi'}
+};
+const CONRAMO=['mn','bd','me']; // los que tienen evaluaciones cargadas
+
+/* ============================================================
+   HORARIO SEMANAL OFICIAL  (1=lun ... 6=sáb)
+============================================================ */
+const HOR_DEF=[
+ {r:'mn',d:3,i:'08:30',f:'10:20',t:'Laboratorio',s:''},
+ {r:'mn',d:5,i:'13:30',f:'16:20',t:'Cátedra',s:'H-011'},
+ {r:'me',d:4,i:'10:30',f:'13:20',t:'Cátedra',s:'C-213'},
+ {r:'me',d:3,i:'15:30',f:'17:20',t:'Ayudantía',s:'H-012'},
+ {r:'bd',d:4,i:'16:30',f:'19:20',t:'Cátedra',s:'H-108'},
+ {r:'pm',d:1,i:'12:30',f:'15:20',t:'Cátedra',s:'R-01'},
+ {r:'pm',d:2,i:'13:30',f:'15:20',t:'Ayudantía',s:'CEN 101'},
+ {r:'mi',d:1,i:'16:30',f:'19:20',t:'Cátedra',s:'R-01'},
+ {r:'mi',d:4,i:'13:30',f:'15:20',t:'Ayudantía',s:'C-018'}
+];
+// Migración: si el horario guardado es de una versión vieja, lo reemplazo por el oficial.
+if(!S.hor||S.horV!==3){S.hor=JSON.parse(JSON.stringify(HOR_DEF));S.horV=3;}
+
+/* ============================================================
+   EVENTOS
+============================================================ */
+const EV=[
+// BASES DE DATOS
+{d:'2026-08-12',r:'bd',t:'tarea',ti:'BD-ER-1 · BD-ER-2',de:'Entidad-Relación · 10 pts · vence 23:59'},
+{d:'2026-08-16',r:'bd',t:'hito',ti:'Cierre inscripción de equipos',de:'Equipos estables de 3 personas'},
+{d:'2026-08-19',r:'bd',t:'tarea',ti:'BD-FN-1 · BD-MR-1 · BD-MR-2',de:'Formas Normales y Modelo Relacional · 12 pts · vence 23:59'},
+{d:'2026-08-26',r:'bd',t:'tarea',ti:'BD-AR-1 · BD-AR-2 · BD-SQL1-1',de:'Álgebra Relacional y SQL DDL/DML · 9 pts · vence 23:59'},
+{d:'2026-09-03',r:'bd',t:'control',ti:'C1 · Modelación',de:'8% · 45min individual + 120min grupal, en papel'},
+{d:'2026-09-09',r:'bd',t:'tarea',ti:'BD-SQL2-1',de:'SELECT · 6 pts · vence 23:59'},
+{d:'2026-09-24',r:'bd',t:'control',ti:'Control práctico grupal en servidor',de:'8% · entrega 23:59, sin fase individual'},
+{d:'2026-09-23',r:'bd',t:'tarea',ti:'BD-SQL3 y BD-SQL4 · 5 entregas',de:'SELECT anidados y JOIN · 15 pts · vence 23:59'},
+{d:'2026-10-08',r:'bd',t:'control',ti:'C2 · SQL básico',de:'8% · individual + grupal, en papel'},
+{d:'2026-10-29',r:'bd',t:'control',ti:'C3 · SQL avanzado',de:'8% · individual + grupal, en papel'},
+{d:'2026-11-19',r:'bd',t:'control',ti:'C4 · Vistas, funciones, triggers e índices',de:'8% · individual + grupal, en papel'},
+{d:'2026-11-26',r:'bd',t:'examen',ti:'EXAMEN Bases de Datos',de:'40% · individual, sin eximición'},
+// MÉTODOS NUMÉRICOS
+{d:'2026-08-12',r:'mn',t:'lab',ti:'L1 · NumPy, SciPy, Matplotlib',de:'Entregable L1 · error numérico'},
+{d:'2026-08-14',r:'mn',t:'clase',ti:'Álgebra lineal en métodos numéricos',de:'Pre-estudio: Cap 8, 9, 10 y 11'},
+{d:'2026-08-19',r:'mn',t:'lab',ti:'L2 · Álgebra lineal con Python',de:'det, norm, solve, cond, lu, inv'},
+{d:'2026-08-21',r:'mn',t:'clase',ti:'Raíces de funciones 1D',de:'Pre-estudio: Cap 5 y 6'},
+{d:'2026-08-26',r:'mn',t:'lab',ti:'L3 · Raíces unidimensionales',de:'scipy.optimize.root_scalar'},
+{d:'2026-08-28',r:'mn',t:'clase',ti:'Interpolación polinomial y trazadores',de:'Pre-estudio: Cap 17 y 18'},
+{d:'2026-08-31',r:'mn',t:'tarea',ti:'T1 · Enunciado Tarea 1',de:'Módulos I a III'},
+{d:'2026-09-02',r:'mn',t:'lab',ti:'L4 · Interpolación 1D',de:'lagrange, CubicSpline, polynomial.fit'},
+{d:'2026-09-04',r:'mn',t:'clase',ti:'Integración numérica',de:'Pre-estudio: Cap 19 y 20'},
+{d:'2026-09-09',r:'mn',t:'lab',ti:'L5 · Integración numérica',de:'trapezoid, simpson, quad'},
+{d:'2026-09-11',r:'mn',t:'control',ti:'C1 · Control teórico Prueba 1',de:'Control escrito + repaso'},
+{d:'2026-09-14',r:'mn',t:'prueba',ti:'PRUEBA 1',de:'Módulos I a IV'},
+{d:'2026-09-23',r:'mn',t:'clase',ti:'Ayudantía: solución Prueba 1',de:'Opcional'},
+{d:'2026-09-25',r:'mn',t:'clase',ti:'Diferenciación numérica 1D',de:'Pre-estudio: Cap 21'},
+{d:'2026-09-30',r:'mn',t:'lab',ti:'L6 · Diferenciación numérica',de:'diff, gradient, CubicSpline.derivative'},
+{d:'2026-10-02',r:'mn',t:'clase',ti:'Diferenciación parcial y sistemas no lineales',de:'Pre-estudio: Cap 12 y 21 · Jacobianos y Hessianos'},
+{d:'2026-10-05',r:'mn',t:'tarea',ti:'T2 · Enunciado Tarea 2',de:'Módulos IV y V'},
+{d:'2026-10-07',r:'mn',t:'lab',ti:'L7 · Sistemas de ecuaciones no lineales',de:'scipy.optimize.root'},
+{d:'2026-10-09',r:'mn',t:'clase',ti:'Problemas de valor inicial (EDO escalares)',de:'Pre-estudio: Cap 22'},
+{d:'2026-10-14',r:'mn',t:'lab',ti:'L8 · Métodos RK de paso constante',de:'Implementación propia'},
+{d:'2026-10-16',r:'mn',t:'clase',ti:'PVIs vectoriales y paso adaptativo',de:'Pre-estudio: Cap 22 y 23'},
+{d:'2026-10-21',r:'mn',t:'control',ti:'C2 · Control teórico + L9 EDOs',de:'Control escrito · solve_ivp'},
+{d:'2026-10-22',r:'mn',t:'prueba',ti:'PRUEBA 2',de:'Módulos V y VI'},
+{d:'2026-10-28',r:'mn',t:'clase',ti:'Ayudantía: solución Prueba 2',de:'Opcional'},
+{d:'2026-10-30',r:'mn',t:'clase',ti:'Optimización local',de:'Pre-estudio: Cap 7'},
+{d:'2026-11-04',r:'mn',t:'lab',ti:'L10 · Optimización local',de:'minimize_scalar, minimize'},
+{d:'2026-11-06',r:'mn',t:'control',ti:'C3 · Control teórico Prueba 3',de:'Control escrito + repaso'},
+{d:'2026-11-09',r:'mn',t:'prueba',ti:'PRUEBA 3',de:'Módulo VII'},
+{d:'2026-11-10',r:'mn',t:'tarea',ti:'T3 · Enunciado Tarea 3',de:''},
+{d:'2026-11-11',r:'mn',t:'clase',ti:'Ayudantía: solución Prueba 3',de:'Opcional'},
+{d:'2026-11-13',r:'mn',t:'clase',ti:'Álgebra dispersa y optimización global',de:'Material adicional'},
+{d:'2026-11-18',r:'mn',t:'lab',ti:'L11 · Sparse y optimización global',de:'scipy.sparse, basinhopping, differential_evolution'},
+{d:'2026-11-24',r:'mn',t:'examen',ti:'EXAMEN Métodos Numéricos',de:'25% · todos los módulos'},
+// MODELOS ESTOCÁSTICOS
+{d:'2026-08-27',r:'me',t:'control',ti:'Control 1',de:'Unidades 1 y 2 · durante la cátedra'},
+{d:'2026-09-02',r:'me',t:'prueba',ti:'PRUEBA 1',de:'20% · Unidades 1 y 2'},
+{d:'2026-10-01',r:'me',t:'control',ti:'Control 2',de:'Unidad 3 · durante la cátedra'},
+{d:'2026-10-07',r:'me',t:'prueba',ti:'PRUEBA 2',de:'20% · Unidad 3'},
+{d:'2026-10-29',r:'me',t:'control',ti:'Control 3',de:'Unidad 4 · durante la cátedra'},
+{d:'2026-11-11',r:'me',t:'prueba',ti:'PRUEBA 3',de:'20% · Unidad 4'},
+{d:'2026-11-12',r:'me',t:'control',ti:'Control 4',de:'Unidad 5 · durante la cátedra'},
+{d:'2026-11-20',r:'me',t:'hito',ti:'Recuperativas',de:'Solo ausencias justificadas'},
+{d:'2026-11-27',r:'me',t:'examen',ti:'EXAMEN Modelos Estocásticos',de:'25% · Unidad 5, sin eximición'}
+].sort((a,b)=>a.d<b.d?-1:1);
+
+const T={clase:'Clase',lab:'Laboratorio',control:'Control',prueba:'Prueba',examen:'Examen',tarea:'Entrega',hito:'Hito'};
+const GORDO=['control','prueba','examen'];
+const PESA=['control','prueba','examen','tarea'];
+
+/* ============================================================
+   FECHAS
+============================================================ */
+const TODAY=new Date(); TODAY.setHours(0,0,0,0);
+const pd=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const dias=s=>Math.round((pd(s)-TODAY)/864e5);
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MESL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIA=['dom','lun','mar','mié','jue','vie','sáb'];
+const DIAL=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const fmt=s=>{const d=pd(s);return DIA[d.getDay()]+' '+d.getDate()+' '+MES[d.getMonth()]};
+const fmtc=s=>{const d=pd(s);return d.getDate()+'/'+MES[d.getMonth()]};
+const dtxt=n=>n<0?'pasó':n===0?'HOY':n===1?'mañana':'en '+n+'d';
+const dcls=n=>n<0?'c-far':n<=3?'c-soon':n<=10?'c-mid':'c-far';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const F=n=>n.toFixed(2).replace('.',',');
+
+document.getElementById('today').textContent=DIAL[TODAY.getDay()]+' '+TODAY.getDate()+' de '+MESL[TODAY.getMonth()];
+
+/* ============================================================
+   ESQUEMAS DE NOTA
+============================================================ */
+const CALC={
+ mn:{
+  titulo:'Métodos Numéricos', cod:'IOC 3205 · Harvey Hernández',
+  formula:'NP = 0,60·Pruebas + 0,25·Labs + 0,15·Controles<br>NF = 0,60·NP + 0,25·Examen + 0,15·Tareas',
+  grupos:[
+    {k:'P',n:'Pruebas',items:['p1','p2','p3'],labels:['Prueba 1 (Mód. I-IV)','Prueba 2 (Mód. V-VI)','Prueba 3 (Mód. VII)']},
+    {k:'L',n:'Laboratorios',items:['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11'],labels:['L1 NumPy/SciPy','L2 Álgebra lineal','L3 Raíces','L4 Interpolación','L5 Integración','L6 Diferenciación','L7 Sist. no lineales','L8 RK paso fijo','L9 EDOs adaptativo','L10 Optimización','L11 Sparse/global']},
+    {k:'C',n:'Controles teóricos',items:['c1','c2','c3'],labels:['Control 1','Control 2','Control 3']},
+    {k:'T',n:'Tareas',items:['t1','t2','t3'],labels:['Tarea 1','Tarea 2','Tarea 3']},
+    {k:'E',n:'Examen',items:['ex'],labels:['Examen final']}
+  ],
+  calc(g){
+    const P=g.P,L=g.L,C=g.C,Tt=g.T,E=g.E;
+    const np=(P!==null||L!==null||C!==null)?(0.60*(P??0)+0.25*(L??0)+0.15*(C??0))/(0.60*(P!==null)+0.25*(L!==null)+0.15*(C!==null)):null;
+    const npFull=(P!==null&&L!==null&&C!==null)?0.60*P+0.25*L+0.15*C:null;
+    let nf=null;
+    if(npFull!==null&&E!==null&&Tt!==null) nf=0.60*npFull+0.25*E+0.15*Tt;
+    return {np,npFull,nf,P,L,C,T:Tt,E};
+  },
+  render(r){
+    let h='';
+    const np=r.npFull??r.np;
+    if(np===null) return '<div class="muted small">Escribe tus primeras notas y aparece el cálculo.</div>';
+    const parcial=r.npFull===null;
+    h+='<div class="row sb"><div><div class="xs muted">Nota de presentación'+(parcial?' (parcial)':'')+'</div>'+
+       '<div class="nota" style="color:'+(np>=3.95?'var(--ok)':'var(--danger)')+'">'+F(np)+'</div></div>';
+    if(r.nf!==null) h+='<div style="text-align:right"><div class="xs muted">Nota final</div><div class="nota" style="color:'+(r.nf>=3.95?'var(--ok)':'var(--danger)')+'">'+F(r.nf)+'</div></div>';
+    h+='</div>';
+    if(r.npFull!==null){
+      const eximible=r.npFull>=5.0&&r.P!==null&&r.P>=4.5;
+      if(eximible) h+='<div class="note ok" style="margin:12px 0 0"><b>Vas hacia la eximición.</b> NP '+F(r.npFull)+' ≥ 5,0 y promedio de pruebas '+F(r.P)+' ≥ 4,5. Falta aprobar todas las pruebas y controles individualmente. Si te eximes, tu nota final <b>es</b> la NP.</div>';
+      else if(r.npFull>=3.95){
+        const faltaNP=Math.max(0,5.0-r.npFull), faltaP=r.P!==null?Math.max(0,4.5-r.P):null;
+        h+='<div class="note" style="margin:12px 0 0">Para eximirte necesitas NP ≥ 5,0'+(faltaNP>0?' (te faltan '+F(faltaNP)+')':' ✓')+' y promedio de pruebas ≥ 4,5'+(faltaP!==null&&faltaP>0?' (te faltan '+F(faltaP)+')':' ✓')+'.</div>';
+      } else h+='<div class="note bad" style="margin:12px 0 0"><b>NP bajo 3,95.</b> Con esta NP la nota final queda topada en <b>3,9</b> aunque el examen te salga perfecto. Hay que subir pruebas, labs o controles.</div>';
+      // nota necesaria en examen
+      if(r.E===null&&r.npFull>=3.95){
+        const tt=r.T??4.0, sup=r.T===null?' (asumiendo tareas en 4,0)':'';
+        const need=(3.95-0.60*r.npFull-0.15*tt)/0.25;
+        let msg;
+        if(need<=1) msg='Con esta NP ya apruebas con <b style="color:var(--ok)">cualquier nota</b> en el examen'+sup+'.';
+        else if(need<=7) msg='Necesitas <b style="color:'+(need<=4?'var(--ok)':need<=5.5?'var(--warn)':'var(--danger)')+'">'+F(need)+'</b> en el examen para aprobar con 3,95'+sup+'.';
+        else msg='<span style="color:var(--danger)">Ni con un 7,0 en el examen llegas a 3,95'+sup+'.</span>';
+        h+='<div class="small" style="margin-top:11px;padding-top:10px;border-top:1px solid var(--line)">'+msg+'</div>';
+      }
+    }
+    return h;
+  },
+  req:'Aprueba con <b>NF ≥ 3,95 y NP ≥ 3,95</b>. Si NP &lt; 3,95 la nota final queda topada en 3,9. Eximición voluntaria: NP ≥ 5,0, aprobar todas las pruebas y controles, y promedio de pruebas ≥ 4,5 (≥ 6,0 si hubo ausencias justificadas).',
+  fuente:'Syllabus oficial IOC 3205 · NRC 8221'
+ },
+ bd:{
+  titulo:'Bases de Datos', cod:'Carlos Díaz · Maximiliano García · Andrés Howard',
+  formula:'NF = 0,20·Trabajo semanal + 0,40·Prom. aplicación + 0,40·Examen',
+  grupos:[
+    {k:'S',n:'Trabajo semanal',items:['ts'],labels:['Trabajo semanal (quizzes + ejercicios)']},
+    {k:'C',n:'Evaluaciones de aplicación',items:['c1','cg','c2','c3','c4'],labels:['C1 Modelación','Control grupal en servidor','C2 SQL básico','C3 SQL avanzado','C4 Vistas/triggers/índices']},
+    {k:'E',n:'Examen',items:['ex'],labels:['Examen final']}
+  ],
+  calc(g){
+    const {S:s,C,E}=g;
+    const w={S:.20,C:.40,E:.40};
+    let acum=0,used=0;
+    if(s!==null){acum+=.20*s;used+=.20}
+    if(C!==null){acum+=.40*C;used+=.40}
+    if(E!==null){acum+=.40*E;used+=.40}
+    const nf=(s!==null&&C!==null&&E!==null)?acum:null;
+    return {parcial:used>0?acum/used:null,nf,S:s,C,E,used};
+  },
+  render(r){
+    if(r.parcial===null) return '<div class="muted small">Escribe tu primera nota y aparece el cálculo.</div>';
+    const fallas=[['Trabajo semanal',r.S],['Prom. aplicación',r.C],['Examen',r.E]].filter(x=>x[1]!==null&&x[1]<4);
+    const base=r.nf??r.parcial;
+    const efectiva=(r.nf!==null&&fallas.length)?Math.min(3.9,r.nf):base;
+    let h='<div class="row sb"><div><div class="xs muted">'+(r.nf!==null?'Nota final':'Promedio de lo rendido')+'</div>'+
+      '<div class="nota" style="color:'+(efectiva>=4?'var(--ok)':'var(--danger)')+'">'+F(efectiva)+'</div></div>'+
+      '<div style="text-align:right"><div class="xs muted">Rendido</div><div class="mono" style="font-size:17px;font-weight:800">'+Math.round(r.used*100)+'%</div></div></div>';
+    h+='<div class="bar2"><i style="width:'+(r.used*100)+'%;background:linear-gradient(90deg,var(--bd),var(--me))"></i></div>';
+    if(fallas.length) h+='<div class="note bad" style="margin-top:12px"><b>Ojo con el mínimo por componente.</b> '+fallas.map(x=>x[0]+' está en '+F(x[1])).join(' y ')+'. Cada componente debe ir ≥ 4,0 o la nota final se trunca a 3,9.</div>';
+    if(r.E===null&&r.S!==null&&r.C!==null){
+      const need=(4-.20*r.S-.40*r.C)/.40;
+      h+='<div class="small" style="margin-top:11px;padding-top:10px;border-top:1px solid var(--line)">'+
+        (need<=1?'Ya tienes el 4,0 asegurado con <b style="color:var(--ok)">cualquier nota</b> en el examen (ojo: igual necesitas ≥ 4,0 en él por el mínimo por componente).'
+         :need<=7?'Necesitas <b style="color:'+(need<=4?'var(--ok)':need<=5.5?'var(--warn)':'var(--danger)')+'">'+F(need)+'</b> en el examen para llegar a 4,0.'
+                :'<span style="color:var(--danger)">Con lo rendido no alcanzas 4,0 ni con un 7,0 en el examen.</span>')+'</div>';
+    }
+    return h;
+  },
+  req:'Se exige <b>≥ 4,0 en cada componente</b> (trabajo semanal, promedio de aplicación y examen) además de NF ≥ 4,0. Si falla alguno, la nota final se trunca a <b>3,9</b>. No hay eximición.',
+  fuente:'Clase 1 · propuesta del curso (Canvas)'
+ },
+ me:{
+  titulo:'Modelos Estocásticos', cod:'ICI 3205 · Marcel Favereau, PhD',
+  formula:'NF = 0,20·P1 + 0,20·P2 + 0,20·P3 + 0,25·Examen + 0,15·Prom. controles',
+  grupos:[
+    {k:'P',n:'Pruebas',items:['p1','p2','p3'],labels:['Prueba 1 (U1-2)','Prueba 2 (U3)','Prueba 3 (U4)']},
+    {k:'C',n:'Controles',items:['k1','k2','k3','k4'],labels:['Control 1','Control 2','Control 3','Control 4']},
+    {k:'E',n:'Examen',items:['ex'],labels:['Examen (U5)']}
+  ],
+  calc(g){
+    const {P,C,E}=g;
+    let acum=0,used=0;
+    if(P!==null){acum+=.60*P;used+=.60}
+    if(C!==null){acum+=.15*C;used+=.15}
+    if(E!==null){acum+=.25*E;used+=.25}
+    return {parcial:used>0?acum/used:null,nf:(P!==null&&C!==null&&E!==null)?acum:null,P,C,E,used,acum};
+  },
+  render(r){
+    if(r.parcial===null) return '<div class="muted small">Escribe tu primera nota y aparece el cálculo.</div>';
+    const v=r.nf??r.parcial;
+    let h='<div class="row sb"><div><div class="xs muted">'+(r.nf!==null?'Nota final':'Promedio de lo rendido')+'</div>'+
+      '<div class="nota" style="color:'+(v>=4?'var(--ok)':'var(--danger)')+'">'+F(v)+'</div></div>'+
+      '<div style="text-align:right"><div class="xs muted">Rendido</div><div class="mono" style="font-size:17px;font-weight:800">'+Math.round(r.used*100)+'%</div></div></div>';
+    h+='<div class="bar2"><i style="width:'+(r.used*100)+'%;background:linear-gradient(90deg,var(--me),var(--bd))"></i></div>';
+    if(r.used<1){
+      const need=(4-r.acum)/(1-r.used);
+      h+='<div class="small" style="margin-top:11px;padding-top:10px;border-top:1px solid var(--line)">'+
+        (need<=1?'Ya tienes el <b>4,0</b> asegurado, saques lo que saques en el '+Math.round((1-r.used)*100)+'% que falta.'
+         :need<=7?'Para llegar a <b>4,0</b> necesitas promediar <b style="color:'+(need<=4?'var(--ok)':need<=5.5?'var(--warn)':'var(--danger)')+'">'+F(need)+'</b> en el '+Math.round((1-r.used)*100)+'% que falta.'
+                :'<span style="color:var(--danger)">Con lo rendido ya no alcanzas 4,0 aunque saques 7,0 en todo lo demás.</span>')+'</div>';
+    }
+    return h;
+  },
+  req:'Se aprueba con <b>NF ≥ 4,0</b>. No hay eximición del examen. Los controles son individuales y se rinden durante la cátedra.',
+  fuente:'Capítulo 0 · Motivación y Resumen del Curso (Canvas)'
+ }
+};
+
+/* ============================================================
+   INFO RAMOS
+============================================================ */
+const INFO={
+ mn:{
+  que:'Resolver con computador los problemas matemáticos que no tienen solución algebraica: raíces de ecuaciones, ajuste de curvas, integrales, derivadas, ecuaciones diferenciales y optimización. Todo implementado en Python con NumPy y SciPy.',
+  porque:'Es el puente entre el cálculo que ya viste y la ingeniería aplicada. Toda simulación, modelo físico u optimización real corre sobre esto. Y te enseña a medir el <b>error numérico</b>: cuánto puedes confiar en un número que salió de un computador.',
+  como:'El profe lo dice explícito en el syllabus: <b>no entrega apuntes ni resúmenes</b>. Tú eres responsable de armar tu propio material. La metodología es pre-estudio del capítulo antes de cada clase, cátedra para conceptos, y laboratorio para la práctica calificada. Con 11 labs valiendo 25% de la NP, la constancia semanal pesa más que cualquier prueba individual.',
+  temario:['I · Introducción y error numérico — NumPy/SciPy/Matplotlib, álgebra lineal dispersa, precisión finita','II · Raíces — bisección y métodos abiertos para 1 variable','III · Interpolación — lineal, splines, multidimensional','IV · Integración numérica — datos muestreados, funciones 1D, multivariable','V · Diferenciación numérica — datos, funciones 1D y multivariable, Jacobianos y Hessianos','VI · EDOs — familias de métodos, orden superior, valores iniciales y de frontera, rigidez numérica','VII · Optimización — lineal con restricciones, no lineal con y sin restricciones, global'],
+  datos:['Profesor: Harvey Hernández Suárez · hehernandez@miuandes.cl','Código IOC 3205 · NRC 8221 · 6 créditos · 5 módulos semanales','Requisitos: Cálculo II y Programación','Libro: Chapra & Clough, <i>Applied Numerical Methods with Python for Engineers and Scientists</i> (McGraw-Hill, 2022)','⚠ Python no es contenido del curso pero sí requisito — tienes hasta mediados de octubre para nivelarte','Labs: prohibido IA, VSCode, Spyder, celular y laptop personal. Solo Jupyter vía Chrome','Permitido en labs: documentación oficial de SciPy/NumPy y apuntes manuscritos']
+ },
+ bd:{
+  que:'Cómo se guardan, organizan y consultan los datos en un sistema real. Tomas un pedazo del mundo y lo traduces a un modelo formal: entidades, relaciones, tablas normalizadas. Después lo consultas con SQL y lo automatizas con vistas, funciones y triggers.',
+  porque:'Es el ramo más directamente empleable de los tres. Toda aplicación, dashboard o sistema de IA se apoya en una base de datos. Saber SQL bien te vuelve autónomo: dejas de pedir datos y los sacas tú.',
+  como:'Práctica acumulativa, no memoria. El material se publica <b>antes</b> de clase y debes llegar habiéndolo leído — la clase es para resolver problemas en papel. Instala PostgreSQL temprano. Ojo: los controles son en papel y sin tecnología, así que practica escribiendo queries sin autocompletado.',
+  temario:['Entidad-Relación (BD-ER)','Modelo Relacional (BD-MR)','Formas Normales (BD-FN)','Álgebra Relacional (BD-AR)','SQL1 · DDL y DML','SQL2 · SELECT','SQL3 · SELECT anidados','SQL4 · JOIN y más','SQL VIEW','Procedimientos almacenados','Triggers','Conexión por Python y gráficos'],
+  datos:['Los códigos de Canvas son sigla del tema + número: BD-ER-1 = Bases de Datos, Entidad-Relación, ejercicio 1','Equipos estables de 3 personas para la fase grupal','Formato control: 45 min individual → 15 min receso → 120 min grupal','Los quizzes de Canvas suman al trabajo semanal','Los días de control no dan puntos de trabajo semanal']
+ },
+ me:{
+  que:'Modelar sistemas que evolucionan con azar en el tiempo. Partes repasando probabilidad y llegas a cadenas de Markov y teoría de colas: cuánta gente se acumula en una fila, cuánto stock necesitas, qué tan confiable es un sistema.',
+  porque:'Te enseña a decidir bajo incertidumbre con números en la mano: dimensionar capacidad, inventario y nivel de servicio. Es la base de investigación de operaciones aplicada.',
+  como:'El profe lo dice textual: <b>el objetivo no es memorizar fórmulas sino reconocer la estructura del problema</b>, elegir el modelo correcto y justificar sus supuestos. Secuencia sugerida: comprender la definición → representar el sistema → plantear el modelo → resolver. En Canvas hay controles y pruebas pasadas resueltas por capítulo: úsalas como termómetro, no como lectura.',
+  temario:['U1 · Repaso de probabilidad — condicional, independencia, Bayes, v.a., esperanza, varianza (sem 1-2)','U2 · Proceso de Poisson — conteo, homogéneo y no homogéneo, tiempos entre eventos, superposición (sem 2-4)','U3 · Cadenas de Markov en tiempo discreto — matrices de transición, clasificación de estados, largo plazo (sem 5-8)','U4 · Cadenas de Markov en tiempo continuo — tasas de transición, probabilidades límite, nacimiento y muerte (sem 9-11)','U5 · Sistemas de espera — Little, M/M/1, M/M/c, capacidad finita e infinita, redes (sem 12-16)'],
+  datos:['Profesor: Marcel Favereau, PhD · código ICI 3205','Cátedra: jueves 10:30–13:20, sala C-213','Ayudantía: miércoles, enfocada en ejercitación','En Canvas hay pautas de controles y pruebas pasadas de los capítulos 2, 3, 4 y 5','Libros: Gazmuri & Crespo, Kulkarni, Tijms, Ross, Hillier & Lieberman, Taha']
+ }
+};
+
+/* ============================================================
+   HOME
+============================================================ */
+function ring(pct,col,txt){
+  const r=23,c=2*Math.PI*r;
+  return '<div class="ring"><svg width="54" height="54"><circle cx="27" cy="27" r="'+r+'" stroke="var(--panel3)" stroke-width="5" fill="none"/>'+
+    '<circle cx="27" cy="27" r="'+r+'" stroke="'+col+'" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="'+c+'" stroke-dashoffset="'+(c*(1-pct/100))+'"/></svg>'+
+    '<div class="v">'+txt+'</div></div>';
+}
+function evHTML(e){
+  const n=dias(e.d);
+  return '<div class="ev"><div class="bar" style="background:'+R[e.r].c+'"></div><div style="flex:1;min-width:0">'+
+    '<div class="k">'+T[e.t]+' · '+R[e.r].s+'</div><div class="ti">'+esc(e.ti)+'</div>'+
+    (e.de?'<div class="de">'+esc(e.de)+'</div>':'')+'</div>'+
+    '<div class="dd"><div class="day">'+fmt(e.d)+'</div><div class="cnt '+dcls(n)+'">'+dtxt(n)+'</div></div></div>';
+}
+function pintaHoy(){
+  const cls=clasesDe(TODAY), evs=EV.filter(e=>e.d===iso(TODAY));
+  const ahora=String(new Date().getHours()).padStart(2,'0')+':'+String(new Date().getMinutes()).padStart(2,'0');
+  let h='<div class="card">';
+  if(!cls.length&&!evs.length){
+    const finde=[0,6].includes(TODAY.getDay());
+    h+='<div class="muted small">'+(finde?'Fin de semana, sin clases. Buen momento para adelantar.':'Hoy no tienes clases.')+'</div>';
+  }else{
+    if(evs.length) evs.forEach(e=>{
+      h+='<div class="ev"><div class="bar" style="background:'+R[e.r].c+'"></div><div style="flex:1;min-width:0">'+
+        '<div class="k" style="color:var(--danger)">'+T[e.t]+' HOY · '+R[e.r].s+'</div>'+
+        '<div class="ti">'+esc(e.ti)+'</div>'+(e.de?'<div class="de">'+esc(e.de)+'</div>':'')+'</div></div>';
+    });
+    cls.forEach(c=>{
+      const fin=c.f&&ahora>c.f, curso=c.i&&c.f&&ahora>=c.i&&ahora<=c.f;
+      h+='<div class="ev" style="'+(fin?'opacity:.4':'')+'"><div class="bar" style="background:'+R[c.r].c+'"></div>'+
+        '<div style="width:52px;flex:none"><div class="mono" style="font-size:14px;font-weight:800">'+esc(c.i||'—')+'</div>'+
+        '<div class="xs muted mono">'+esc(c.f||'')+'</div></div>'+
+        '<div style="flex:1;min-width:0"><div class="ti">'+R[c.r].n+'</div>'+
+        '<div class="de">'+esc(c.t||'')+(c.s?' · sala '+esc(c.s):'')+'</div></div>'+
+        (curso?'<div class="dd"><span class="badge">ahora</span></div>':'')+'</div>';
+    });
+  }
+  document.getElementById('hoy').innerHTML=h+'</div>';
+}
+function pintaHome(){
+  pintaHoy();
+  const sig=EV.find(e=>dias(e.d)>=0&&GORDO.includes(e.t));
+  document.getElementById('hero').innerHTML=sig?
+    '<div class="hero"><div class="lbl">Próxima evaluación</div><div class="n" style="color:'+R[sig.r].c+'">'+dias(sig.d)+'<span style="font-size:17px;font-weight:600;letter-spacing:0;margin-left:5px">días</span></div>'+
+    '<div class="t">'+esc(sig.ti)+'</div><div class="d">'+R[sig.r].n+' · '+fmt(sig.d)+'</div></div>'
+    :'<div class="hero"><div class="lbl">Semestre</div><div class="t" style="margin-top:8px">No quedan evaluaciones pendientes.</div></div>';
+
+  const prox=EV.filter(e=>dias(e.d)>=0&&PESA.includes(e.t)).slice(0,5);
+  document.getElementById('next').innerHTML='<div class="card">'+(prox.length?prox.map(evHTML).join(''):'<div class="muted small">Nada pendiente.</div>')+'</div>';
+
+  const w7=EV.filter(e=>{const n=dias(e.d);return n>=0&&n<=7});
+  document.getElementById('week7').innerHTML='<div class="card">'+(w7.length?w7.map(evHTML).join(''):'<div class="muted small">Semana despejada. Buen momento para adelantar materia.</div>')+'</div>';
+
+  const ini=pd('2026-08-06'),fin=pd('2026-11-27');
+  const pct=Math.max(0,Math.min(100,Math.round((TODAY-ini)/(fin-ini)*100)));
+  let h='<div class="card t"><div class="row"><div style="flex:1"><b>Avance del semestre</b>'+
+    '<div class="xs muted" style="margin-top:2px">Último examen: 27 de noviembre · faltan '+dias('2026-11-27')+' días</div></div>'+
+    ring(pct,'#6c8cff',pct+'%')+'</div></div><div class="grid g3">';
+  for(const k of ['mn','bd','me']){
+    const pend=EV.filter(e=>e.r===k&&dias(e.d)>=0&&PESA.includes(e.t)).length;
+    const s2=EV.find(e=>e.r===k&&dias(e.d)>=0&&PESA.includes(e.t));
+    h+='<div class="card t"><span class="pill '+R[k].cls+'">'+R[k].s+'</span>'+
+      '<div style="margin-top:9px;font-weight:650;font-size:14px">'+R[k].n+'</div>'+
+      '<div class="xs muted">'+pend+' evaluaciones pendientes</div>'+
+      (s2?'<div class="small" style="margin-top:7px">Próxima: <b>'+esc(s2.ti)+'</b><br><span class="muted">'+fmt(s2.d)+'</span></div>':'')+'</div>';
+  }
+  document.getElementById('cards').innerHTML=h+'</div>';
+}
+
+/* ============================================================
+   CALENDARIO
+============================================================ */
+let curM=new Date(TODAY.getFullYear(),TODAY.getMonth(),1);
+function clasesDe(d){
+  const wd=d.getDay();
+  return S.hor.filter(x=>+x.d===wd).sort((a,b)=>(a.i||'zz').localeCompare(b.i||'zz'));
+}
+function pintaCal(){
+  document.getElementById('mlbl').textContent=MESL[curM.getMonth()][0].toUpperCase()+MESL[curM.getMonth()].slice(1)+' '+curM.getFullYear();
+  const first=new Date(curM), start=(first.getDay()+6)%7;
+  const nd=new Date(curM.getFullYear(),curM.getMonth()+1,0).getDate();
+  let h=['L','M','M','J','V','S','D'].map(x=>'<div class="hd">'+x+'</div>').join('');
+  for(let i=0;i<start;i++) h+='<div class="cel off"></div>';
+  for(let n=1;n<=nd;n++){
+    const d=new Date(curM.getFullYear(),curM.getMonth(),n), s=iso(d);
+    const evs=EV.filter(e=>e.d===s), cls=clasesDe(d);
+    const gordos=evs.filter(e=>GORDO.includes(e.t));
+    const ramos=[...new Set([...evs.map(e=>e.r),...cls.map(c=>c.r)])];
+    const hoy=s===iso(TODAY);
+    h+='<div class="cel'+(hoy?' today':'')+'" data-d="'+s+'">'+
+      '<div class="num">'+n+'</div>'+
+      '<div class="ds">'+ramos.slice(0,3).map(r=>{
+        const g=gordos.some(e=>e.r===r);
+        return '<span class="d'+(g?' sq':'')+'" style="background:'+R[r].c+'"></span>';
+      }).join('')+'</div>'+
+      (gordos.length?'<div class="lb" style="color:'+R[gordos[0].r].c+'">'+(gordos[0].t==='examen'?'EXAM':gordos[0].t==='prueba'?'PRUEBA':'CONTROL')+'</div>':'')+
+      '</div>';
+  }
+  const cal=document.getElementById('cal');
+  cal.innerHTML=h;
+  cal.querySelectorAll('.cel[data-d]').forEach(c=>c.onclick=()=>openDay(c.dataset.d));
+}
+document.getElementById('pm').onclick=()=>{curM=new Date(curM.getFullYear(),curM.getMonth()-1,1);pintaCal()};
+document.getElementById('nm').onclick=()=>{curM=new Date(curM.getFullYear(),curM.getMonth()+1,1);pintaCal()};
+
+function openDay(s){
+  const d=pd(s), evs=EV.filter(e=>e.d===s), cls=clasesDe(d);
+  let h='<div class="row sb" style="margin-bottom:4px"><div><b style="font-size:18px">'+DIAL[d.getDay()][0].toUpperCase()+DIAL[d.getDay()].slice(1)+' '+d.getDate()+'</b>'+
+    '<div class="xs muted">'+MESL[d.getMonth()]+' '+d.getFullYear()+' · '+dtxt(dias(s))+'</div></div>'+
+    '<button class="btn sm" onclick="closeSheet()">Cerrar</button></div>';
+  if(cls.length){
+    h+='<div class="eyebrow" style="margin:16px 0 7px">Clases</div><div class="card t">';
+    cls.forEach(c=>{
+      h+='<div class="ev"><div class="bar" style="background:'+R[c.r].c+'"></div><div style="flex:1">'+
+        '<div class="k">'+R[c.r].s+'</div><div class="ti">'+esc(c.t)+'</div>'+
+        '<div class="de">'+(c.i?esc(c.i)+(c.f?'–'+esc(c.f):''):'horario por definir')+(c.s?' · sala '+esc(c.s):'')+'</div></div></div>';
+    });
+    h+='</div>';
+  }
+  if(evs.length){
+    h+='<div class="eyebrow" style="margin:16px 0 7px">Ese día</div><div class="card t">'+evs.map(evHTML).join('')+'</div>';
+    const g=evs.filter(e=>GORDO.includes(e.t));
+    if(g.length){
+      h+='<div class="eyebrow" style="margin:16px 0 7px">Qué tienes que saber</div>';
+      g.forEach(e=>{h+='<div class="card t"><span class="pill '+R[e.r].cls+'">'+R[e.r].s+'</span><div style="margin-top:9px;font-weight:650">'+esc(e.ti)+'</div>'+
+        '<ul class="tidy">'+materiaPara(e).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>'});
+    }
+  }
+  if(!cls.length&&!evs.length) h+='<div class="card" style="margin-top:14px"><div class="muted small">Día libre.</div></div>';
+  document.getElementById('sheetc').innerHTML=h;
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('ovl').classList.add('on');
+}
+function closeSheet(){document.getElementById('sheet').classList.remove('on');document.getElementById('ovl').classList.remove('on')}
+
+// contenidos por unidad (Modelos Estocásticos)
+const UNI_ME={
+ 1:'U1 · Repaso de probabilidad: condicional, independencia, Bayes, variables aleatorias, esperanza, varianza y distribuciones relevantes.',
+ 2:'U2 · Proceso de Poisson: procesos de conteo, Poisson homogéneo y no homogéneo, tiempos de eventos y entre eventos, superposición y descomposición.',
+ 3:'U3 · Cadenas de Markov en tiempo discreto: modelación, matrices de transición, visitas entre estados, clasificación de estados y comportamiento de largo plazo.',
+ 4:'U4 · Cadenas de Markov en tiempo continuo: tasas de transición, probabilidades límite, procesos de nacimiento y muerte.',
+ 5:'U5 · Sistemas de espera: ecuación de Little, M/M/1, M/M/c, capacidad finita e infinita, autoservicio, fuentes finitas y redes.'
+};
+// qué materia entra en cada evaluación
+function materiaPara(e){
+  const out=[];
+  if(e.de) out.push('Alcance según Canvas: '+e.de);
+  // unidades explícitas (Modelos Estocásticos)
+  if(e.r==='me'&&e.de){
+    const ns=[...e.de.matchAll(/\b([1-5])\b/g)].map(m=>+m[1]);
+    [...new Set(ns)].forEach(n=>{if(UNI_ME[n])out.push(UNI_ME[n])});
+  }
+  // clases, labs y entregas desde la evaluación anterior
+  const prev=EV.filter(x=>x.r===e.r&&x.d<e.d&&GORDO.includes(x.t)).slice(-1)[0];
+  const desde=prev?prev.d:'2026-08-01';
+  EV.filter(x=>x.r===e.r&&x.d<e.d&&['clase','lab','tarea'].includes(x.t))
+    .filter(x=>e.t==='examen'||x.d>desde)
+    .forEach(x=>out.push(x.ti+(x.de&&x.de.includes('Cap')?' — '+x.de.replace('Pre-estudio: ',''):'')));
+  return out.length?out:['Revisa el material del ramo en Canvas.'];
+}
+
+/* ---- grilla de horario semanal ---- */
+const SLOTS=['08:30','09:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30','17:30','18:30'];
+// Los bloques van de HH:30 a (HH+1):20 — ej. 13:30 termina 14:20
+const FIN=t=>String(+t.split(':')[0]+1).padStart(2,'0')+':20';
+function pintaGrid(){
+  const hoyD=(TODAY.getDay()===0||TODAY.getDay()===6)?0:TODAY.getDay();
+  let h='<div class="hgrid"><div class="dh"></div>'+['LUN','MAR','MIÉ','JUE','VIE'].map((d,j)=>
+    '<div class="dh"'+(j+1===hoyD?' style="color:var(--tx)"':'')+'>'+d+'</div>').join('');
+  SLOTS.forEach(s0=>{
+    const s1=FIN(s0);
+    h+='<div class="hh">'+s0+'</div>';
+    for(let d=1;d<=5;d++){
+      const b=S.hor.find(x=>+x.d===d&&x.i&&x.f&&x.i<=s0&&x.f>=s1);
+      if(!b){h+='<div class="sl"></div>';continue}
+      const idx=SLOTS.indexOf(s0);
+      const prev=idx>0&&b.i<=SLOTS[idx-1]&&b.f>=FIN(SLOTS[idx-1]);
+      const next=idx<SLOTS.length-1&&b.i<=SLOTS[idx+1]&&b.f>=FIN(SLOTS[idx+1]);
+      const pos=!prev&&next?'top':prev&&next?'mid':prev&&!next?'bot':'';
+      h+='<div class="sl f '+pos+(d===hoyD?' hoy':'')+'" style="background:'+R[b.r].hex+'26;color:'+R[b.r].c+'">'+
+        (!prev?'<div class="nm">'+R[b.r].s+'</div><div class="mt">'+esc((b.t||'').slice(0,11))+(b.s?'<br>'+esc(b.s):'')+'</div>':'')+'</div>';
+    }
+  });
+  h+='</div>';
+  document.getElementById('hgrid').innerHTML=h;
+}
+/* ---- editor horario ---- */
+function pintaHor(){
+  const D=['','Lunes','Martes','Miércoles','Jueves','Viernes'];
+  const TP=['Cátedra','Ayudantía','Laboratorio'];
+  document.getElementById('hor').innerHTML=S.hor.map((x,i)=>
+    '<div class="row" style="gap:7px;padding:9px 0;border-bottom:1px solid var(--line);flex-wrap:wrap">'+
+    '<select style="width:auto;min-width:72px" data-h="'+i+'.r">'+Object.keys(R).map(k=>'<option value="'+k+'"'+(x.r===k?' selected':'')+'>'+R[k].s+'</option>').join('')+'</select>'+
+    '<select style="width:auto;min-width:100px" data-h="'+i+'.d">'+[1,2,3,4,5].map(d=>'<option value="'+d+'"'+(+x.d===d?' selected':'')+'>'+D[d]+'</option>').join('')+'</select>'+
+    '<input type="time" data-h="'+i+'.i" value="'+(x.i||'')+'">'+
+    '<input type="time" data-h="'+i+'.f" value="'+(x.f||'')+'">'+
+    '<select style="width:auto;min-width:104px" data-h="'+i+'.t">'+TP.map(t=>'<option value="'+t+'"'+(x.t===t?' selected':'')+'>'+t+'</option>').join('')+'</select>'+
+    '<input type="text" style="width:88px" placeholder="Sala" data-h="'+i+'.s" value="'+esc(x.s||'')+'">'+
+    '<button class="btn sm" onclick="delHor('+i+')">✕</button></div>').join('');
+  document.querySelectorAll('[data-h]').forEach(el=>el.onchange=()=>{
+    const[i,f]=el.dataset.h.split('.');S.hor[i][f]=el.value;save();pintaCal();pintaGrid();
+  });
+}
+function addHor(){S.hor.push({r:'bd',d:1,i:'08:30',f:'10:20',t:'Cátedra',s:''});save();pintaHor();pintaCal();pintaGrid()}
+function delHor(i){S.hor.splice(i,1);save();pintaHor();pintaCal();pintaGrid()}
+/* ---- sub-pestañas del calendario ---- */
+document.querySelectorAll('#segcal button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#segcal button').forEach(x=>x.classList.toggle('on',x===b));
+  document.getElementById('t-mes').classList.toggle('hide',b.dataset.t!=='mes');
+  document.getElementById('t-sem').classList.toggle('hide',b.dataset.t!=='sem');
+});
+/* ---- leyenda ---- */
+document.getElementById('leg').innerHTML=Object.keys(R).map(k=>
+  '<span><i style="background:'+R[k].c+'"></i>'+R[k].n+'</span>').join('')+
+  '<span><i style="background:var(--tx2);border-radius:2px"></i>Evaluación</span>';
+
+/* ============================================================
+   CALCULADORA
+============================================================ */
+function promedio(k,items){
+  const v=items.map(i=>S.notas[k+'.'+i]).filter(x=>x!==''&&x!==undefined&&x!==null).map(Number).filter(x=>!isNaN(x));
+  return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;
+}
+function pintaCalc(){
+  document.getElementById('calcs').innerHTML=['mn','bd','me'].map(k=>{
+    const c=CALC[k];
+    const g={}; c.grupos.forEach(gr=>g[gr.k]=promedio(k,gr.items));
+    const r=c.calc(g);
+    let h='<div class="card"><div class="row sb"><span class="pill '+R[k].cls+'">'+R[k].s+'</span><span class="xs muted">'+c.cod+'</span></div>'+
+      '<h3 style="font-size:17px;margin:11px 0 5px">'+c.titulo+'</h3>'+
+      '<div class="xs muted" style="line-height:1.65">'+c.formula+'</div>';
+    c.grupos.forEach(gr=>{
+      const p=g[gr.k];
+      h+='<details class="acc" style="margin-top:11px"><summary><span>'+gr.n+'</span>'+
+        '<span class="'+(p===null?'badge g':'')+'" style="'+(p!==null?'font-weight:800;font-variant-numeric:tabular-nums;color:'+(p>=4?'var(--ok)':'var(--danger)'):'')+'">'+(p===null?'sin notas':F(p))+'</span></summary><div class="bd"><table><tbody>';
+      gr.items.forEach((it,j)=>{
+        const v=S.notas[k+'.'+it];
+        h+='<tr><td>'+gr.labels[j]+'</td><td style="width:84px;text-align:right"><input type="number" step="0.1" min="1" max="7" placeholder="—" value="'+(v===undefined||v===null?'':v)+'" data-n="'+k+'.'+it+'"></td></tr>';
+      });
+      h+='</tbody></table></div></details>';
+    });
+    h+='<div class="res">'+c.render(r)+'</div>'+
+       '<div class="xs muted" style="margin-top:11px;line-height:1.65">'+c.req+'<br><span style="color:var(--tx3)">Fuente: '+c.fuente+'</span></div></div>';
+    return h;
+  }).join('');
+  document.querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{
+    S.notas[el.dataset.n]=el.value;save();
+    clearTimeout(window._c);window._c=setTimeout(()=>{const o=[...document.querySelectorAll('details.acc[open]')].map(d=>d.querySelector('summary').textContent);pintaCalc();
+      document.querySelectorAll('details.acc').forEach(d=>{if(o.includes(d.querySelector('summary').textContent))d.open=true});},700);
+  });
+}
+
+/* ============================================================
+   PLAN DE ESTUDIO
+============================================================ */
+function lunes(d){const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));x.setHours(0,0,0,0);return x}
+const W=[];
+{let cur=lunes(pd('2026-08-10')),end=pd('2026-11-30'),i=1;
+ while(cur<=end){const a=new Date(cur),b=new Date(cur);b.setDate(b.getDate()+6);
+  W.push({n:i++,a:iso(a),b:iso(b),ev:EV.filter(e=>e.d>=iso(a)&&e.d<=iso(b))});cur.setDate(cur.getDate()+7)}}
+const SEM=W.find(w=>dias(w.a)<=0&&dias(w.b)>=0);
+
+function tareas(w){
+  const t=[],i=W.indexOf(w);
+  w.ev.filter(e=>GORDO.includes(e.t)).forEach(e=>t.push({r:e.r,x:'⚑ '+e.ti+' el '+fmtc(e.d)+' — repaso final y ejercicios pasados'}));
+  w.ev.filter(e=>e.t==='clase').forEach(e=>t.push({r:e.r,x:'Pre-estudio antes del '+fmtc(e.d)+': '+e.ti+(e.de&&e.de.includes('Cap')?' ('+e.de.replace('Pre-estudio: ','')+')':'')}));
+  w.ev.filter(e=>e.t==='lab').forEach(e=>t.push({r:e.r,x:'Practicar en Python antes del '+fmtc(e.d)+': '+e.ti}));
+  w.ev.filter(e=>e.t==='tarea').forEach(e=>t.push({r:e.r,x:'Entregar '+e.ti+' ('+fmtc(e.d)+')'}));
+  if(i>0) W[i-1].ev.filter(e=>e.t==='clase'||e.t==='lab').forEach(e=>t.push({r:e.r,x:'Repasar lo de la semana pasada: '+e.ti}));
+  const sig=EV.find(e=>e.d>w.b&&GORDO.includes(e.t));
+  if(sig&&dias(sig.d)-dias(w.b)<=10) t.push({r:sig.r,x:'Empezar a preparar: '+sig.ti+' ('+fmtc(sig.d)+')'});
+  return t;
+}
+function pintaPlan(){
+  document.getElementById('plan').innerHTML=W.filter(w=>dias(w.b)>=-7).map(w=>{
+    const t=tareas(w),hoy=w===SEM,id='w'+w.n;
+    const done=t.filter((x,j)=>S.chk[id+'.'+j]).length;
+    return '<details class="acc'+(hoy?' now':'')+'"'+(hoy?' open':'')+'>'+
+     '<summary><div><div>Semana '+w.n+(hoy?' · ahora':'')+'</div><div class="xs muted" style="font-weight:400">'+fmtc(w.a)+' – '+fmtc(w.b)+'</div></div>'+
+     '<span class="chip">'+done+'/'+t.length+'</span></summary><div class="bd">'+
+     (t.length?t.map((x,j)=>{const key=id+'.'+j,on=!!S.chk[key];
+       return '<label class="chk'+(on?' done':'')+'"><input type="checkbox" data-c="'+key+'"'+(on?' checked':'')+'>'+
+        '<span><span class="pill '+R[x.r].cls+'" style="font-size:9px;padding:2px 6px;margin-right:6px">'+R[x.r].s+'</span>'+esc(x.x)+'</span></label>'}).join('')
+      :'<div class="muted small">Semana libre.</div>')+
+     '<div class="eyebrow" style="margin:15px 0 6px">Mis apuntes</div>'+
+     '<textarea data-t="'+id+'" placeholder="Dudas, qué no me cuadra, qué preguntar en ayudantía...">'+esc(S.notes[id]||'')+'</textarea>'+
+     '</div></details>';
+  }).join('');
+  document.querySelectorAll('[data-c]').forEach(el=>el.onchange=()=>{
+    S.chk[el.dataset.c]=el.checked;save();el.closest('.chk').classList.toggle('done',el.checked);
+    const d=el.closest('details'),chips=d.querySelector('.chip');
+    const all=d.querySelectorAll('[data-c]'),n=[...all].filter(x=>x.checked).length;
+    chips.textContent=n+'/'+all.length;
+  });
+  document.querySelectorAll('[data-t]').forEach(el=>el.oninput=()=>{S.notes[el.dataset.t]=el.value;save()});
+}
+
+/* ============================================================
+   RAMOS
+============================================================ */
+document.getElementById('ramos').innerHTML=['mn','bd','me'].map(k=>{
+  const i=INFO[k];
+  return '<div class="card"><span class="pill '+R[k].cls+'">'+R[k].s+'</span>'+
+   '<h3 style="font-size:18px;margin:11px 0 3px">'+R[k].n+'</h3>'+
+   '<div class="eyebrow" style="margin:16px 0 5px">De qué trata</div><div class="small">'+i.que+'</div>'+
+   '<div class="eyebrow" style="margin:16px 0 5px">Por qué importa</div><div class="small">'+i.porque+'</div>'+
+   '<div class="eyebrow" style="margin:16px 0 5px">Cómo se estudia</div><div class="small">'+i.como+'</div>'+
+   '<div class="eyebrow" style="margin:16px 0 5px">Temario</div><ul class="tidy">'+i.temario.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+   '<div class="eyebrow" style="margin:16px 0 5px">Datos del curso</div><ul class="tidy">'+i.datos.map(x=>'<li>'+x+'</li>').join('')+'</ul></div>';
+}).join('');
+
+/* ============================================================
+   GUÍAS
+============================================================ */
+const G=window.GUIAS||[];
+function gTot(g){return g.secciones.length}
+function gHechas(g){return g.secciones.filter((_,i)=>S.chk['g.'+g.id+'.'+i]).length}
+function pintaGuias(){
+  document.getElementById('guias').innerHTML=G.map(g=>{
+    const d=gHechas(g),t=gTot(g),p=Math.round(d/t*100);
+    return '<div class="card gcard" data-g="'+g.id+'" style="cursor:pointer">'+
+      '<div class="row sb"><span class="pill '+R[g.ramo].cls+'">'+R[g.ramo].s+' · '+g.tag+'</span>'+
+      '<span class="chip">'+g.min+' min</span></div>'+
+      '<h3 style="font-size:17px;margin:11px 0 4px">'+esc(g.titulo)+'</h3>'+
+      '<div class="small muted">'+esc(g.bajada)+'</div>'+
+      '<div class="bar2" style="margin-top:12px"><i style="width:'+p+'%;background:'+R[g.ramo].c+'"></i></div>'+
+      '<div class="row sb"><span class="xs muted">'+d+' de '+t+' secciones</span>'+
+      '<span class="xs" style="color:'+(p===100?'var(--ok)':'var(--tx3)')+'">'+(p===100?'✓ completa':p+'%')+'</span></div>'+
+      '</div>';
+  }).join('');
+  document.querySelectorAll('.gcard').forEach(c=>c.onclick=()=>abreGuia(c.dataset.g));
+}
+function abreGuia(id){
+  const g=G.find(x=>x.id===id);
+  let h='<button class="btn sm" style="margin-bottom:14px" onclick="cierraGuia()">‹ Volver a las guías</button>'+
+    '<span class="pill '+R[g.ramo].cls+'">'+R[g.ramo].s+' · '+g.tag+'</span>'+
+    '<h2 style="margin:11px 0 5px">'+esc(g.titulo)+'</h2>'+
+    '<div class="sec-desc">'+esc(g.bajada)+'</div>';
+  g.secciones.forEach((s,i)=>{
+    const key='g.'+g.id+'.'+i, on=!!S.chk[key];
+    h+='<details class="acc"><summary><div class="row" style="gap:9px;flex:1;min-width:0">'+
+      '<span class="gnum'+(on?' ok':'')+'">'+(on?'✓':i+1)+'</span>'+
+      '<span style="flex:1;min-width:0">'+esc(s.t)+'</span></div></summary><div class="bd guia">';
+    if(s.h) h+=s.h;
+    if(s.code) h+='<div class="codewrap"><button class="cp" onclick="cop(this)">copiar</button><pre><code>'+esc(s.code)+'</code></pre></div>';
+    if(s.ojo) h+='<div class="note"><b>Ojo con esto.</b> '+s.ojo+'</div>';
+    if(s.ej) s.ej.forEach((e,j)=>{
+      h+='<div class="ejer"><div class="q"><b>'+(j+1)+'.</b> '+esc(e.q).replace(/\n/g,'<br>')+'</div>'+
+        '<details class="sol"><summary>Ver solución</summary><div class="sb2">'+e.a+'</div></details></div>';
+    });
+    if(!s.ej) h+='<label class="chk" style="margin-top:14px;border-top:1px solid var(--line);border-bottom:0;padding-top:12px">'+
+      '<input type="checkbox" data-c="'+key+'"'+(on?' checked':'')+'><span>Ya estudié esta sección</span></label>';
+    h+='</div></details>';
+  });
+  document.getElementById('guiadet').innerHTML=h;
+  document.getElementById('guias').classList.add('hide');
+  document.getElementById('guiadet').classList.remove('hide');
+  document.querySelectorAll('#guiadet [data-c]').forEach(el=>el.onchange=()=>{
+    S.chk[el.dataset.c]=el.checked;save();
+    const n=el.closest('details').querySelector('.gnum');
+    n.classList.toggle('ok',el.checked);
+    n.textContent=el.checked?'✓':n.dataset.i||n.textContent;
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function cierraGuia(){
+  document.getElementById('guiadet').classList.add('hide');
+  document.getElementById('guias').classList.remove('hide');
+  pintaGuias(); window.scrollTo({top:0,behavior:'instant'});
+}
+function cop(b){
+  const t=b.parentElement.querySelector('code').textContent;
+  navigator.clipboard.writeText(t).then(()=>{b.textContent='copiado';setTimeout(()=>b.textContent='copiar',1600)})
+   .catch(()=>toast('No se pudo copiar'));
+}
+
+/* ============================================================
+   SYNC (Supabase — tus propias credenciales, guardadas solo en tu dispositivo)
+============================================================ */
+function pintaSync(){
+  const s=S.sync;
+  const conf=s.url&&s.key&&s.id;
+  document.getElementById('syncpanel').innerHTML='<div class="card">'+
+   (conf?'<div class="note ok" style="margin:0 0 12px">Sincronización activa como <b>'+esc(s.id)+'</b>. Todo lo que escribas se guarda en la nube y aparece en tus otros dispositivos.</div>':
+         '<div class="small muted" style="margin-bottom:12px">Conecta tu propio proyecto de Supabase (gratis) para que las notas y checks se sincronicen entre el celular y el computador. Los datos quedan en tu cuenta, no pasan por nadie más.</div>')+
+   '<table><tbody>'+
+   '<tr><td style="width:96px">URL</td><td><input type="text" placeholder="https://xxxx.supabase.co" data-s="url" value="'+esc(s.url||'')+'"></td></tr>'+
+   '<tr><td>Clave anon</td><td><input type="text" placeholder="eyJ..." data-s="key" value="'+esc(s.key||'')+'"></td></tr>'+
+   '<tr><td>Mi código</td><td><input type="text" placeholder="gabo" data-s="id" value="'+esc(s.id||'')+'"></td></tr>'+
+   '</tbody></table>'+
+   '<div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">'+
+   '<button class="btn sm pri" onclick="pushCloud(1)">↑ Subir ahora</button>'+
+   '<button class="btn sm" onclick="pullCloud(1)">↓ Bajar de la nube</button>'+
+   '<button class="btn sm" onclick="testCloud()">⚙ Probar conexión</button></div>'+
+   (LASTERR?'<div id="diag" class="note '+(/^OK/.test(LASTERR)?'ok':'bad')+'" style="margin-top:12px;word-break:break-word">'+esc(LASTERR)+'</div>':'')+
+   '<details class="acc" style="margin-top:12px"><summary><span>Cómo configurarlo (una vez)</span></summary><div class="bd small">'+
+   '<ol class="tidy" style="padding-left:18px">'+
+   '<li>Crea una cuenta gratis en supabase.com y un proyecto nuevo.</li>'+
+   '<li>Entra a <b>SQL Editor</b> y corre esto:<br><code style="display:block;background:var(--panel2);padding:9px;border-radius:8px;margin:7px 0;font-size:11px;white-space:pre-wrap">create table estado (id text primary key, data jsonb, updated_at timestamptz default now());\nalter table estado enable row level security;\ncreate policy p on estado for all using (true) with check (true);</code></li>'+
+   '<li>En <b>Project Settings → API</b> copia la <i>Project URL</i> y la clave <i>anon public</i> y pégalas arriba.</li>'+
+   '<li>Elige un código (ej. <i>gabo</i>) y usa el mismo en el celular y en el computador.</li>'+
+   '</ol><div class="note" style="margin-top:6px">La clave <i>anon</i> es pública por diseño: está pensada para ir dentro de apps de navegador. Aun así, con la política de arriba cualquiera que tenga tu URL, clave y código podría leer o escribir tus notas. Elige un código poco obvio.</div>'+
+   '</div></details></div>';
+  document.querySelectorAll('[data-s]').forEach(el=>el.onchange=()=>{S.sync[el.dataset.s]=el.value.trim();save(false);pintaSync();estadoSync()});
+}
+function estadoSync(ok){
+  const s=S.sync,d=document.getElementById('syncdot'),t=document.getElementById('synctxt');
+  if(!(s.url&&s.key&&s.id)){d.style.background='var(--tx3)';t.textContent='local';return}
+  d.style.background=ok===false?'var(--danger)':'var(--ok)';
+  t.textContent=ok===false?'error':'sincronizado';
+}
+let LASTERR='';
+// Las llaves nuevas (sb_publishable_...) NO son JWT: mandarlas como Bearer las rechaza.
+// Solo las llaves legacy (eyJ...) van también en Authorization.
+function hdrs(s,extra){
+  const h={'apikey':s.key};
+  if(/^eyJ/.test(s.key)) h['Authorization']='Bearer '+s.key;
+  return Object.assign(h,extra||{});
+}
+function baseURL(s){
+  let u=s.url.trim().replace(/\/+$/,'');
+  if(!/^https?:\/\//.test(u)) u='https://'+u;
+  return u;
+}
+async function pushCloud(manual){
+  const s=S.sync; if(!(s.url&&s.key&&s.id)) {if(manual)toast('Falta configurar la sincronización');return}
+  try{
+    const ts=new Date().toISOString();
+    const r=await fetch(baseURL(s)+'/rest/v1/estado',{method:'POST',
+      headers:hdrs(s,{'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}),
+      body:JSON.stringify({id:s.id,data:{notas:S.notas,chk:S.chk,notes:S.notes,hor:S.hor,horV:S.horV},updated_at:ts})});
+    if(!r.ok){LASTERR='HTTP '+r.status+' — '+(await r.text()).slice(0,300);throw 0}
+    S.sync.ts=ts; localStorage.setItem(KEY,JSON.stringify(S));
+    LASTERR=''; estadoSync(true); if(manual)toast('Subido a la nube');
+  }catch(e){
+    if(!LASTERR) LASTERR='No se pudo conectar. Revisa la URL o tu internet.';
+    estadoSync(false); if(manual){pintaSync();toast('Error al subir')}
+  }
+}
+async function pullCloud(manual){
+  const s=S.sync; if(!(s.url&&s.key&&s.id)) {if(manual)toast('Falta configurar la sincronización');return}
+  try{
+    const r=await fetch(baseURL(s)+'/rest/v1/estado?id=eq.'+encodeURIComponent(s.id)+'&select=data,updated_at',{headers:hdrs(s)});
+    if(!r.ok){LASTERR='HTTP '+r.status+' — '+(await r.text()).slice(0,300);throw 0}
+    const j=await r.json();
+    LASTERR='';
+    if(j&&j[0]&&j[0].data){
+      const nube=j[0].updated_at||'', mio=S.sync.ts||'';
+      // Solo sobrescribo si la nube es más nueva que mi último envío.
+      // Así, si edité acá y no alcancé a subir, no me borro solo.
+      if(!manual && mio && nube && nube<=mio){estadoSync(true); return}
+      if(manual && mio && nube && nube<mio && !confirm('Lo que tienes en este dispositivo es más reciente que la nube. ¿Reemplazarlo igual con la versión de la nube?')){return}
+      const D=j[0].data;
+      Object.assign(S,{notas:D.notas||{},chk:D.chk||{},notes:D.notes||{}});
+      // El horario de la nube solo se acepta si es de la versión actual.
+      // Si es viejo, conservo el oficial que ya tengo y lo subo para corregir la nube.
+      const horViejo=D.horV!==3;
+      if(!horViejo&&D.hor) S.hor=D.hor;
+      S.sync.ts=nube; save(false); estadoSync(true); pintaTodo();
+      if(horViejo) pushCloud();
+      toast(manual?'Datos bajados':'Actualizado desde tu otro dispositivo');
+    } else {estadoSync(true); if(manual){pintaSync();toast('Ese código aún no tiene datos')}}
+  }catch(e){
+    if(!LASTERR) LASTERR='No se pudo conectar. Revisa la URL o tu internet.';
+    estadoSync(false); if(manual){pintaSync();toast('Error al bajar')}
+  }
+}
+async function testCloud(){
+  const s=S.sync;
+  if(!(s.url&&s.key&&s.id)){LASTERR='Faltan datos: llena URL, clave y código.';pintaSync();return}
+  LASTERR='Probando...';pintaSync();
+  try{
+    const r=await fetch(baseURL(s)+'/rest/v1/estado?select=id&limit=1',{headers:hdrs(s)});
+    const txt=await r.text();
+    if(r.ok){LASTERR='OK · la tabla responde bien. Ya puedes subir y bajar.';}
+    else if(r.status===401||r.status===403) LASTERR='HTTP '+r.status+' · la clave no es válida o falta la política RLS. Revisa que copiaste la clave completa y que corriste el SQL con el "create policy".';
+    else if(r.status===404) LASTERR='HTTP 404 · no existe la tabla "estado" en ese proyecto. Corre el SQL del paso 2.';
+    else LASTERR='HTTP '+r.status+' — '+txt.slice(0,300);
+  }catch(e){LASTERR='No se pudo conectar. Revisa que la URL sea del tipo https://xxxx.supabase.co (sin /rest ni barras al final).'}
+  pintaSync();
+}
+
+/* ============================================================
+   EXPORT / IMPORT
+============================================================ */
+function expo(){const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='semestre-gabo.json';a.click()}
+function impo(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{S=JSON.parse(r.result);save(false);location.reload()}catch(e){toast('Archivo inválido')}};r.readAsText(f)}
+
+/* ============================================================
+   NAV + INIT
+============================================================ */
+const VS=['home','cal','notas','estudio','guias','ramos'];
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+  VS.forEach(v=>document.getElementById('v-'+v).classList.toggle('hide',v!==b.dataset.v));
+  window.scrollTo({top:0,behavior:'instant'});
+});
+function pintaTodo(){pintaHome();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaSync();estadoSync()}
+pintaTodo();
+const CONF=()=>S.sync.url&&S.sync.key&&S.sync.id;
+if(CONF()) pullCloud();
+// Baja los cambios solos al volver a la app o a la pestaña
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CONF())pullCloud()});
+window.addEventListener('focus',()=>{if(CONF())pullCloud()});
+// Y revisa cada 45s si tienes la app abierta y visible
+setInterval(()=>{if(!document.hidden&&CONF())pullCloud()},45000);
+// Si cierras con algo sin subir, lo manda igual
+window.addEventListener('pagehide',()=>{if(CONF()){clearTimeout(saveT);pushCloud()}});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
