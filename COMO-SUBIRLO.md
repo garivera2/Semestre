@@ -42,11 +42,7 @@ Si después de una actualización sigue mostrando la versión vieja: cierra la a
 
 ## Parte 3 — Sincronización entre celular y computador
 
-Ya está configurada. Los datos viven en tu proyecto de Supabase:
-
-```
-https://dgyorqgaacjmfvbxujup.supabase.co
-```
+Ya está configurada. Los datos viven en tu proyecto de Supabase. La URL y la clave están guardadas dentro de la app, en la pestaña Notas → Sincronizar, y no se escriben en este repositorio.
 
 **Cómo funciona:**
 
