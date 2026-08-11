@@ -100,6 +100,31 @@ print(f'Error al final: {error_final:.4f} °C')`,
   ojo:'Corre ese código con h = 10, h = 5 y h = 1, y mira cómo cae el error. Vas a notar que reducir h a la mitad reduce el error aproximadamente a la mitad. Eso significa que Euler es un método de primer orden — un concepto que vas a usar todo el semestre.'
  },
  {
+  t:'Cómo plantear una EDO desde un balance',
+  h:`<p>Esta es la parte que más cuesta al principio, y no porque sea difícil sino porque uno cree que la ecuación hay que <i>ocurrírsela</i>. No: se <b>construye</b>, siempre con la misma receta.</p>
+  <p class="fx">acumulación = entra − sale</p>
+  <p>La "acumulación" es la derivada de lo que estás siguiendo. Si sigues la masa de sal S, entonces la acumulación es <span class="fx-i">dS/dt</span>. Nada más.</p>
+  <p><b>Los cuatro pasos:</b></p>
+  <ol>
+  <li><b>Decide qué sigues.</b> Masa de sal en kg. No el volumen, no la concentración. Elegir mal acá arruina todo lo demás.</li>
+  <li><b>Traza la caja</b> (volumen de control). Todo lo que cruza su borde cuenta.</li>
+  <li><b>Escribe cada término en las mismas unidades.</b> Como sigues kg, todo va en kg/min.</li>
+  <li><b>Arma la resta.</b></li>
+  </ol>
+  <p><b>Aplicado al estanque:</b> 500 L de agua con 10 kg de sal, entra agua pura a 5 L/min, sale mezcla a 5 L/min.</p>
+  <table class="tb"><tr><th>Término</th><th>Cálculo</th><th>Resultado</th></tr>
+  <tr><td>Entra</td><td>5 L/min × 0 kg/L</td><td>0 kg/min</td></tr>
+  <tr><td>Sale</td><td>5 L/min × (S/500) kg/L</td><td>S/100 kg/min</td></tr></table>
+  <p class="fx">dS/dt = 0 − S/100</p>
+  <p><b>El término de salida es el que traba a todo el mundo.</b> La pregunta es: ¿con qué concentración sale el líquido por ese tubo? Con la que hay <b>adentro</b>, porque el supuesto de mezcla perfecta dice que el estanque es homogéneo. Esa concentración es S/V.</p>
+  <p>Y ahí está lo importante: <b>la incógnita S aparece en el término de salida</b>. Por eso queda una ecuación diferencial y no una cuenta aritmética. Si la sal saliera a ritmo fijo, no habría EDO.</p>
+  <p><b>Verificación de unidades.</b> L/min × kg/L = kg/min. Si te queda otra cosa, mezclaste algo. Este chequeo salva más pruebas de lo que parece.</p>
+  <p><b>La variante que sí cae:</b> si el caudal que entra no iguala al que sale, el volumen cambia con el tiempo:</p>
+  <p class="fx">V(t) = V<sub>0</sub> + (q<sub>ent</sub> − q<sub>sal</sub>) · t</p>
+  <p>y el término de salida pasa a ser q<sub>sal</sub> · S/V(t). Misma receta, pero el denominador se mueve.</p>`,
+  ojo:'Si en vez de agua pura entrara salmuera a 0,2 kg/L, el término de entrada sería 5 × 0,2 = 1 kg/min y la ecuación quedaría dS/dt = 1 − S/100. Fíjate que ahora existe un equilibrio: cuando S = 100 kg, entra y sale lo mismo y la sal deja de cambiar. Ese valor se llama estado estacionario y se encuentra haciendo dS/dt = 0.'
+ },
+ {
   t:'Por qué esto importa antes de que empieces',
   h:`<p>El curso está armado sobre este ciclo: <b>problema físico → modelo matemático → algoritmo numérico → código → interpretación del resultado</b>. Las pruebas evalúan que entiendas los eslabones del medio; los laboratorios, que sepas ejecutar los dos últimos.</p>
   <p>Y hay un detalle práctico: el profe declaró en el syllabus que <b>no entrega apuntes ni resúmenes</b>. Tú armas tu material. Eso significa que conviene que desde la primera clase lleves un cuaderno donde por cada método anotes cuatro cosas: qué problema resuelve, cuál es la idea geométrica, cuál es su orden de error, y cuál es la función de SciPy que lo implementa. Esas cuatro columnas son básicamente el formulario que vas a querer tener en las pruebas.</p>`
@@ -108,10 +133,10 @@ print(f'Error al final: {error_final:.4f} °C')`,
   t:'Ejercicios',
   ej:[
    {q:'Un estanque tiene 500 L de agua con 10 kg de sal disuelta. Entra agua pura a 5 L/min y sale mezcla a 5 L/min. Escribe el modelo matemático de la cantidad de sal S(t) e identifica cuál es la variable dependiente, la independiente y los parámetros.',
-    a:`El balance de masa dice: acumulación = entra − sale.<br><br>
-    Entra sal: 0 kg/min (el agua es pura).<br>
-    Sale sal: el caudal por la concentración actual, o sea 5 · (S/500).<br><br>
-    <span class="fx">dS/dt = −S/100</span><br><br>
+    a:`Aplica la receta de la sección anterior: acumulación = entra − sale, todo en kg/min.<br><br>
+    <b>Entra:</b> 5 L/min × 0 kg/L = 0 kg/min. El agua es pura, no trae sal.<br>
+    <b>Sale:</b> 5 L/min × (S/500) kg/L = S/100 kg/min. Sale con la concentración que hay adentro, por el supuesto de mezcla perfecta.<br><br>
+    <span class="fx">dS/dt = 0 − S/100 = −S/100</span><br><br>
     <b>Variable dependiente:</b> S, la masa de sal.<br>
     <b>Variable independiente:</b> t, el tiempo.<br>
     <b>Parámetros:</b> el volumen (500 L) y el caudal (5 L/min), que juntos dan la constante 1/100.<br>
