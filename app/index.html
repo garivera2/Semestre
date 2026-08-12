@@ -104,6 +104,9 @@ nav button.on{color:var(--acc)}
 .frow label{width:66px;flex:none;font-size:12.5px;color:var(--tx2)}
 .frow input,.frow select{flex:1;width:auto}
 .hgrid .hh{font-size:9.5px}
+.rg{padding:9px 0;border-bottom:.5px solid var(--line);cursor:pointer}
+.rg:last-child{border-bottom:0}
+.rg:active{opacity:.6}
 
 /* ---- guías ---- */
 .gnum{width:22px;height:22px;flex:none;border-radius:50%;background:var(--panel3);color:var(--tx3);
@@ -259,7 +262,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v10</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v11</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -333,8 +336,13 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
 </section>
 
 <section id="v-guias" class="hide">
-  <div class="sec-desc" style="margin-top:16px">Material escrito para ti siguiendo el temario del libro guía. Teoría, código que puedes copiar y correr, y ejercicios con solución.</div>
-  <div id="guias"></div>
+  <div class="seg" id="segguia" style="margin-top:16px">
+    <button data-t="ruta" class="on">Ruta de estudio</button>
+    <button data-t="todas">Todas las guías</button>
+  </div>
+  <div class="sec-desc">Material escrito siguiendo el temario y el material de Canvas de tus ramos. Teoría, ejemplos y ejercicios con solución.</div>
+  <div id="ruta"></div>
+  <div id="guias" class="hide"></div>
   <div id="guiadet" class="hide"></div>
 </section>
 
@@ -381,7 +389,7 @@ const CONRAMO=['mn','bd','me']; // los que tienen evaluaciones cargadas
    HORARIO SEMANAL OFICIAL  (1=lun ... 6=sáb)
 ============================================================ */
 const HOR_DEF=[
- {r:'mn',d:3,i:'08:30',f:'10:20',t:'Laboratorio',s:''},
+ {r:'mn',d:3,i:'08:30',f:'10:20',t:'Laboratorio',s:'BIB COMP 2'},
  {r:'mn',d:5,i:'13:30',f:'16:20',t:'Cátedra',s:'H-011'},
  {r:'me',d:4,i:'10:30',f:'13:20',t:'Cátedra',s:'C-213'},
  {r:'me',d:3,i:'15:30',f:'17:20',t:'Ayudantía',s:'H-012'},
@@ -392,7 +400,7 @@ const HOR_DEF=[
  {r:'mi',d:4,i:'13:30',f:'15:20',t:'Ayudantía',s:'C-018'}
 ];
 // Migración: si el horario guardado es de una versión vieja, lo reemplazo por el oficial.
-if(!S.hor||S.horV!==3){S.hor=JSON.parse(JSON.stringify(HOR_DEF));S.horV=3;}
+if(!S.hor||S.horV!==4){S.hor=JSON.parse(JSON.stringify(HOR_DEF));S.horV=4;}
 
 /* ============================================================
    EVENTOS
@@ -1130,6 +1138,54 @@ function pintaGuias(){
   }).join('');
   document.querySelectorAll('.gcard').forEach(c=>c.onclick=()=>abreGuia(c.dataset.g));
 }
+/* ---- ruta cronológica ---- */
+const SEMANAS=[
+ {n:1,f:'3 – 9 ago',t:'Arranque',
+  meta:'La semana de presentación. Si te la perdiste o no entendiste, esto es lo que quedó pendiente.'},
+ {n:2,f:'10 – 16 ago',t:'Primera entrega y primer laboratorio',
+  meta:'Semana cargada: entregas de BD y tu primer lab calificado de Métodos, los dos el miércoles.'},
+ {n:3,f:'17 – 23 ago',t:'Del diagrama a las tablas',
+  meta:'BD pasa a modelo relacional y normalización. Métodos entra en raíces de funciones.'}
+];
+function pintaRuta(){
+  const actual=SEM?SEM.n:0;
+  document.getElementById('ruta').innerHTML=SEMANAS.map(s=>{
+    const gs=G.filter(g=>g.sem===s.n);
+    const evs=EV.filter(e=>{const w=W.find(x=>x.n===s.n);return w&&e.d>=w.a&&e.d<=w.b&&PESA.includes(e.t)});
+    const hechas=gs.filter(g=>gHechas(g)===gTot(g)).length;
+    const es=s.n===actual;
+    return '<div class="card'+(es?' now':'')+'">'+
+      '<div class="row sb"><div><div class="row" style="gap:8px"><b style="font-size:16px">Semana '+s.n+'</b>'+
+      (es?'<span class="badge">ahora</span>':s.n<actual?'<span class="badge g">pasada</span>':'')+'</div>'+
+      '<div class="xs muted">'+s.f+' · '+s.t+'</div></div>'+
+      '<span class="chip">'+hechas+'/'+gs.length+'</span></div>'+
+      '<div class="small muted" style="margin:10px 0 4px">'+s.meta+'</div>'+
+      (evs.length?'<div style="margin:10px 0 2px">'+evs.map(e=>{
+        const n=dias(e.d);
+        return '<div class="row" style="gap:8px;padding:4px 0"><span class="hdot" style="background:'+R[e.r].c+'"></span>'+
+          '<span class="small" style="flex:1">'+esc(e.ti)+'</span>'+
+          '<span class="xs '+dcls(n)+'" style="font-weight:700">'+fmtc(e.d)+'</span></div>';
+      }).join('')+'</div>':'')+
+      '<div style="margin-top:11px;border-top:.5px solid var(--line);padding-top:10px">'+
+      (gs.length?gs.map(g=>{
+        const d=gHechas(g),t=gTot(g),p=Math.round(d/t*100);
+        return '<div class="rg" data-g="'+g.id+'"><div class="row" style="gap:10px">'+
+          '<span class="gnum'+(p===100?' ok':'')+'">'+(p===100?'✓':'') +'</span>'+
+          '<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px">'+esc(g.titulo)+'</div>'+
+          '<div class="xs muted">'+R[g.ramo].n+' · '+g.min+' min · '+d+'/'+t+' secciones</div></div>'+
+          '<span class="xs" style="color:var(--tx3)">abrir ›</span></div></div>';
+      }).join(''):'<div class="xs muted">Sin guías para esta semana todavía.</div>')+
+      '</div></div>';
+  }).join('')+
+  '<div class="card"><div class="small muted">Las guías de las semanas siguientes las vamos armando a medida que avancen las clases. Si necesitas alguna antes, pídemela.</div></div>';
+  document.querySelectorAll('.rg').forEach(c=>c.onclick=()=>abreGuia(c.dataset.g));
+}
+document.querySelectorAll('#segguia button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#segguia button').forEach(x=>x.classList.toggle('on',x===b));
+  document.getElementById('ruta').classList.toggle('hide',b.dataset.t!=='ruta');
+  document.getElementById('guias').classList.toggle('hide',b.dataset.t!=='todas');
+  document.getElementById('guiadet').classList.add('hide');
+});
 function abreGuia(id){
   const g=G.find(x=>x.id===id);
   let h='<button class="btn sm" style="margin-bottom:14px" onclick="cierraGuia()">‹ Volver a las guías</button>'+
@@ -1154,6 +1210,7 @@ function abreGuia(id){
   });
   document.getElementById('guiadet').innerHTML=h;
   document.getElementById('guias').classList.add('hide');
+  document.getElementById('ruta').classList.add('hide');
   document.getElementById('guiadet').classList.remove('hide');
   document.querySelectorAll('#guiadet [data-c]').forEach(el=>el.onchange=()=>{
     S.chk[el.dataset.c]=el.checked;save();
@@ -1165,8 +1222,9 @@ function abreGuia(id){
 }
 function cierraGuia(){
   document.getElementById('guiadet').classList.add('hide');
-  document.getElementById('guias').classList.remove('hide');
-  pintaGuias(); window.scrollTo({top:0,behavior:'instant'});
+  const enRuta=document.querySelector('#segguia button[data-t=ruta]').classList.contains('on');
+  document.getElementById(enRuta?'ruta':'guias').classList.remove('hide');
+  pintaGuias(); pintaRuta(); window.scrollTo({top:0,behavior:'instant'});
 }
 function cop(b){
   const t=b.parentElement.querySelector('code').textContent;
@@ -1254,7 +1312,7 @@ async function pullCloud(manual){
       Object.assign(S,{notas:D.notas||{},chk:D.chk||{},notes:D.notes||{}});
       // El horario de la nube solo se acepta si es de la versión actual.
       // Si es viejo, conservo el oficial que ya tengo y lo subo para corregir la nube.
-      const horViejo=D.horV!==3;
+      const horViejo=D.horV!==4;
       if(!horViejo&&D.hor) S.hor=D.hor;
       S.sync.ts=nube; save(false); estadoSync(true); pintaTodo();
       if(horViejo) pushCloud();
@@ -1297,7 +1355,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   VS.forEach(v=>document.getElementById('v-'+v).classList.toggle('hide',v!==b.dataset.v));
   window.scrollTo({top:0,behavior:'instant'});
 });
-function pintaTodo(){pintaHome();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaNotif();pintaSync();estadoSync()}
+function pintaTodo(){pintaHome();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaRuta();pintaNotif();pintaSync();estadoSync()}
 pintaTodo();
 revisaAvisos();
 const CONF=()=>S.sync.url&&S.sync.key&&S.sync.id;
