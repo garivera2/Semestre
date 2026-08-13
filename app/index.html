@@ -262,7 +262,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v11</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v12</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -1204,8 +1204,8 @@ function abreGuia(id){
       h+='<div class="ejer"><div class="q"><b>'+(j+1)+'.</b> '+esc(e.q).replace(/\n/g,'<br>')+'</div>'+
         '<details class="sol"><summary>Ver solución</summary><div class="sb2">'+e.a+'</div></details></div>';
     });
-    if(!s.ej) h+='<label class="chk" style="margin-top:14px;border-top:1px solid var(--line);border-bottom:0;padding-top:12px">'+
-      '<input type="checkbox" data-c="'+key+'"'+(on?' checked':'')+'><span>Ya estudié esta sección</span></label>';
+    h+='<label class="chk" style="margin-top:14px;border-top:.5px solid var(--line);border-bottom:0;padding-top:12px">'+
+      '<input type="checkbox" data-c="'+key+'"'+(on?' checked':'')+'><span>'+(s.ej?'Ya hice estos ejercicios':'Ya estudié esta sección')+'</span></label>';
     h+='</div></details>';
   });
   document.getElementById('guiadet').innerHTML=h;
