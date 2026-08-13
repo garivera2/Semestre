@@ -262,7 +262,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v12</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v13</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -281,6 +281,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
 
 <section id="v-home">
   <div class="eyebrow" style="margin-top:14px">Tu día</div><div id="hoy"></div>
+  <div class="eyebrow">Pendientes</div><div id="pend"></div>
   <div id="hero"></div>
   <div class="eyebrow">Próximas evaluaciones</div><div id="next"></div>
   <div class="eyebrow">Próximos 7 días</div><div id="week7"></div>
@@ -312,21 +313,37 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
 </section>
 
 <section id="v-notas" class="hide">
-  <div class="sec-desc" style="margin-top:16px">Escribe solo las notas que ya tengas. Calcula tu promedio en vivo y te dice cuánto necesitas en lo que falta para aprobar.</div>
-  <div id="calcs"></div>
-  <div class="eyebrow">Datos</div>
-  <div class="card">
-    <div class="row" style="flex-wrap:wrap;gap:8px">
-      <button class="btn sm" onclick="expo()">↓ Exportar</button>
-      <button class="btn sm" onclick="document.getElementById('imp').click()">↑ Importar</button>
-      <input type="file" id="imp" accept=".json" class="hide" onchange="impo(this)">
-      <button class="btn sm" onclick="if(confirm('¿Borrar todo lo que has escrito?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar</button>
+  <div class="seg" id="segnotas" style="margin-top:16px">
+    <button data-t="cal" class="on">Notas</button>
+    <button data-t="gas">Gastos</button>
+    <button data-t="cfg">Ajustes</button>
+  </div>
+
+  <div id="t-gas" class="hide">
+    <div class="sec-desc">Cuánto llevas gastado, por tarjeta y por categoría. Puedes anotarlo a mano o dejar que tu iPhone lo registre solo cada vez que pagas con Apple Pay.</div>
+    <div id="gastos"></div>
+  </div>
+
+  <div id="t-cfg" class="hide">
+    <div class="eyebrow" style="margin-top:8px">Recordatorios</div>
+    <div id="notif"></div>
+    <div class="eyebrow">Sincronizar entre dispositivos</div>
+    <div id="syncpanel"></div>
+    <div class="eyebrow">Datos</div>
+    <div class="card">
+      <div class="row" style="flex-wrap:wrap;gap:8px">
+        <button class="btn sm" onclick="expo()">↓ Exportar</button>
+        <button class="btn sm" onclick="document.getElementById('imp').click()">↑ Importar</button>
+        <input type="file" id="imp" accept=".json" class="hide" onchange="impo(this)">
+        <button class="btn sm" onclick="if(confirm('¿Borrar todo lo que has escrito?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar</button>
+      </div>
     </div>
   </div>
-  <div class="eyebrow">Recordatorios</div>
-  <div id="notif"></div>
-  <div class="eyebrow">Sincronizar entre dispositivos</div>
-  <div id="syncpanel"></div>
+
+  <div id="t-cal">
+  <div class="sec-desc">Escribe solo las notas que ya tengas. Calcula tu promedio en vivo y te dice cuánto necesitas en lo que falta para aprobar.</div>
+  <div id="calcs"></div>
+  </div>
 </section>
 
 <section id="v-estudio" class="hide">
@@ -998,6 +1015,119 @@ document.getElementById('ramos').innerHTML=['mn','bd','me'].map(k=>{
 }).join('');
 
 /* ============================================================
+   PENDIENTES
+============================================================ */
+S.todos=S.todos||[];
+function pintaPend(){
+  const hoyISO=iso(TODAY);
+  const abiertos=S.todos.filter(x=>!x.done).sort((a,b)=>(a.f||'9')<(b.f||'9')?-1:1);
+  const listos=S.todos.filter(x=>x.done);
+  let h='<div class="card">';
+  h+='<div class="row" style="gap:8px"><input type="text" id="ntodo" placeholder="Ej. terminar diagrama ER" style="flex:1">'+
+     '<input type="date" id="ntodof" style="width:auto" value="'+hoyISO+'">'+
+     '<button class="btn sm pri" onclick="addTodo()">+</button></div>';
+  if(abiertos.length){
+    h+='<div style="margin-top:12px;border-top:.5px solid var(--line);padding-top:4px">';
+    abiertos.forEach(t=>{
+      const n=t.f?dias(t.f):null;
+      h+='<label class="chk"><input type="checkbox" data-td="'+t.id+'">'+
+        '<span style="flex:1">'+esc(t.txt)+'</span>'+
+        (t.f?'<span class="xs '+dcls(n)+'" style="font-weight:700;white-space:nowrap">'+(n===0?'hoy':n<0?'atrasada':dtxt(n))+'</span>':'')+
+        '<button class="btn sm" style="padding:2px 7px;font-size:11px" onclick="delTodo(\''+t.id+'\')">✕</button></label>';
+    });
+    h+='</div>';
+  } else h+='<div class="muted small" style="margin-top:12px">Nada pendiente. Escribe algo arriba y aparece acá y en tu resumen de la mañana.</div>';
+  if(listos.length) h+='<details class="acc" style="margin-top:11px;background:none;border:0"><summary style="padding:8px 0"><span class="xs muted">'+listos.length+' completadas</span></summary><div class="bd" style="padding:0">'+
+    listos.map(t=>'<label class="chk done"><input type="checkbox" checked data-td="'+t.id+'"><span style="flex:1">'+esc(t.txt)+'</span>'+
+      '<button class="btn sm" style="padding:2px 7px;font-size:11px" onclick="delTodo(\''+t.id+'\')">✕</button></label>').join('')+'</div></details>';
+  document.getElementById('pend').innerHTML=h+'</div>';
+  document.querySelectorAll('[data-td]').forEach(el=>el.onchange=()=>{
+    const t=S.todos.find(x=>x.id===el.dataset.td); if(t){t.done=el.checked;save();pintaPend()}
+  });
+  const inp=document.getElementById('ntodo');
+  if(inp) inp.onkeydown=e=>{if(e.key==='Enter')addTodo()};
+}
+function addTodo(){
+  const i=document.getElementById('ntodo'), f=document.getElementById('ntodof');
+  const txt=i.value.trim(); if(!txt)return;
+  S.todos.push({id:'t'+Date.now(),txt,f:f.value||'',done:false});
+  save(); i.value=''; pintaPend();
+}
+function delTodo(id){S.todos=S.todos.filter(x=>x.id!==id);save();pintaPend()}
+
+/* ============================================================
+   GASTOS
+============================================================ */
+S.gastos=S.gastos||[];
+const CLP=n=>'$'+Math.round(n).toLocaleString('es-CL');
+function pintaGastos(){
+  const mesActual=iso(TODAY).slice(0,7);
+  const delMes=S.gastos.filter(g=>(g.fecha||'').slice(0,7)===mesActual);
+  const total=delMes.reduce((a,b)=>a+(+b.monto||0),0);
+  const porTarjeta={};
+  delMes.forEach(g=>{const k=g.tarjeta||'Sin tarjeta';porTarjeta[k]=(porTarjeta[k]||0)+(+g.monto||0)});
+  let h='<div class="card"><div class="xs muted">Gastado este mes</div>'+
+    '<div class="nota" style="margin:4px 0 2px">'+CLP(total)+'</div>'+
+    '<div class="xs muted">'+delMes.length+' movimientos · '+MESL[TODAY.getMonth()]+'</div>';
+  if(Object.keys(porTarjeta).length){
+    h+='<div style="margin-top:13px;border-top:.5px solid var(--line);padding-top:4px">';
+    Object.entries(porTarjeta).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
+      h+='<div class="kv"><span class="muted">'+esc(k)+'</span><b class="mono">'+CLP(v)+'</b></div>'});
+    h+='</div>';
+  }
+  h+='</div>';
+
+  h+='<div class="card"><b style="font-size:14px">Anotar un gasto</b>'+
+   '<div class="frow"><label>Monto</label><input type="number" id="gm" placeholder="12990" inputmode="numeric"></div>'+
+   '<div class="frow"><label>Dónde</label><input type="text" id="gd" placeholder="Ej. Jumbo"></div>'+
+   '<div class="frow"><label>Tarjeta</label><input type="text" id="gt" placeholder="Ej. Débito Santander" value="'+esc(S.ultTarjeta||'')+'"></div>'+
+   '<div class="frow"><label>Fecha</label><input type="date" id="gf" value="'+iso(TODAY)+'"></div>'+
+   '<button class="btn sm pri" style="margin-top:11px" onclick="addGasto()">Guardar gasto</button></div>';
+
+  const ult=[...S.gastos].sort((a,b)=>(b.fecha||'')<(a.fecha||'')?-1:1).slice(0,25);
+  h+='<div class="card"><b style="font-size:14px">Últimos movimientos</b>'+
+   (ult.length?'<div style="margin-top:8px">'+ult.map(g=>
+     '<div class="row sb" style="padding:9px 0;border-bottom:.5px solid var(--line)">'+
+     '<div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">'+esc(g.comercio||'Sin detalle')+'</div>'+
+     '<div class="xs muted">'+(g.fecha?fmt(g.fecha):'')+(g.tarjeta?' · '+esc(g.tarjeta):'')+(g.auto?' · automático':'')+'</div></div>'+
+     '<div class="row" style="gap:8px"><b class="mono" style="font-size:14px">'+CLP(g.monto)+'</b>'+
+     '<button class="btn sm" style="padding:2px 7px;font-size:11px" onclick="delGasto(\''+g.id+'\')">✕</button></div></div>').join('')+'</div>'
+    :'<div class="muted small" style="margin-top:8px">Todavía no hay movimientos.</div>')+'</div>';
+
+  h+='<details class="acc"><summary><span>Registrar los pagos automáticamente desde el iPhone</span></summary><div class="bd small">'+
+   '<p style="margin:0 0 10px">iOS puede ejecutar una automatización <b>cada vez que pagas con Apple Pay</b>. Con eso el gasto se registra solo, sin que abras nada.</p>'+
+   '<p style="margin:0 0 6px"><b>1.</b> En Supabase → SQL Editor, corre esto una vez:</p>'+
+   '<pre style="background:var(--panel2);padding:10px;border-radius:9px;font-size:11px;white-space:pre-wrap;overflow-x:auto">create table gastos (\n  id uuid primary key default gen_random_uuid(),\n  usuario text,\n  monto numeric,\n  comercio text,\n  tarjeta text,\n  fecha timestamptz default now()\n);\nalter table gastos enable row level security;\ncreate policy pg on gastos for all using (true) with check (true);</pre>'+
+   '<p style="margin:10px 0 6px"><b>2.</b> En el iPhone: app <b>Atajos</b> → pestaña <b>Automatización</b> → <b>Nueva</b> → elige <b>Transacción</b> (en iOS 26 se llama <b>Wallet</b>).</p>'+
+   '<p style="margin:0 0 6px"><b>3.</b> Selecciona las tarjetas que quieres registrar y marca <b>Ejecutar inmediatamente</b>, para que no te pregunte cada vez.</p>'+
+   '<p style="margin:0 0 6px"><b>4.</b> Agrega la acción <b>Obtener contenido de URL</b> con:</p>'+
+   '<pre style="background:var(--panel2);padding:10px;border-radius:9px;font-size:11px;white-space:pre-wrap;overflow-x:auto">URL: TU_URL_SUPABASE/rest/v1/gastos\nMétodo: POST\nCabeceras:\n  apikey: TU_CLAVE\n  Content-Type: application/json\nCuerpo (JSON):\n  usuario: '+esc(S.sync.id||'tu-codigo')+'\n  monto: [Monto de la transacción]\n  comercio: [Comercio]\n  tarjeta: [Tarjeta]</pre>'+
+   '<p style="margin:10px 0 0">Los campos entre corchetes los insertas desde el botón de variables de Atajos, que te ofrece los datos de la transacción.</p>'+
+   '<div class="note" style="margin-top:10px">Desde iOS 18 hay reportes de que este disparador a veces no se ejecuta. Si te falla, no es tu configuración: es un problema conocido de Apple. El registro manual de arriba siempre funciona.</div>'+
+   '</div></details>';
+  document.getElementById('gastos').innerHTML=h;
+}
+function addGasto(){
+  const m=+document.getElementById('gm').value;
+  if(!m){toast('Falta el monto');return}
+  const g={id:'g'+Date.now(),monto:m,comercio:document.getElementById('gd').value.trim(),
+    tarjeta:document.getElementById('gt').value.trim(),fecha:document.getElementById('gf').value};
+  S.gastos.push(g); S.ultTarjeta=g.tarjeta; save(); pintaGastos(); toast('Gasto anotado');
+}
+function delGasto(id){S.gastos=S.gastos.filter(x=>x.id!==id);save();pintaGastos()}
+async function bajaGastos(){
+  const s=S.sync; if(!(s.url&&s.key&&s.id))return;
+  try{
+    const r=await fetch(baseURL(s)+'/rest/v1/gastos?usuario=eq.'+encodeURIComponent(s.id)+'&select=*&order=fecha.desc&limit=200',{headers:hdrs(s)});
+    if(!r.ok)return;
+    const j=await r.json(); if(!Array.isArray(j))return;
+    const nuevos=j.filter(x=>!S.gastos.some(g=>g.id===x.id))
+      .map(x=>({id:x.id,monto:x.monto,comercio:x.comercio,tarjeta:x.tarjeta,fecha:(x.fecha||'').slice(0,10),auto:true}));
+    if(nuevos.length){S.gastos=S.gastos.concat(nuevos);save(false);pintaGastos()}
+  }catch(e){}
+}
+
+/* ============================================================
    TEMA
 ============================================================ */
 function aplicaTema(){
@@ -1286,7 +1416,7 @@ async function pushCloud(manual){
     const ts=new Date().toISOString();
     const r=await fetch(baseURL(s)+'/rest/v1/estado',{method:'POST',
       headers:hdrs(s,{'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}),
-      body:JSON.stringify({id:s.id,data:{notas:S.notas,chk:S.chk,notes:S.notes,hor:S.hor,horV:S.horV},updated_at:ts})});
+      body:JSON.stringify({id:s.id,data:{notas:S.notas,chk:S.chk,notes:S.notes,hor:S.hor,horV:S.horV,todos:S.todos,gastos:S.gastos},updated_at:ts})});
     if(!r.ok){LASTERR='HTTP '+r.status+' — '+(await r.text()).slice(0,300);throw 0}
     S.sync.ts=ts; localStorage.setItem(KEY,JSON.stringify(S));
     LASTERR=''; estadoSync(true); if(manual)toast('Subido a la nube');
@@ -1309,7 +1439,7 @@ async function pullCloud(manual){
       if(!manual && mio && nube && nube<=mio){estadoSync(true); return}
       if(manual && mio && nube && nube<mio && !confirm('Lo que tienes en este dispositivo es más reciente que la nube. ¿Reemplazarlo igual con la versión de la nube?')){return}
       const D=j[0].data;
-      Object.assign(S,{notas:D.notas||{},chk:D.chk||{},notes:D.notes||{}});
+      Object.assign(S,{notas:D.notas||{},chk:D.chk||{},notes:D.notes||{},todos:D.todos||[],gastos:D.gastos||[]});
       // El horario de la nube solo se acepta si es de la versión actual.
       // Si es viejo, conservo el oficial que ya tengo y lo subo para corregir la nube.
       const horViejo=D.horV!==4;
@@ -1355,11 +1485,16 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   VS.forEach(v=>document.getElementById('v-'+v).classList.toggle('hide',v!==b.dataset.v));
   window.scrollTo({top:0,behavior:'instant'});
 });
-function pintaTodo(){pintaHome();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaRuta();pintaNotif();pintaSync();estadoSync()}
+document.querySelectorAll('#segnotas button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#segnotas button').forEach(x=>x.classList.toggle('on',x===b));
+  ['cal','gas','cfg'].forEach(v=>document.getElementById('t-'+v).classList.toggle('hide',v!==b.dataset.t));
+  window.scrollTo({top:0,behavior:'instant'});
+});
+function pintaTodo(){pintaHome();pintaPend();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaRuta();pintaGastos();pintaNotif();pintaSync();estadoSync()}
 pintaTodo();
 revisaAvisos();
 const CONF=()=>S.sync.url&&S.sync.key&&S.sync.id;
-if(CONF()) pullCloud();
+if(CONF()){pullCloud();bajaGastos()}
 // Baja los cambios solos al volver a la app o a la pestaña
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CONF())pullCloud()});
 window.addEventListener('focus',()=>{if(CONF())pullCloud()});
