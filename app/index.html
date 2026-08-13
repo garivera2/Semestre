@@ -262,7 +262,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v13</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v14</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -1023,20 +1023,23 @@ function pintaPend(){
   const abiertos=S.todos.filter(x=>!x.done).sort((a,b)=>(a.f||'9')<(b.f||'9')?-1:1);
   const listos=S.todos.filter(x=>x.done);
   let h='<div class="card">';
-  h+='<div class="row" style="gap:8px"><input type="text" id="ntodo" placeholder="Ej. terminar diagrama ER" style="flex:1">'+
-     '<input type="date" id="ntodof" style="width:auto" value="'+hoyISO+'">'+
-     '<button class="btn sm pri" onclick="addTodo()">+</button></div>';
+  h+='<input type="text" id="ntodo" placeholder="Ej. terminar diagrama ER">'+
+     '<div class="row" style="gap:8px;margin-top:8px"><input type="date" id="ntodof" style="flex:1" value="'+hoyISO+'">'+
+     '<input type="time" id="ntodoh" style="width:auto" value="20:00">'+
+     '<button class="btn sm pri" onclick="addTodo()">Agregar</button></div>';
   if(abiertos.length){
     h+='<div style="margin-top:12px;border-top:.5px solid var(--line);padding-top:4px">';
     abiertos.forEach(t=>{
       const n=t.f?dias(t.f):null;
       h+='<label class="chk"><input type="checkbox" data-td="'+t.id+'">'+
-        '<span style="flex:1">'+esc(t.txt)+'</span>'+
+        '<span style="flex:1">'+esc(t.txt)+(t.h?' <span class="xs muted mono">'+t.h+'</span>':'')+'</span>'+
         (t.f?'<span class="xs '+dcls(n)+'" style="font-weight:700;white-space:nowrap">'+(n===0?'hoy':n<0?'atrasada':dtxt(n))+'</span>':'')+
+        (t.f?'<button class="btn sm" title="Crear recordatorio en el celular" style="padding:2px 7px;font-size:12px" onclick="event.preventDefault();recordar(\''+t.id+'\')">🔔</button>':'')+
         '<button class="btn sm" style="padding:2px 7px;font-size:11px" onclick="delTodo(\''+t.id+'\')">✕</button></label>';
     });
     h+='</div>';
-  } else h+='<div class="muted small" style="margin-top:12px">Nada pendiente. Escribe algo arriba y aparece acá y en tu resumen de la mañana.</div>';
+    h+='<div class="xs muted" style="padding:8px 2px 0">El botón 🔔 crea el recordatorio en el calendario de tu celular, para que la notificación te llegue aunque la app esté cerrada.</div>';
+  } else h+='<div class="muted small" style="margin-top:12px">Nada pendiente. Escribe algo arriba y aparece acá, en tu resumen de la mañana y con opción de recordatorio en el celular.</div>';
   if(listos.length) h+='<details class="acc" style="margin-top:11px;background:none;border:0"><summary style="padding:8px 0"><span class="xs muted">'+listos.length+' completadas</span></summary><div class="bd" style="padding:0">'+
     listos.map(t=>'<label class="chk done"><input type="checkbox" checked data-td="'+t.id+'"><span style="flex:1">'+esc(t.txt)+'</span>'+
       '<button class="btn sm" style="padding:2px 7px;font-size:11px" onclick="delTodo(\''+t.id+'\')">✕</button></label>').join('')+'</div></details>';
@@ -1048,12 +1051,32 @@ function pintaPend(){
   if(inp) inp.onkeydown=e=>{if(e.key==='Enter')addTodo()};
 }
 function addTodo(){
-  const i=document.getElementById('ntodo'), f=document.getElementById('ntodof');
+  const i=document.getElementById('ntodo'), f=document.getElementById('ntodof'), hh=document.getElementById('ntodoh');
   const txt=i.value.trim(); if(!txt)return;
-  S.todos.push({id:'t'+Date.now(),txt,f:f.value||'',done:false});
+  S.todos.push({id:'t'+Date.now(),txt,f:f.value||'',h:hh.value||'',done:false});
   save(); i.value=''; pintaPend();
 }
 function delTodo(id){S.todos=S.todos.filter(x=>x.id!==id);save();pintaPend()}
+// Genera un evento de calendario con alarma. Al abrirlo, el iPhone lo agrega
+// a Calendario y la notificación la dispara el sistema, no la app.
+function recordar(id){
+  const t=S.todos.find(x=>x.id===id); if(!t||!t.f)return;
+  const hora=t.h||'20:00';
+  const [H,M]=hora.split(':').map(Number);
+  const fin=String(H).padStart(2,'0')+':'+String(M+15>=60?59:M+15).padStart(2,'0');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Semestre//ES','METHOD:PUBLISH',
+    'BEGIN:VEVENT','UID:'+id+'@semestre','DTSTAMP:'+dtICS(iso(TODAY),'08:00')+'Z',
+    'DTSTART;TZID=America/Santiago:'+dtICS(t.f,hora),
+    'DTEND;TZID=America/Santiago:'+dtICS(t.f,fin),
+    'SUMMARY:'+t.txt.replace(/[,;]/g,''),
+    'DESCRIPTION:Pendiente de tu dashboard del semestre',
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+t.txt.replace(/[,;]/g,''),'TRIGGER:-PT0M','END:VALARM',
+    'END:VEVENT','END:VCALENDAR'];
+  const b=new Blob([L.join('\r\n')],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download='recordatorio.ics'; a.click();
+  toast('Ábrelo para que suene a la hora');
+}
 
 /* ============================================================
    GASTOS
