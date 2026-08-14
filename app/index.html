@@ -262,7 +262,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v14</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v15</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -400,7 +400,7 @@ const R={
  x:{n:'Otro / personal',s:'—',c:'var(--tx2)',hex:'#8e8e93',cls:'p-x'}
 };
 const RAMOS=['mn','bd','me','pm','mi'];
-const CONRAMO=['mn','bd','me']; // los que tienen evaluaciones cargadas
+const CONRAMO=['mn','bd','me','pm','mi'];
 
 /* ============================================================
    HORARIO SEMANAL OFICIAL  (1=lun ... 6=sáb)
@@ -479,7 +479,23 @@ const EV=[
 {d:'2026-11-11',r:'me',t:'prueba',ti:'PRUEBA 3',de:'20% · Unidad 4'},
 {d:'2026-11-12',r:'me',t:'control',ti:'Control 4',de:'Unidad 5 · durante la cátedra'},
 {d:'2026-11-20',r:'me',t:'hito',ti:'Recuperativas',de:'Solo ausencias justificadas'},
-{d:'2026-11-27',r:'me',t:'examen',ti:'EXAMEN Modelos Estocásticos',de:'25% · Unidad 5, sin eximición'}
+{d:'2026-11-27',r:'me',t:'examen',ti:'EXAMEN Modelos Estocásticos',de:'25% · Unidad 5, sin eximición'},
+// PROGRAMACIÓN MATEMÁTICA · prof. Miguel Carrasco
+{d:'2026-08-25',r:'pm',t:'control',ti:'Control 1',de:'Modelamiento, programación lineal, simplex, solución gráfica, dualidad y B&B'},
+{d:'2026-09-07',r:'pm',t:'prueba',ti:'PRUEBA 1',de:'Programación lineal, dualidad, flujo en redes, programación entera y no lineal'},
+{d:'2026-09-22',r:'pm',t:'control',ti:'Control 2',de:'Optimización sin restricciones, condiciones de primer y segundo orden, convexidad'},
+{d:'2026-10-05',r:'pm',t:'prueba',ti:'PRUEBA 2',de:'Optimización sin restricciones, gradiente y Newton, y con restricciones · día por confirmar'},
+{d:'2026-10-27',r:'pm',t:'control',ti:'Control 3',de:'Optimización con restricciones, KKT caso no convexo'},
+{d:'2026-11-09',r:'pm',t:'prueba',ti:'PRUEBA 3',de:'Optimización con restricciones y programación dinámica'},
+{d:'2026-11-16',r:'pm',t:'hito',ti:'Prueba recuperativa',de:'Toda la materia'},
+{d:'2026-11-17',r:'pm',t:'control',ti:'Control 4',de:'Programación dinámica'},
+{d:'2026-11-18',r:'pm',t:'hito',ti:'Fin de clases',de:'Última semana de Programación Matemática'},
+{d:'2026-12-01',r:'pm',t:'examen',ti:'EXAMEN Programación Matemática',de:'13:30 a 15:20'},
+// MICROECONOMÍA
+{d:'2026-09-24',r:'mi',t:'prueba',ti:'PRUEBA 1',de:'25% · 13:30-15:20 · Temas I.1 a II.2'},
+{d:'2026-11-05',r:'mi',t:'prueba',ti:'PRUEBA 2',de:'25% · 13:30-15:20 · Temas II.2 a III.1'},
+{d:'2026-11-25',r:'mi',t:'examen',ti:'EXAMEN Microeconomía',de:'30% · 13:30-15:30 · toda la materia'},
+{d:'2026-11-30',r:'mi',t:'hito',ti:'Recuperativo (tentativo)',de:'Solo por ausencia justificada al examen'}
 ].sort((a,b)=>a.d<b.d?-1:1);
 
 const T={clase:'Clase',lab:'Laboratorio',control:'Control',prueba:'Prueba',examen:'Examen',tarea:'Entrega',hito:'Hito'};
@@ -600,6 +616,70 @@ const CALC={
   req:'Se exige <b>≥ 4,0 en cada componente</b> (trabajo semanal, promedio de aplicación y examen) además de NF ≥ 4,0. Si falla alguno, la nota final se trunca a <b>3,9</b>. No hay eximición.',
   fuente:'Clase 1 · propuesta del curso (Canvas)'
  },
+ mi:{
+  titulo:'Microeconomía', cod:'NRC 591 · 3594',
+  formula:'NF = 0,25·P1 + 0,25·P2 + 0,30·Examen + 0,10·Controles en ayudantía + 0,10·Controles en clases',
+  grupos:[
+    {k:'P',n:'Pruebas',items:['p1','p2'],labels:['Prueba 1 (24 sep)','Prueba 2 (5 nov)']},
+    {k:'E',n:'Examen',items:['ex'],labels:['Examen (25 nov)']},
+    {k:'A',n:'Controles cortos en ayudantía',items:['a1','a2','a3','a4'],drop1:true,labels:['Control corto 1','Control corto 2','Control corto 3','Control corto 4']},
+    {k:'C',n:'Controles en clases',items:['c1','c2','c3','c4'],labels:['Control 1','Control 2','Control 3','Control 4']}
+  ],
+  calc(g){
+    // De los 4 controles cortos de ayudantía se elimina el peor
+    const notas=['a1','a2','a3','a4'].map(k=>S.notas['mi.'+k]).filter(v=>v!==''&&v!==undefined&&v!==null).map(Number).filter(v=>!isNaN(v));
+    const A=g.A;
+    const {P,E,C}=g;
+    let acum=0,used=0;
+    if(P!==null){acum+=.50*P;used+=.50}
+    if(E!==null){acum+=.30*E;used+=.30}
+    if(A!==null){acum+=.10*A;used+=.10}
+    if(C!==null){acum+=.10*C;used+=.10}
+    return {parcial:used>0?acum/used:null,nf:(P!==null&&E!==null&&A!==null&&C!==null)?acum:null,used,acum,A,elim:notas.length===4};
+  },
+  render(r){
+    if(r.parcial===null) return '<div class="muted small">Escribe tu primera nota y aparece el cálculo.</div>';
+    const v=r.nf??r.parcial;
+    let h='<div class="row sb"><div><div class="xs muted">'+(r.nf!==null?'Nota final':'Promedio de lo rendido')+'</div>'+
+      '<div class="nota" style="color:'+(v>=4?'var(--ok)':'var(--danger)')+'">'+F(v)+'</div></div>'+
+      '<div style="text-align:right"><div class="xs muted">Rendido</div><div class="mono" style="font-size:17px;font-weight:800">'+Math.round(r.used*100)+'%</div></div></div>';
+    h+='<div class="bar2"><i style="width:'+(r.used*100)+'%;background:linear-gradient(90deg,var(--mi),var(--bd))"></i></div>';
+    if(r.elim) h+='<div class="note ok" style="margin-top:11px">Ya descarté tu peor control corto de ayudantía, como dice el syllabus.</div>';
+    if(r.used<1){
+      const need=(4-r.acum)/(1-r.used);
+      h+='<div class="small" style="margin-top:11px;padding-top:10px;border-top:.5px solid var(--line)">'+
+        (need<=1?'Ya tienes el <b>4,0</b> asegurado con lo que falta.'
+         :need<=7?'Para llegar a <b>4,0</b> necesitas promediar <b style="color:'+(need<=4?'var(--ok)':need<=5.5?'var(--warn)':'var(--danger)')+'">'+F(need)+'</b> en el '+Math.round((1-r.used)*100)+'% restante.'
+                :'<span style="color:var(--danger)">Con lo rendido ya no alcanzas 4,0.</span>')+'</div>';
+    }
+    return h;
+  },
+  req:'<b>Ninguna evaluación es reprobatoria y no se exige nota mínima.</b> Se permite como máximo una ausencia justificada a pruebas; en ese caso la nota del examen reemplaza la prueba. Las ausencias a controles cortos no se pueden justificar. De los 4 controles cortos de ayudantía se elimina el peor.',
+  fuente:'Syllabus Microeconomía 2026-2 (Canvas)'
+ },
+ pm:{
+  titulo:'Programación Matemática', cod:'Miguel Carrasco',
+  formula:'⚠ Ponderaciones aún no publicadas en Canvas',
+  pendiente:true,
+  grupos:[
+    {k:'P',n:'Pruebas',items:['p1','p2','p3'],labels:['Prueba 1 (7 sep)','Prueba 2 (5 oct)','Prueba 3 (9 nov)']},
+    {k:'C',n:'Controles',items:['c1','c2','c3','c4'],labels:['Control 1 (25 ago)','Control 2 (22 sep)','Control 3 (27 oct)','Control 4 (17 nov)']},
+    {k:'E',n:'Examen',items:['ex'],labels:['Examen (1 dic)']}
+  ],
+  calc(g){
+    const {P,C,E}=g;
+    const v=[P,C,E].filter(x=>x!==null);
+    return {parcial:v.length?v.reduce((a,b)=>a+b,0)/v.length:null,nf:null,P,C,E};
+  },
+  render(r){
+    if(r.parcial===null) return '<div class="muted small">Escribe tu primera nota y aparece el promedio.</div>';
+    return '<div class="xs muted">Promedio simple de lo rendido</div>'+
+      '<div class="nota" style="color:'+(r.parcial>=4?'var(--ok)':'var(--danger)')+'">'+F(r.parcial)+'</div>'+
+      '<div class="small muted" style="margin-top:8px">Este es un promedio simple, no tu nota real. Apenas el profe publique las ponderaciones las cargo y el cálculo pasa a ser exacto.</div>';
+  },
+  req:'El profesor Carrasco publicó el calendario de evaluaciones pero todavía no las ponderaciones. En cuanto aparezcan en Canvas, actualizo la fórmula.',
+  fuente:'Planilla "Programación Mat 202620" (Canvas)'
+ },
  me:{
   titulo:'Modelos Estocásticos', cod:'ICI 3205 · Marcel Favereau, PhD',
   formula:'NF = 0,20·P1 + 0,20·P2 + 0,20·P3 + 0,25·Examen + 0,15·Prom. controles',
@@ -719,12 +799,12 @@ function pintaHome(){
   const w7=EV.filter(e=>{const n=dias(e.d);return n>=0&&n<=7});
   document.getElementById('week7').innerHTML='<div class="card">'+(w7.length?w7.map(evHTML).join(''):'<div class="muted small">Semana despejada. Buen momento para adelantar materia.</div>')+'</div>';
 
-  const ini=pd('2026-08-06'),fin=pd('2026-11-27');
+  const ini=pd('2026-08-03'),fin=pd('2026-12-01');
   const pct=Math.max(0,Math.min(100,Math.round((TODAY-ini)/(fin-ini)*100)));
   let h='<div class="card t"><div class="row"><div style="flex:1"><b>Avance del semestre</b>'+
-    '<div class="xs muted" style="margin-top:2px">Último examen: 27 de noviembre · faltan '+dias('2026-11-27')+' días</div></div>'+
+    '<div class="xs muted" style="margin-top:2px">Último examen: 1 de diciembre · faltan '+dias('2026-12-01')+' días</div></div>'+
     ring(pct,'#6c8cff',pct+'%')+'</div></div><div class="grid g3">';
-  for(const k of ['mn','bd','me']){
+  for(const k of CONRAMO){
     const pend=EV.filter(e=>e.r===k&&dias(e.d)>=0&&PESA.includes(e.t)).length;
     const s2=EV.find(e=>e.r===k&&dias(e.d)>=0&&PESA.includes(e.t));
     h+='<div class="card t"><span class="pill '+R[k].cls+'">'+R[k].s+'</span>'+
@@ -920,14 +1000,17 @@ document.getElementById('leg').innerHTML=RAMOS.map(k=>
 /* ============================================================
    CALCULADORA
 ============================================================ */
-function promedio(k,items){
-  const v=items.map(i=>S.notas[k+'.'+i]).filter(x=>x!==''&&x!==undefined&&x!==null).map(Number).filter(x=>!isNaN(x));
-  return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;
+function promedio(k,items,drop1){
+  let v=items.map(i=>S.notas[k+'.'+i]).filter(x=>x!==''&&x!==undefined&&x!==null).map(Number).filter(x=>!isNaN(x));
+  if(!v.length) return null;
+  // drop1: cuando el ramo descarta la peor nota y ya están todas rendidas
+  if(drop1&&v.length===items.length&&v.length>1) v=[...v].sort((a,b)=>a-b).slice(1);
+  return v.reduce((a,b)=>a+b,0)/v.length;
 }
 function pintaCalc(){
-  document.getElementById('calcs').innerHTML=['mn','bd','me'].map(k=>{
+  document.getElementById('calcs').innerHTML=['mn','bd','me','mi','pm'].map(k=>{
     const c=CALC[k];
-    const g={}; c.grupos.forEach(gr=>g[gr.k]=promedio(k,gr.items));
+    const g={}; c.grupos.forEach(gr=>g[gr.k]=promedio(k,gr.items,gr.drop1));
     const r=c.calc(g);
     let h='<div class="card"><div class="row sb"><span class="pill '+R[k].cls+'">'+R[k].s+'</span><span class="xs muted">'+c.cod+'</span></div>'+
       '<h3 style="font-size:17px;margin:11px 0 5px">'+c.titulo+'</h3>'+

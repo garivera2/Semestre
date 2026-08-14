@@ -688,7 +688,7 @@ while abs(x) > 1e-9:
 {
  id:'micro1', ramo:'mi', tag:'Unidad 1', sem:2,
  titulo:'Introducción a la Economía',
- bajada:'Los ocho conceptos fundamentales que el profe dijo que debes dominar. NRC 591 y 3594.',
+ bajada:'Los ocho conceptos base que el profe dijo que debes dominar antes de entrar a Teoría del Consumidor. NRC 591 y 3594.',
  min:70,
  secciones:[
  {

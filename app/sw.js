@@ -1,5 +1,5 @@
 // Service worker mínimo: cachea la app para que funcione sin internet.
-const CACHE = 'semestre-v14';
+const CACHE = 'semestre-v15';
 const FILES = ['./', './index.html', './guias.js', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {
