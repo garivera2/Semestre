@@ -1228,5 +1228,381 @@ print(np.isclose(0.1 + 0.2, 0.3))  # True`,
  }
  ]
 }
+,
+
+/* ===================== ME · U1 REPASO DE PROBABILIDAD ===================== */
+{
+ id:'me-u1', ramo:'me', tag:'Semana 1', sem:1,
+ titulo:'Repaso de probabilidad',
+ bajada:'Capítulo 1. La base sobre la que se monta todo el resto del curso. Formulario y conceptos, sin ejercicios.',
+ min:35,
+ secciones:[
+ {
+  t:'Lo esencial en una hoja',
+  h:`<p>El profe da esto por sabido desde la segunda semana. Si algo de acá no te sale automático, ese es tu punto débil.</p>
+  <p><b>Probabilidad condicional</b></p>
+  <p class="fx">P(A | B) = P(A ∩ B) / P(B),  con P(B) &gt; 0</p>
+  <p><b>Independencia.</b> A y B son independientes si P(A ∩ B) = P(A)·P(B), lo que equivale a P(A|B) = P(A). Saber que ocurrió B no cambia nada sobre A.</p>
+  <p><b>Probabilidad total</b> — cuando el espacio se parte en casos excluyentes B₁…Bₙ:</p>
+  <p class="fx">P(A) = Σ P(A | B<sub>i</sub>) · P(B<sub>i</sub>)</p>
+  <p><b>Bayes</b> — invierte el condicionamiento:</p>
+  <p class="fx">P(B<sub>i</sub> | A) = P(A | B<sub>i</sub>) P(B<sub>i</sub>) / Σ P(A | B<sub>j</sub>) P(B<sub>j</sub>)</p>`,
+  ojo:'Bayes se usa cuando te dan el efecto y te preguntan por la causa. "Salió positivo el test, ¿cuál es la probabilidad de que esté enfermo?" — te dieron P(positivo|enfermo) y quieren P(enfermo|positivo). Reconocer esa inversión es la mitad del ejercicio.'
+ },
+ {
+  t:'Esperanza y varianza',
+  h:`<p class="fx">E[X] = Σ x·p(x)   (discreta)   ó   ∫ x·f(x) dx   (continua)</p>
+  <p class="fx">Var(X) = E[X²] − (E[X])²</p>
+  <p><b>Propiedades que vas a usar sin parar:</b></p>
+  <ul>
+  <li>E[aX + b] = a·E[X] + b — la esperanza es <b>lineal siempre</b>, haya o no independencia</li>
+  <li>Var(aX + b) = a²·Var(X) — la constante b no afecta la dispersión, y la a va al cuadrado</li>
+  <li>E[X + Y] = E[X] + E[Y] — <b>siempre</b>, incluso si dependen</li>
+  <li>Var(X + Y) = Var(X) + Var(Y) — <b>solo si son independientes</b></li>
+  </ul>
+  <p><b>Esperanza condicional</b>, que es la herramienta más potente del curso:</p>
+  <p class="fx">E[X] = E[ E[X | Y] ]</p>
+  <p>Se llama ley de esperanzas iteradas. Sirve para calcular esperanzas difíciles condicionando en algo que las vuelve fáciles. Vuelve a aparecer en Markov.</p>`,
+  ojo:'La asimetría entre esperanza y varianza es lo que más se equivoca: la esperanza de una suma siempre se suma, la varianza solo si hay independencia. Si no lo son, aparece un término de covarianza.'
+ },
+ {
+  t:'Distribuciones que necesitas de memoria',
+  h:`<table class="tb"><tr><th>Distribución</th><th>Modela</th><th>E[X]</th><th>Var(X)</th></tr>
+  <tr><td><b>Bernoulli(p)</b></td><td>Un intento: éxito o fracaso</td><td>p</td><td>p(1−p)</td></tr>
+  <tr><td><b>Binomial(n,p)</b></td><td>Éxitos en n intentos</td><td>np</td><td>np(1−p)</td></tr>
+  <tr><td><b>Geométrica(p)</b></td><td>Intentos hasta el primer éxito</td><td>1/p</td><td>(1−p)/p²</td></tr>
+  <tr><td><b>Poisson(λ)</b></td><td>Eventos en un intervalo fijo</td><td>λ</td><td>λ</td></tr>
+  <tr><td><b>Exponencial(λ)</b></td><td>Tiempo hasta el próximo evento</td><td>1/λ</td><td>1/λ²</td></tr>
+  <tr><td><b>Uniforme(a,b)</b></td><td>Igual chance en un rango</td><td>(a+b)/2</td><td>(b−a)²/12</td></tr>
+  <tr><td><b>Normal(μ,σ²)</b></td><td>Suma de muchos efectos chicos</td><td>μ</td><td>σ²</td></tr></table>
+  <p>Fíjate en el par que domina el curso: <b>Poisson cuenta eventos</b> en un periodo, <b>Exponencial mide el tiempo</b> hasta que ocurre uno. Son dos caras del mismo proceso, y esa dualidad es exactamente el Capítulo 2.</p>
+  <p>Y en Poisson pasa algo poco común: <b>la media y la varianza son iguales</b>, ambas λ. Es un chequeo rápido de que estás usando la distribución correcta.</p>`
+ },
+ {
+  t:'La propiedad sin memoria',
+  h:`<p>Es la propiedad más importante del curso y por eso conviene entenderla ahora y no cuando aparezca.</p>
+  <p class="fx">P(X &gt; s + t | X &gt; s) = P(X &gt; t)</p>
+  <p>En palabras: si llevas <i>s</i> minutos esperando, la probabilidad de esperar <i>t</i> minutos más es la misma que si recién hubieras llegado. <b>El sistema no recuerda cuánto llevas esperando.</b></p>
+  <p>La <b>exponencial</b> es la única distribución continua con esta propiedad, y la <b>geométrica</b> la única discreta.</p>
+  <p><b>Por qué importa:</b> es lo que hace que las cadenas de Markov funcionen. Si el tiempo que llevas en un estado no afecta cuándo saldrás, entonces basta con saber dónde estás ahora — no necesitas la historia. Eso es literalmente la propiedad de Markov.</p>`,
+  ojo:'Es contraintuitivo y hay que aceptarlo: una ampolleta exponencial que lleva 1000 horas encendida tiene la misma expectativa de vida restante que una nueva. Por eso la exponencial modela mal el desgaste y bien las llegadas aleatorias.'
+ }
+ ]
+},
+
+/* ===================== ME · U2 PROCESO DE POISSON ===================== */
+{
+ id:'me-u2', ramo:'me', tag:'Semana 2', sem:2,
+ titulo:'Proceso de Poisson',
+ bajada:'Capítulo 2, la materia que acabas de ver. Conteo, tiempos entre eventos, descomposición, suma y caso no homogéneo.',
+ min:55,
+ secciones:[
+ {
+  t:'Proceso de conteo',
+  h:`<p>Un <b>proceso de conteo</b> {N(t), t ≥ 0} cuenta cuántos eventos ocurrieron hasta el instante t. Cumple cuatro cosas por definición: N(t) ≥ 0, toma valores enteros, es no decreciente, y N(t) − N(s) es el número de eventos en el intervalo (s, t].</p>
+  <p><b>Las dos propiedades que definen todo:</b></p>
+  <ul>
+  <li><b>Incrementos independientes:</b> lo que pasa en intervalos que no se solapan es independiente. Que hayan llegado 10 clientes entre las 9 y las 10 no dice nada sobre cuántos llegarán entre las 11 y las 12.</li>
+  <li><b>Incrementos estacionarios:</b> la distribución del número de eventos depende solo del <b>largo</b> del intervalo, no de dónde empieza. Entre las 9 y las 10 se distribuye igual que entre las 15 y las 16.</li>
+  </ul>
+  <p>Cuando un proceso de conteo cumple ambas y los eventos llegan a tasa constante λ, tienes un <b>proceso de Poisson homogéneo</b>.</p>`
+ },
+ {
+  t:'Las dos caras del proceso',
+  h:`<p>Acá está la distinción que mencionaste y que es el corazón del capítulo. El mismo proceso se mira de dos formas:</p>
+  <p><b>1. Cuántos eventos en un periodo</b> → Poisson</p>
+  <p class="fx">N(t) ~ Poisson(λt)</p>
+  <p class="fx">P(N(t) = n) = e<sup>−λt</sup> (λt)<sup>n</sup> / n!</p>
+  <p>Con E[N(t)] = λt y Var(N(t)) = λt.</p>
+  <p><b>2. Cuánto tiempo hasta el próximo evento</b> → Exponencial</p>
+  <p>Los tiempos entre eventos T₁, T₂, T₃… son independientes y todos:</p>
+  <p class="fx">T<sub>i</sub> ~ Exponencial(λ),  E[T<sub>i</sub>] = 1/λ</p>
+  <p><b>El puente entre las dos:</b></p>
+  <p class="fx">P(T₁ &gt; t) = P(N(t) = 0) = e<sup>−λt</sup></p>
+  <p>"El primer evento tarda más de t" es exactamente lo mismo que "no hubo eventos hasta t". Esa igualdad es la que conecta ambas visiones, y es una demostración que puede caer.</p>
+  <p><b>3. Tiempo hasta el n-ésimo evento</b> → Gamma / Erlang</p>
+  <p class="fx">S<sub>n</sub> = T₁ + … + T<sub>n</sub> ~ Gamma(n, λ),  E[S<sub>n</sub>] = n/λ</p>`,
+  ojo:'La regla para saber qué usar: si la pregunta empieza con "cuántos" y menciona un periodo, es Poisson. Si empieza con "cuánto tiempo" o "cuál es la probabilidad de que pase más de X minutos", es exponencial. Y si dice "hasta el tercer cliente", es Gamma.'
+ },
+ {
+  t:'Descomposición, suma y mezcla',
+  h:`<p>Tres operaciones que aparecen en casi toda prueba.</p>
+  <p><b>Descomposición (thinning).</b> Si cada evento de un Poisson(λ) se clasifica como tipo A con probabilidad p, y tipo B con probabilidad 1−p, entonces:</p>
+  <p class="fx">N<sub>A</sub>(t) ~ Poisson(λp)  y  N<sub>B</sub>(t) ~ Poisson(λ(1−p))</p>
+  <p>Y lo notable: <b>son independientes entre sí</b>. Eso es lo que sorprende, porque vienen del mismo proceso original.</p>
+  <p><b>Suma (superposición).</b> Si juntas dos procesos independientes:</p>
+  <p class="fx">N₁ ~ Poisson(λ₁),  N₂ ~ Poisson(λ₂)  ⟹  N₁ + N₂ ~ Poisson(λ₁ + λ₂)</p>
+  <p>Y la probabilidad de que el próximo evento venga del proceso 1 es λ₁/(λ₁+λ₂).</p>
+  <p><b>Mezcla.</b> Cuando la tasa misma es aleatoria, se condiciona en ella y se aplica la ley de esperanzas iteradas del capítulo anterior.</p>`,
+  ojo:'Descomposición y suma son la razón de que Poisson sea tan usado: puedes separar y juntar procesos libremente sin salirte de la familia. Ninguna otra distribución de conteo se comporta tan bien, y por eso se modela con Poisson aunque la realidad sea más sucia.'
+ },
+ {
+  t:'Distribución condicional de los tiempos',
+  h:`<p>Un resultado que se ve raro pero es de los más elegantes del capítulo.</p>
+  <p><b>Si sabes que ocurrió exactamente un evento en (0, t)</b>, entonces el instante en que ocurrió se distribuye <b>uniforme</b> en ese intervalo. No hay preferencia por ningún momento.</p>
+  <p>Generalizando: dado que ocurrieron n eventos en (0, t), los instantes se distribuyen como n puntos uniformes independientes ordenados de menor a mayor (estadísticos de orden).</p>
+  <p><b>Qué significa:</b> el proceso de Poisson reparte los eventos "sin memoria y sin preferencia". Es la formalización de que las llegadas son completamente aleatorias.</p>`
+ },
+ {
+  t:'Proceso de Poisson no homogéneo',
+  h:`<p>Se relaja el supuesto de tasa constante: ahora λ(t) varía con el tiempo. Modela cosas reales, como que a un local llegue más gente al mediodía que a las 4 de la tarde.</p>
+  <p>Aparece la <b>función de intensidad acumulada</b>:</p>
+  <p class="fx">m(t) = ∫₀ᵗ λ(u) du</p>
+  <p>Y el conteo pasa a ser:</p>
+  <p class="fx">N(t) ~ Poisson( m(t) )</p>
+  <p class="fx">N(t) − N(s) ~ Poisson( m(t) − m(s) )</p>
+  <p><b>Lo que se pierde:</b> los incrementos estacionarios. Ya no da lo mismo dónde empieza el intervalo, solo su largo. Los incrementos <b>independientes</b> sí se mantienen.</p>
+  <p><b>Y ojo con los tiempos entre eventos:</b> dejan de ser exponenciales idénticamente distribuidos. Esa es la diferencia práctica más grande con el caso homogéneo.</p>`,
+  ojo:'Regla mecánica para resolver: donde en el caso homogéneo escribías λt, en el no homogéneo escribes m(t) = ∫λ(u)du. Todo lo demás de las fórmulas de conteo se mantiene igual. Con eso resuelves la mayoría de los ejercicios.'
+ },
+ {
+  t:'Formulario',
+  h:`<table class="tb"><tr><th>Qué necesito</th><th>Fórmula</th></tr>
+  <tr><td>n eventos en tiempo t</td><td>e<sup>−λt</sup>(λt)<sup>n</sup>/n!</td></tr>
+  <tr><td>Ningún evento hasta t</td><td>e<sup>−λt</sup></td></tr>
+  <tr><td>Esperar más de t</td><td>P(T &gt; t) = e<sup>−λt</sup></td></tr>
+  <tr><td>Esperar menos de t</td><td>P(T ≤ t) = 1 − e<sup>−λt</sup></td></tr>
+  <tr><td>Tiempo medio entre eventos</td><td>1/λ</td></tr>
+  <tr><td>Tiempo medio hasta el n-ésimo</td><td>n/λ</td></tr>
+  <tr><td>Eventos esperados en t</td><td>λt</td></tr>
+  <tr><td>Separar por tipo (prob. p)</td><td>Poisson(λp), independiente del resto</td></tr>
+  <tr><td>Juntar dos procesos</td><td>Poisson(λ₁+λ₂)</td></tr>
+  <tr><td>¿De cuál viene el próximo?</td><td>λ₁/(λ₁+λ₂)</td></tr>
+  <tr><td>Tasa variable</td><td>reemplaza λt por ∫₀ᵗλ(u)du</td></tr></table>
+  <p>Esta tabla es básicamente lo que querrías tener en tu formulario manuscrito para el Control 1 y la Prueba 1.</p>`
+ }
+ ]
+},
+
+/* ===================== MI · TEORÍA DEL CONSUMIDOR ===================== */
+{
+ id:'mi-u1', ramo:'mi', tag:'Semana 1-2', sem:2,
+ titulo:'Teoría del Consumidor',
+ bajada:'Unidades I.1, I.2 y I.3: preferencias, maximización de utilidad y funciones de demanda.',
+ min:60,
+ secciones:[
+ {
+  t:'I.1 · Axiomas de preferencia',
+  h:`<p>Todo parte de una pregunta simple: ¿cómo se representa matemáticamente que alguien prefiere una cosa sobre otra?</p>
+  <p>Se escribe <b>A ≿ B</b> ("A es al menos tan preferido como B"). Para que esas preferencias se puedan modelar, se exigen axiomas:</p>
+  <ul>
+  <li><b>Completitud:</b> dadas dos canastas cualesquiera, el consumidor siempre puede decidir. Nunca responde "no sé".</li>
+  <li><b>Transitividad:</b> si A ≿ B y B ≿ C, entonces A ≿ C. Es lo que evita preferencias circulares.</li>
+  <li><b>Reflexividad:</b> A ≿ A.</li>
+  <li><b>Continuidad:</b> cambios pequeños en la canasta no producen saltos bruscos en las preferencias.</li>
+  <li><b>No saciedad (más es mejor):</b> más cantidad siempre se prefiere.</li>
+  <li><b>Convexidad:</b> se prefieren las combinaciones equilibradas a los extremos.</li>
+  </ul>
+  <p><b>Para qué sirven:</b> si se cumplen completitud, transitividad y continuidad, se puede demostrar que existe una <b>función de utilidad</b> U(x) que representa esas preferencias. Ese es el puente entre "me gusta más" y las matemáticas.</p>`,
+  ojo:'La utilidad es ORDINAL, no cardinal. U=10 y U=20 solo significan que la segunda se prefiere, no que sea el doble de buena. Por eso cualquier transformación monótona creciente de U representa las mismas preferencias — y esa propiedad se usa para simplificar problemas, por ejemplo tomando logaritmo a una Cobb-Douglas.'
+ },
+ {
+  t:'I.1 · Curvas de indiferencia y TMS',
+  h:`<p>Una <b>curva de indiferencia</b> une todas las canastas que dan la misma utilidad. El consumidor es indiferente entre cualquier punto de ella.</p>
+  <p><b>Propiedades:</b> tienen pendiente negativa, nunca se cruzan (se violaría transitividad), las más alejadas del origen dan mayor utilidad, y son convexas hacia el origen.</p>
+  <p>La <b>Tasa Marginal de Sustitución</b> es la pendiente de esa curva:</p>
+  <p class="fx">TMS = − dx₂/dx₁ = UMg₁ / UMg₂</p>
+  <p>Se lee: cuántas unidades del bien 2 estás dispuesto a resignar por una unidad más del bien 1, manteniendo la misma utilidad.</p>
+  <p>La TMS <b>decreciente</b> es la traducción matemática de la convexidad: mientras más tengas del bien 1, menos del bien 2 estás dispuesto a sacrificar por otra unidad más.</p>`
+ },
+ {
+  t:'I.2 · Restricción presupuestaria',
+  h:`<p>Las preferencias dicen qué quieres; el presupuesto dice qué puedes.</p>
+  <p class="fx">p₁x₁ + p₂x₂ ≤ m</p>
+  <p>La recta presupuestaria es la frontera, cuando gastas todo. Su <b>pendiente es −p₁/p₂</b>: el precio relativo, o sea a cuántas unidades del bien 2 tienes que renunciar en el mercado para conseguir una del bien 1.</p>
+  <p><b>Cómo se mueve:</b></p>
+  <ul>
+  <li>Si sube el <b>ingreso</b> m → se desplaza paralela hacia afuera, sin cambiar pendiente</li>
+  <li>Si sube <b>p₁</b> → rota hacia adentro pivoteando sobre el eje del bien 2</li>
+  <li>Si suben <b>ambos precios y el ingreso</b> en la misma proporción → <b>no cambia nada</b></li>
+  </ul>
+  <p>Ese último punto es importante: la demanda depende de precios <b>relativos</b> e ingreso real, no de valores nominales. Es lo que se llama ausencia de ilusión monetaria.</p>`
+ },
+ {
+  t:'I.2 · El problema de optimización',
+  h:`<p>Acá se juntan las dos mitades. El consumidor resuelve:</p>
+  <p class="fx">max U(x₁, x₂)  sujeto a  p₁x₁ + p₂x₂ = m</p>
+  <p><b>La condición de óptimo:</b></p>
+  <p class="fx">TMS = p₁/p₂   ⟺   UMg₁/p₁ = UMg₂/p₂</p>
+  <p>La segunda forma es la más intuitiva: en el óptimo, <b>el último peso gastado en cada bien rinde la misma utilidad</b>. Si un bien rindiera más por peso, convendría reasignar gasto hacia él — y entonces no estabas en el óptimo.</p>
+  <p>Geométricamente: el punto donde la curva de indiferencia más alta alcanzable es <b>tangente</b> a la recta presupuestaria.</p>
+  <p><b>Método de resolución.</b> Se usa Lagrange:</p>
+  <p class="fx">ℒ = U(x₁,x₂) + λ(m − p₁x₁ − p₂x₂)</p>
+  <p>Derivas respecto a x₁, x₂ y λ, igualas a cero, y resuelves el sistema. El multiplicador λ tiene interpretación: es la <b>utilidad marginal del ingreso</b>, cuánto sube tu utilidad si te dan un peso más.</p>
+  <p><b>Soluciones de esquina:</b> si los bienes son sustitutos perfectos o las preferencias no son convexas, el óptimo puede estar en un extremo y ahí la tangencia no se cumple. Hay que revisarlo, no asumirlo.</p>`,
+  ojo:'La función de utilidad indirecta V(p₁,p₂,m) es la utilidad máxima alcanzable dados precios e ingreso. O sea, tomas la solución del problema y la reemplazas de vuelta en U. Sirve para analizar bienestar sin volver a optimizar cada vez.'
+ },
+ {
+  t:'I.3 · Funciones de demanda',
+  h:`<p>Al resolver el problema de optimización para <b>cualquier</b> combinación de precios e ingreso, obtienes las <b>funciones de demanda marshallianas</b>:</p>
+  <p class="fx">x₁* = x₁(p₁, p₂, m),   x₂* = x₂(p₁, p₂, m)</p>
+  <p>Y ahora la parte que evalúan: qué pasa cuando cambia cada variable.</p>
+  <p><b>Cambios en el ingreso</b> — curva de Engel</p>
+  <ul>
+  <li>Si la demanda <b>sube</b> con el ingreso → bien <b>normal</b></li>
+  <li>Si <b>baja</b> → bien <b>inferior</b></li>
+  <li>Si sube más que proporcionalmente → bien de <b>lujo</b></li>
+  </ul>
+  <p><b>Cambios en el precio propio</b> — de acá sale la curva de demanda. El efecto total se descompone en dos:</p>
+  <ul>
+  <li><b>Efecto sustitución:</b> el bien se encareció respecto al otro, así que te cambias. <b>Siempre</b> es negativo — sube el precio, baja la cantidad.</li>
+  <li><b>Efecto ingreso:</b> tu poder adquisitivo cayó. El signo <b>depende</b>: negativo si es bien normal, positivo si es inferior.</li>
+  </ul>
+  <p>Cuando el bien es inferior y el efecto ingreso supera al de sustitución, aparece el <b>bien Giffen</b>: sube el precio y aumenta la cantidad demandada. Es raro en la práctica, pero es la excepción teórica que siempre preguntan.</p>
+  <p><b>Cambios en el precio cruzado</b></p>
+  <ul>
+  <li>Si sube p₂ y aumenta x₁ → <b>sustitutos</b></li>
+  <li>Si sube p₂ y disminuye x₁ → <b>complementarios</b></li>
+  </ul>
+  <p><b>Demanda de mercado.</b> Es la suma <b>horizontal</b> de las demandas individuales: para cada precio, sumas las cantidades que demanda cada consumidor. Horizontal, no vertical — ese detalle se equivoca seguido.</p>`
+ }
+ ]
+},
+
+/* ===================== PM · OPTIMIZACIÓN LINEAL ===================== */
+{
+ id:'pm-u1', ramo:'pm', tag:'Semana 1-2', sem:2,
+ titulo:'Programación lineal y simplex',
+ bajada:'Resumen corto: modelamiento, simplex, dos fases, dualidad y holgura complementaria. Para el Control 1.',
+ min:30,
+ secciones:[
+ {
+  t:'Modelamiento y forma estándar',
+  h:`<p>Todo problema de programación lineal tiene tres piezas: <b>variables de decisión</b> (qué eliges), <b>función objetivo</b> (qué maximizas o minimizas) y <b>restricciones</b> (qué te limita).</p>
+  <p>La <b>forma estándar</b> que necesita simplex:</p>
+  <p class="fx">max c<sup>T</sup>x  s.a.  Ax = b,  x ≥ 0,  b ≥ 0</p>
+  <p><b>Cómo llevar cualquier problema ahí:</b></p>
+  <ul>
+  <li><b>≤</b> → suma una variable de <b>holgura</b>: 3x₁ + 2x₂ ≤ 12 pasa a 3x₁ + 2x₂ + s = 12</li>
+  <li><b>≥</b> → resta una variable de <b>exceso</b> y agrega una <b>artificial</b></li>
+  <li><b>min</b> → multiplica el objetivo por −1 y maximiza</li>
+  <li><b>Variable libre</b> → escríbela como x = x⁺ − x⁻ con ambas ≥ 0</li>
+  <li><b>b negativo</b> → multiplica esa restricción por −1 (y da vuelta la desigualdad)</li>
+  </ul>`
+ },
+ {
+  t:'Solución gráfica y el teorema clave',
+  h:`<p>Con dos variables se resuelve dibujando: grafica las restricciones, identifica la región factible, y evalúa el objetivo en los vértices.</p>
+  <p><b>El teorema fundamental:</b> si existe solución óptima, entonces hay al menos un <b>vértice</b> de la región factible que es óptimo.</p>
+  <p>Eso es lo que hace viable a simplex: en vez de revisar infinitos puntos, basta con recorrer vértices, que son finitos.</p>
+  <p><b>Los cuatro casos posibles:</b> solución única (un vértice), soluciones múltiples (el objetivo es paralelo a una restricción activa), no acotada (la región se extiende infinitamente en la dirección de mejora), o infactible (no hay región).</p>`
+ },
+ {
+  t:'Simplex',
+  h:`<p>La idea: partir de un vértice factible y moverse a un vértice vecino que mejore el objetivo, hasta que ninguno mejore.</p>
+  <p><b>El ciclo, en cuatro pasos:</b></p>
+  <ol>
+  <li><b>Variable de entrada:</b> la de costo reducido más favorable. En maximización, la más negativa de la fila objetivo.</li>
+  <li><b>Variable de salida:</b> criterio del cociente mínimo. Divides b<sub>i</sub> por el coeficiente de la columna entrante, solo para los coeficientes <b>positivos</b>, y sale la fila con el cociente más chico.</li>
+  <li><b>Pivoteo:</b> operaciones de fila para dejar la columna entrante como columna identidad.</li>
+  <li><b>Criterio de parada:</b> cuando ningún costo reducido mejora, estás en el óptimo.</li>
+  </ol>
+  <p><b>Casos especiales que reconocer:</b> si todos los coeficientes de la columna entrante son ≤ 0, el problema es <b>no acotado</b>. Si en el óptimo una variable no básica tiene costo reducido cero, hay <b>soluciones múltiples</b>. Si una variable básica vale cero, la solución es <b>degenerada</b> y puede haber ciclado.</p>`,
+  ojo:'El criterio del cociente mínimo solo considera coeficientes positivos. Incluir los negativos es el error más común y te lleva fuera de la región factible.'
+ },
+ {
+  t:'Método de dos fases',
+  h:`<p>Simplex necesita partir de una solución básica factible. Cuando hay restricciones de tipo ≥ o =, la base obvia no sirve, y ahí entra el método de dos fases.</p>
+  <p><b>Fase 1.</b> Agregas variables artificiales y minimizas su suma. Si el mínimo llega a <b>cero</b>, encontraste un punto factible y las artificiales salieron de la base. Si el mínimo es <b>positivo</b>, el problema original es <b>infactible</b> — no hay nada más que hacer.</p>
+  <p><b>Fase 2.</b> Descartas las artificiales, recuperas el objetivo original y corres simplex normal desde el vértice que encontraste.</p>
+  <p>La alternativa es el <b>método de la Gran M</b>, que penaliza las artificiales con un coeficiente enorme en el objetivo. Mismo resultado, en una sola pasada, pero numéricamente más frágil.</p>`
+ },
+ {
+  t:'Dualidad y holgura complementaria',
+  h:`<p>Todo problema (el <b>primal</b>) tiene asociado otro (el <b>dual</b>). Si el primal maximiza con restricciones ≤, el dual minimiza con restricciones ≥, y los roles se invierten: las restricciones del primal se vuelven variables del dual.</p>
+  <p><b>Los tres teoremas:</b></p>
+  <ul>
+  <li><b>Dualidad débil:</b> cualquier solución factible del dual acota superiormente al primal. Te da una cota sin resolver.</li>
+  <li><b>Dualidad fuerte:</b> en el óptimo, ambos valores son <b>iguales</b>.</li>
+  <li><b>Holgura complementaria:</b> la condición que las conecta.</li>
+  </ul>
+  <p class="fx">x<sub>j</sub> · (costo reducido<sub>j</sub>) = 0   y   y<sub>i</sub> · (holgura<sub>i</sub>) = 0</p>
+  <p><b>Qué significa en palabras</b>, que es como conviene recordarlo:</p>
+  <ul>
+  <li>Si una <b>restricción no está activa</b> (le sobra holgura), su variable dual vale <b>cero</b>. Un recurso que sobra no vale nada.</li>
+  <li>Si una <b>variable dual es positiva</b>, su restricción está <b>activa</b>. El recurso se agotó y por eso tiene valor.</li>
+  <li>Si una <b>variable primal es positiva</b>, la restricción dual asociada se cumple con igualdad.</li>
+  </ul>
+  <p><b>La interpretación económica</b> es lo que hace útil todo esto: la variable dual y<sub>i</sub> es el <b>precio sombra</b> del recurso i — cuánto mejoraría el objetivo si tuvieras una unidad más de ese recurso.</p>`,
+  ojo:'La holgura complementaria sirve para verificar optimalidad sin resolver el dual completo: si tienes una solución primal candidata, las condiciones te dicen qué restricciones duales deben cumplirse con igualdad, y de ahí despejas las duales. Es una pregunta de prueba muy frecuente.'
+ }
+ ]
+},
+
+/* ===================== MN · LABORATORIO 1 ===================== */
+{
+ id:'mn-lab1', ramo:'mn', tag:'Laboratorio', sem:2,
+ titulo:'Laboratorio 1 · Serie de Taylor',
+ bajada:'Lo que pide la ayudantía 1: expansiones de Taylor, orden del error y convergencia.',
+ min:40,
+ secciones:[
+ {
+  t:'Qué te van a pedir',
+  h:`<p>El notebook de la ayudantía 1 tiene dos partes:</p>
+  <p><b>Parte 1 — dos problemas del capítulo 4:</b></p>
+  <ul>
+  <li><b>Problema 1:</b> expandir f(x) = ln(x) en serie de Taylor alrededor de x₀ = 1, de orden 0 a 4, para predecir f(2). Calcular el error relativo porcentual de cada orden.</li>
+  <li><b>Problema 2:</b> determinar gráficamente qué orden de la serie de Maclaurin de sin(x) se necesita para bajar de una tolerancia dada.</li>
+  </ul>
+  <p><b>Parte 2 — ejemplo guiado</b> de convergencia de la serie de e<sup>x</sup>: construirla término a término, graficar contra la función exacta, y medir el error en un punto fijo x* = 2 en función del número de términos.</p>`
+ },
+ {
+  t:'La serie de Taylor, lo mínimo',
+  h:`<p class="fx">f(x) ≈ Σ<sub>k=0</sub><sup>n</sup> f<sup>(k)</sup>(x₀)/k! · (x − x₀)<sup>k</sup></p>
+  <p>Cada término agrega una derivada más y mejora la aproximación. El <b>resto</b> —lo que botas— es:</p>
+  <p class="fx">R<sub>n</sub> = f<sup>(n+1)</sup>(ξ)/(n+1)! · (x − x₀)<sup>n+1</sup> = O(h<sup>n+1</sup>)</p>
+  <p>Ese O(h<sup>n+1</sup>) es el <b>error de truncamiento</b>, y de ahí sale todo lo que hablamos sobre el orden de los métodos.</p>
+  <p><b>Las tres que te conviene tener en la cabeza:</b></p>
+  <p class="fx">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + …</p>
+  <p class="fx">sin(x) = x − x³/3! + x⁵/5! − …</p>
+  <p class="fx">ln(x) alrededor de 1: (x−1) − (x−1)²/2 + (x−1)³/3 − …</p>`
+ },
+ {
+  t:'Cómo resolverlo en Python',
+  h:`<p>El patrón para el problema 1: acumulas términos y mides el error en cada orden.</p>`,
+  code:`import numpy as np
+
+x0, x = 1.0, 2.0
+exacto = np.log(x)          # ln(2) = 0.693147...
+
+# Términos de la serie de ln(x) en torno a x0=1:
+#   término k = (-1)^(k+1) * (x-x0)^k / k
+aprox = 0.0
+print(f'{"orden":>6} {"aprox":>12} {"error %":>12}')
+print('-'*32)
+for k in range(0, 5):
+    if k > 0:
+        aprox += ((-1)**(k+1)) * (x - x0)**k / k
+    err = abs((exacto - aprox) / exacto) * 100
+    print(f'{k:>6d} {aprox:>12.6f} {err:>12.4f}')`,
+  ojo:'Ojo con este caso: la serie de ln(x) en torno a 1 converge solo para 0 < x ≤ 2, y x=2 está justo en el borde del radio de convergencia. Por eso el error baja lentísimo, muy distinto de lo que verás con e^x en la parte 2. Si notas esa diferencia y la comentas, estás demostrando que entendiste y no solo programaste.'
+ },
+ {
+  t:'La parte 2 y el gráfico del error',
+  h:`<p>Para e<sup>x</sup> el comportamiento es el opuesto: cada término divide el error por un factorial, así que converge muy rápido.</p>
+  <p>El gráfico que te van a pedir es <b>error contra número de términos</b>, y va en escala <b>semilogarítmica</b> en el eje del error, porque cae varios órdenes de magnitud.</p>`,
+  code:`import numpy as np
+import matplotlib.pyplot as plt
+from math import factorial
+
+xs = 2.0
+exacto = np.exp(xs)
+
+Ns, errores = [], []
+S = 0.0
+for N in range(0, 15):
+    S += xs**N / factorial(N)
+    Ns.append(N+1)
+    errores.append(abs(exacto - S))
+
+plt.semilogy(Ns, errores, 'o-')
+plt.xlabel('número de términos')
+plt.ylabel('error absoluto')
+plt.grid(True, which='both', alpha=0.3)
+plt.show()`,
+  ojo:'Fíjate en algo al final de ese gráfico: en algún punto el error deja de bajar y se aplana cerca de 1e-16. Ahí ya no manda el truncamiento sino el error de redondeo — llegaste al límite de precisión del float. Es exactamente la curva en U del capítulo 4, vista con tus propios números.'
+ }
+ ]
+}
 
 ];
