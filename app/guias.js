@@ -1662,6 +1662,30 @@ plt.show()`,
   ojo:'Una matriz mal condicionada no se arregla con un mejor algoritmo. El problema está en la matriz, no en el método. Lo único que puedes hacer es trabajar con más precisión, reformular el problema, o aceptar que el resultado tiene pocas cifras confiables.'
  },
  {
+  t:'De dónde sale la fórmula (para la prueba a mano)',
+  h:`<p>Si te toca explicarlo o aplicarlo sin computador, esto es lo que hay que entender. La derivación es corta y vale la pena seguirla.</p>
+  <p><b>El problema real.</b> Cuando resuelves Ax = b, los datos nunca son exactos: b viene de mediciones, y A se guarda con precisión finita. La pregunta no es "¿cuál es x?" sino <b>¿cuánto se amplifica en x un error chico en los datos?</b></p>
+  <p><b>La derivación, en tres líneas.</b> Si b se perturba en δb, la solución se perturba en δx:</p>
+  <p class="fx">A(x + δx) = b + δb   ⟹   δx = A<sup>−1</sup> δb</p>
+  <p>Tomando normas y usando que ‖Mv‖ ≤ ‖M‖·‖v‖:</p>
+  <p class="fx">‖δx‖ ≤ ‖A<sup>−1</sup>‖ · ‖δb‖</p>
+  <p>Por otro lado, de b = Ax sale ‖b‖ ≤ ‖A‖·‖x‖, o sea 1/‖x‖ ≤ ‖A‖/‖b‖. Multiplicando ambas:</p>
+  <p class="fx">‖δx‖/‖x‖  ≤  ‖A‖·‖A<sup>−1</sup>‖ · ‖δb‖/‖b‖</p>
+  <p>Y ahí está: <b>el error relativo de la solución es a lo más cond(A) veces el error relativo de los datos.</b> El número de condición es literalmente el <b>factor de amplificación</b> del error. Eso es todo lo que significa.</p>
+  <p><b>Por qué aparece la inversa.</b> A⁻¹ es lo que deshace a A. Si A aplasta mucho alguna dirección —o sea, está cerca de ser singular— entonces A⁻¹ tiene que estirar muchísimo esa misma dirección para devolverla. Y estirar mucho significa amplificar mucho cualquier errorcito que venga en esa dirección.</p>
+  <p><b>Por qué el logaritmo.</b> Las cifras significativas se cuentan en potencias de 10. Si cond(A) = 1.000 = 10³, un error que estaba en la cuarta cifra pasa a estar en la primera: se corrió <b>tres</b> posiciones. Y 3 = log₁₀(1.000). Por eso:</p>
+  <p class="fx">cifras perdidas = log<sub>10</sub>( cond(A) )</p>
+  <p><b>El procedimiento a mano, en cinco pasos:</b></p>
+  <ol>
+  <li>Consigue A⁻¹ (normalmente te la dan, calcularla a mano es lento)</li>
+  <li>Calcula ‖A‖ y ‖A⁻¹‖ con la <b>misma</b> norma. Si te piden "la más desfavorable", pruebas con dos y te quedas con el producto mayor</li>
+  <li>cond(A) = ‖A‖ · ‖A⁻¹‖</li>
+  <li>c = log₁₀(cond), y redondeas <b>hacia arriba</b> — perder 2,1 cifras significa que ya no confías en la tercera</li>
+  <li>Cifras confiables = cifras con las que trabajaste − c</li>
+  </ol>`,
+  ojo:'La pregunta conceptual que más cae: "¿un cond alto significa que el método está malo?". No. El método puede ser perfecto — el problema está en la matriz. Un sistema mal condicionado es intrínsecamente sensible, y ningún algoritmo lo arregla. Es una propiedad del problema, no del que lo resuelve.'
+ },
+ {
   t:'El ejemplo de la clase, paso a paso',
   h:`<p>Este es el que proyectó el profe. Vale la pena que lo sepas hacer completo, porque tiene todos los conceptos del módulo juntos.</p>
   <p class="fx">A = [60 30 20 ; 50 40 30 ; 40 45 36],  b = [340, 370, 372]<sup>T</sup></p>
