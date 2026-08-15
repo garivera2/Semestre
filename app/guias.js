@@ -1604,5 +1604,130 @@ plt.show()`,
  }
  ]
 }
+,
+
+/* ===================== MN · MÓDULO I ÁLGEBRA LINEAL ===================== */
+{
+ id:'mn-lineal', ramo:'mn', tag:'Clase 2', sem:2,
+ titulo:'Sistemas de ecuaciones lineales',
+ bajada:'Capítulos 8, 9, 10 y 11. Eliminación gaussiana, normas, condicionamiento y factorización LU, con el ejemplo que pasó el profe en clase.',
+ min:55,
+ secciones:[
+ {
+  t:'Los tres métodos y por qué solo uno sirve',
+  h:`<p>Para resolver <b>Ax = b</b> el profe partió comparando tres caminos:</p>
+  <table class="tb"><tr><th>Método</th><th>Veredicto</th></tr>
+  <tr><td><b>Gráfico</b></td><td>Aproximado y limitado a 3 dimensiones. Sirve para entender, no para calcular.</td></tr>
+  <tr><td><b>Regla de Cramer</b></td><td>Exacto pero <b>ineficiente</b>. Requiere calcular determinantes por expansión de cofactores, que cuesta <b>O(n!)</b>. Con n=20 es inviable.</td></tr>
+  <tr><td><b>Eliminación gaussiana</b></td><td><b>El que se usa.</b> Cuesta O(n³) y es exacto salvo redondeo.</td></tr>
+  </table>
+  <p>La diferencia entre O(n!) y O(n³) no es un detalle: para n=15, Cramer necesita del orden de 10¹² operaciones y Gauss unas 3.400. Ese salto es la razón de existir del método.</p>
+  <p>Y el criterio de existencia: <b>el sistema tiene solución única si y solo si det(A) ≠ 0</b>.</p>`
+ },
+ {
+  t:'Eliminación gaussiana',
+  h:`<p>Dos etapas, y hay que tener claras las dos:</p>
+  <p><b>1. Eliminación hacia adelante.</b> Transformas el sistema original en uno <b>triangular superior</b>, usando operaciones de fila que no cambian la solución. Trabajas sobre la matriz aumentada [A | b] hasta llegar a [U | c].</p>
+  <p>El factor que usas en cada paso es:</p>
+  <p class="fx">f<sub>ik</sub> = a<sub>ik</sub> / a<sub>kk</sub>,  fila<sub>i</sub> ← fila<sub>i</sub> − f<sub>ik</sub> · fila<sub>k</sub></p>
+  <p>donde a<sub>kk</sub> es el <b>pivote</b>.</p>
+  <p><b>2. Sustitución hacia atrás.</b> Con el sistema triangular, despejas desde la última ecuación hacia arriba:</p>
+  <p class="fx">x<sub>i</sub> = ( c<sub>i</sub> − Σ<sub>j&gt;i</sub> u<sub>ij</sub> x<sub>j</sub> ) / u<sub>ii</sub></p>
+  <p><b>El problema del método "naive":</b> si algún pivote resulta cero, divides por cero y todo se cae. Y si el pivote es <b>muy pequeño</b>, sin ser cero, los factores se disparan y amplificas el error de redondeo.</p>
+  <p><b>La solución: pivoteo parcial.</b> Antes de cada eliminación, intercambias filas para que el pivote sea el elemento de mayor valor absoluto de esa columna. No cambia la solución y mejora muchísimo la estabilidad numérica.</p>`,
+  ojo:'La complejidad O(n³) sale de contar: son n pasos de eliminación, cada uno sobre una submatriz de tamaño decreciente. La sustitución hacia atrás es solo O(n²), o sea despreciable al lado. Cuando te pregunten por el costo del método, el que manda es el n³ de la eliminación.'
+ },
+ {
+  t:'Normas matriciales',
+  h:`<p>Una <b>norma</b> mide el "tamaño" de una matriz — cuánto amplifica como operador lineal. Las que pasó el profe:</p>
+  <table class="tb"><tr><th>Norma</th><th>Notación</th><th>Cómo se calcula</th></tr>
+  <tr><td><b>Frobenius</b></td><td>‖A‖<sub>f</sub></td><td>Raíz de la suma de todos los elementos al cuadrado</td></tr>
+  <tr><td><b>Suma en fila</b></td><td>‖A‖<sub>∞</sub></td><td>La mayor suma de valores absolutos de una fila</td></tr>
+  <tr><td><b>Suma en columna</b></td><td>‖A‖<sub>1</sub></td><td>La mayor suma de valores absolutos de una columna</td></tr>
+  <tr><td><b>Espectral</b></td><td>‖A‖<sub>2</sub></td><td>Raíz del mayor valor propio de A<sup>T</sup>A</td></tr>
+  </table>
+  <p>Las de fila y columna son las más rápidas de calcular a mano, y por eso son las que te van a pedir en prueba.</p>`
+ },
+ {
+  t:'Número de condición: la idea clave del módulo',
+  h:`<p class="fx">cond(A) = ‖A‖ · ‖A<sup>−1</sup>‖</p>
+  <p>Mide qué tan sensible es la solución a pequeñas perturbaciones en los datos. Es la traducción, en álgebra lineal, del concepto de error del capítulo 4.</p>
+  <ul>
+  <li><b>cond(A) ≈ 1</b> → matriz bien condicionada. Un error chico en los datos produce un error chico en la solución.</li>
+  <li><b>cond(A) grande</b> → <b>mal condicionada</b>. Un error mínimo en b puede producir una solución completamente distinta.</li>
+  </ul>
+  <p><b>Y acá está la fórmula que hay que saber</b>, que es lo que pedía el ejercicio de la clase:</p>
+  <p class="fx">cifras significativas perdidas ≈ log<sub>10</sub>( cond(A) )</p>
+  <p>Si trabajas con 4 cifras significativas y pierdes 3, te queda <b>una sola cifra confiable</b>. Ese es el resultado que importa: no es que el método falle, es que el problema mismo es sensible.</p>`,
+  ojo:'Una matriz mal condicionada no se arregla con un mejor algoritmo. El problema está en la matriz, no en el método. Lo único que puedes hacer es trabajar con más precisión, reformular el problema, o aceptar que el resultado tiene pocas cifras confiables.'
+ },
+ {
+  t:'El ejemplo de la clase, paso a paso',
+  h:`<p>Este es el que proyectó el profe. Vale la pena que lo sepas hacer completo, porque tiene todos los conceptos del módulo juntos.</p>
+  <p class="fx">A = [60 30 20 ; 50 40 30 ; 40 45 36],  b = [340, 370, 372]<sup>T</sup></p>
+  <p><b>Paso 1 — la inversa</b> (dato de la lámina):</p>
+  <p class="fx">A<sup>−1</sup> = [0,225 −0,45 0,25 ; −1,5 3,4 −2,0 ; 1,625 −3,75 2,25]</p>
+  <p><b>Paso 2 — las normas.</b> Suma en columna de A: las columnas suman 150, 115 y 86 → ‖A‖₁ = <b>150,0</b>. Frobenius: ‖A‖<sub>f</sub> = <b>121,7</b>.</p>
+  <p>Suma en columna de A⁻¹: 3,35 · 7,60 · 4,50 → ‖A⁻¹‖₁ = <b>7,60</b>.</p>
+  <p><b>Paso 3 — condición y cifras perdidas.</b></p>
+  <p class="fx">cond(A) ≈ 925 a 1.140  según la norma que uses</p>
+  <p class="fx">c = log<sub>10</sub>(cond) ≈ 2,97 a 3,06  →  <b>se pierden 3 cifras</b></p>
+  <p>Trabajando con 4 cifras significativas, te queda solo 1 confiable.</p>
+  <p><b>Paso 4 — factorización LU y solución.</b></p>
+  <p class="fx">L = [1 0 0 ; 0,8333 1 0 ; 0,6667 1,667 1]</p>
+  <p class="fx">U = [60 30 20 ; 0 15 13,33 ; 0 0 0,4444]</p>
+  <p>Sustitución hacia adelante Lc = b da <b>c = [340 · 86,67 · 0,8889]</b>, y hacia atrás Ux = c da:</p>
+  <p class="fx">x = [3, 4, 2]</p>`,
+  ojo:'Un detalle sobre la lámina: el 925,2 sale de combinar la norma Frobenius de A con la suma en columna de A⁻¹. Si usas la MISMA norma en ambas, te da 769 con Frobenius o 1.140 con suma en columna. La conclusión no cambia — en los tres casos se pierden 3 cifras — pero si en la prueba te piden "la norma más desfavorable", lo correcto es usar la misma norma arriba y abajo y quedarte con el cond más grande.'
+ },
+ {
+  t:'Factorización LU',
+  h:`<p>Descompones la matriz en dos triangulares:</p>
+  <p class="fx">A = L · U</p>
+  <p>con <b>L triangular inferior</b> (unos en la diagonal, y debajo los factores de eliminación que ya calculaste) y <b>U triangular superior</b> (el resultado de la eliminación hacia adelante).</p>
+  <p><b>Lo importante es para qué sirve</b>, que es lo que anotaste en clase: permite resolver <b>Ax = b para distintos b sin repetir la eliminación</b>.</p>
+  <p>El proceso queda en dos sustituciones, ambas O(n²):</p>
+  <ol>
+  <li>Resolver <b>Lc = b</b> hacia adelante</li>
+  <li>Resolver <b>Ux = c</b> hacia atrás</li>
+  </ol>
+  <p><b>Por qué importa:</b> la eliminación cuesta O(n³) y se hace <b>una sola vez</b>. Cada b nuevo cuesta O(n²). Si tienes que resolver el mismo sistema con 100 lados derechos distintos, LU es órdenes de magnitud más barato que repetir Gauss 100 veces.</p>
+  <p><b>Y la matriz inversa:</b> calcularla equivale a resolver n sistemas, uno por cada columna de la identidad. Por eso <b>nunca se calcula la inversa para resolver un sistema</b> — es más caro y numéricamente peor que hacer LU directo. La inversa solo se usa para analizar, como acá para el número de condición.</p>`
+ },
+ {
+  t:'Cómo se hace en Python',
+  h:`<p>Las funciones que vas a necesitar en el laboratorio:</p>`,
+  code:`import numpy as np
+from scipy.linalg import lu, solve, det, norm, inv
+
+A = np.array([[60., 30., 20.],
+              [50., 40., 30.],
+              [40., 45., 36.]])
+b = np.array([340., 370., 372.])
+
+# --- Resolver el sistema (esto es lo que se usa en la práctica) ---
+x = np.linalg.solve(A, b)
+print(x)                         # [3. 4. 2.]
+
+# --- Determinante e inversa ---
+print(np.linalg.det(A))          # 400.0
+print(np.linalg.inv(A))
+
+# --- Normas ---
+print(np.linalg.norm(A, 'fro'))  # Frobenius     121.74
+print(np.linalg.norm(A, np.inf)) # suma en fila   121.0
+print(np.linalg.norm(A, 1))      # suma en columna 150.0
+
+# --- Número de condición y cifras perdidas ---
+c = np.linalg.cond(A, 1)
+print(c, np.log10(c))            # cifras significativas que se pierden
+
+# --- Factorización LU ---
+P, L, U = lu(A)
+print(L); print(U)`,
+  ojo:'Nunca uses inv(A) @ b para resolver un sistema, aunque matemáticamente sea correcto. np.linalg.solve es más rápido y numéricamente más estable, porque internamente hace LU con pivoteo en vez de calcular la inversa completa. Es el tipo de decisión que evalúan en laboratorio.'
+ }
+ ]
+}
 
 ];
