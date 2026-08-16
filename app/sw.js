@@ -1,6 +1,7 @@
 // Service worker mínimo: cachea la app para que funcione sin internet.
-const CACHE = 'semestre-v18';
-const FILES = ['./', './index.html', './guias.js', './manifest.json', './icon.svg'];
+const CACHE = 'semestre-v19';
+const FILES = ['./', './index.html', './manifest.json', './icon.svg',
+  './guias/mn.js', './guias/bd.js', './guias/me.js', './guias/mi.js', './guias/pm.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
