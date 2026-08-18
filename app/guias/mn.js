@@ -984,6 +984,207 @@ print(L); print(U)`,
   ojo:'Nunca uses inv(A) @ b para resolver un sistema, aunque matemáticamente sea correcto. np.linalg.solve es más rápido y numéricamente más estable, porque internamente hace LU con pivoteo en vez de calcular la inversa completa. Es el tipo de decisión que evalúan en laboratorio.'
  }
  ]
+},
+
+/* ---- MN · RAÍCES DE ECUACIONES (Cap 5-6) ---- */
+{
+ id:'mn-raices', ramo:'mn', tag:'Clase 3', sem:3,
+ titulo:'Raíces de ecuaciones',
+ bajada:'Capítulos 5 y 6. Cómo resolver f(x) = 0 cuando no se puede despejar: bisección, falsa posición, punto fijo, Newton-Raphson y secante.',
+ min:60,
+ secciones:[
+ {
+  t:'El problema: f(x) = 0',
+  h:`<p>Todo este módulo resuelve una sola pregunta: <b>¿para qué valor de x la función vale cero?</b> Ese valor se llama <b>raíz</b>.</p>
+  <p>Parece poco, pero casi cualquier ecuación se puede escribir así. Si tienes <span class="fx-i">x = cos(x)</span>, la pasas a <span class="fx-i">f(x) = x − cos(x) = 0</span> y ya es un problema de raíces. Si te preguntan a qué tiempo el paracaidista alcanza 40 m/s, tomas la ecuación de la velocidad, le restas 40, y buscas la raíz.</p>
+  <p>Con una cuadrática despejas con la fórmula. Con una cúbica o cuártica existen fórmulas, pero son horribles. De grado 5 en adelante <b>está demostrado que no existe fórmula general</b> (teorema de Abel-Ruffini). Y si la función mezcla exponenciales, logaritmos o trigonométricas, no hay nada que despejar.</p>
+  <p>Por eso todos los métodos de este capítulo son <b>iterativos</b>: parten de una estimación y la van mejorando hasta que el error baja de una tolerancia.</p>`,
+  ojo:'El primer paso de cualquier problema de raíces es GRAFICAR. Antes de aplicar ningún método necesitas saber cuántas raíces hay y más o menos dónde están. Un método numérico sin una estimación inicial razonable no converge, o converge a la raíz equivocada.'
+ },
+ {
+  t:'Las dos familias: cerrados y abiertos',
+  h:`<p>Esta clasificación es la columna vertebral del capítulo y es lo primero que preguntan.</p>
+  <p><b>Métodos cerrados (bracketing).</b> Necesitan un intervalo [x<sub>l</sub>, x<sub>u</sub>] que <b>encierre</b> la raíz. En cada iteración lo achican sin soltarla nunca.</p>
+  <ul>
+  <li>Siempre convergen. Es una garantía, no una probabilidad.</li>
+  <li>Convergen <b>lento</b>.</li>
+  <li>Ejemplos: bisección, falsa posición.</li>
+  </ul>
+  <p><b>Métodos abiertos.</b> Parten de uno o dos puntos que no tienen por qué encerrar la raíz. Aplican una fórmula que genera el siguiente valor.</p>
+  <ul>
+  <li>Pueden <b>diverger</b>. No hay ninguna garantía.</li>
+  <li>Cuando convergen, lo hacen <b>mucho más rápido</b>.</li>
+  <li>Ejemplos: punto fijo, Newton-Raphson, secante.</li>
+  </ul>
+  <p>El intercambio es siempre el mismo: <b>seguridad contra velocidad</b>. Por eso en la práctica se combinan — primero unas iteraciones de bisección para acercarse, después Newton para rematar. Eso es exactamente lo que hace el método de Brent que trae SciPy.</p>`
+ },
+ {
+  t:'Bisección',
+  h:`<p>Se apoya en el <b>teorema del valor intermedio</b>: si f es continua en [x<sub>l</sub>, x<sub>u</sub>] y cambia de signo en los extremos, hay al menos una raíz adentro. En la práctica el test es:</p>
+  <p class="fx">f(x<sub>l</sub>) · f(x<sub>u</sub>) &lt; 0  →  hay raíz en el intervalo</p>
+  <p><b>El algoritmo</b>, que es todo lo que hay que recordar:</p>
+  <ol>
+  <li>Calcula el punto medio: x<sub>r</sub> = (x<sub>l</sub> + x<sub>u</sub>) / 2</li>
+  <li>Evalúa f(x<sub>l</sub>) · f(x<sub>r</sub>):
+    <ul>
+    <li>Si es &lt; 0, la raíz está en la mitad izquierda → x<sub>u</sub> = x<sub>r</sub></li>
+    <li>Si es &gt; 0, la raíz está en la mitad derecha → x<sub>l</sub> = x<sub>r</sub></li>
+    <li>Si es = 0, x<sub>r</sub> es la raíz exacta</li>
+    </ul>
+  </li>
+  <li>Repite hasta que el error baje de la tolerancia</li>
+  </ol>
+  <p><b>El error se conoce de antemano</b>, y esta es la propiedad que hace especial a la bisección. Después de n iteraciones el intervalo mide (x<sub>u</sub> − x<sub>l</sub>) / 2<sup>n</sup>, así que:</p>
+  <p class="fx">E<sub>n</sub> = Δx<sup>0</sup> / 2<sup>n</sup>   →   n = log<sub>2</sub>( Δx<sup>0</sup> / E<sub>d</sub> )</p>
+  <p>donde Δx<sup>0</sup> es el ancho inicial y E<sub>d</sub> el error deseado. Puedes decir cuántas iteraciones necesitas <b>antes de empezar</b>, sin correr nada. Ningún otro método del capítulo permite eso.</p>
+  <p><b>Convergencia lineal:</b> cada iteración gana un bit, o sea aproximadamente 0,3 dígitos decimales. Bajar el error por un factor de 10 cuesta unas 3,3 iteraciones.</p>`,
+  ojo:'Ojo con el criterio de parada. Se usa el error relativo aproximado entre iteraciones sucesivas, no la distancia al valor verdadero (que no conoces). Y si el intervalo contiene un número PAR de raíces, el test de signos falla: f(xl)·f(xu) > 0 y el método te dice que no hay nada, cuando hay dos.'
+ },
+ {
+  t:'Falsa posición',
+  h:`<p>La crítica a la bisección es que <b>ignora la información que tiene</b>: parte el intervalo por la mitad aunque f(x<sub>l</sub>) valga 0,01 y f(x<sub>u</sub>) valga 900. Si un extremo está muchísimo más cerca de cero, lo lógico es que la raíz esté cerca de ese extremo.</p>
+  <p>La falsa posición hace justo eso: une los dos puntos con una <b>recta</b> y toma como estimación el punto donde esa recta corta el eje x.</p>
+  <p class="fx">x<sub>r</sub> = x<sub>u</sub> − f(x<sub>u</sub>) (x<sub>l</sub> − x<sub>u</sub>) / ( f(x<sub>l</sub>) − f(x<sub>u</sub>) )</p>
+  <p>El resto del algoritmo es idéntico a bisección: mismo test de signos, misma actualización del intervalo. Solo cambia cómo se calcula x<sub>r</sub>.</p>
+  <p><b>Cuándo gana:</b> casi siempre. Suele converger bastante más rápido.</p>
+  <p><b>Cuándo pierde:</b> cuando la función es muy curvada en el intervalo, un extremo se queda <b>pegado</b> iteración tras iteración y el intervalo casi no se achica. En ese caso la bisección, que es "tonta", termina siendo más rápida. El caso clásico del libro es f(x) = x<sup>10</sup> − 1 en [0, 1,3].</p>`,
+  ojo:'Que un extremo quede estancado tiene una consecuencia práctica: el ancho del intervalo deja de servir como estimación del error. Por eso en falsa posición hay que usar el error relativo aproximado entre xr sucesivos, nunca el tamaño del intervalo.'
+ },
+ {
+  t:'Iteración de punto fijo',
+  h:`<p>Es el más simple de los abiertos y el que explica por qué los otros funcionan.</p>
+  <p>La idea: reescribes f(x) = 0 como <span class="fx-i">x = g(x)</span> despejando una x, y después iteras:</p>
+  <p class="fx">x<sub>i+1</sub> = g(x<sub>i</sub>)</p>
+  <p>Ejemplo: de <span class="fx-i">x − cos(x) = 0</span> sale <span class="fx-i">x = cos(x)</span>, o sea g(x) = cos(x). Partes con x = 0, aplicas coseno una y otra vez, y converge a 0,739.</p>
+  <p><b>El criterio de convergencia</b> es lo que preguntan:</p>
+  <p class="fx">| g'(x) | &lt; 1  cerca de la raíz  →  converge</p>
+  <p><b>De dónde sale.</b> Si x<sub>r</sub> es la raíz verdadera, entonces x<sub>r</sub> = g(x<sub>r</sub>). Restando esa igualdad de la iteración:</p>
+  <p class="fx">x<sub>r</sub> − x<sub>i+1</sub> = g(x<sub>r</sub>) − g(x<sub>i</sub>)</p>
+  <p>Por el teorema del valor medio, g(x<sub>r</sub>) − g(x<sub>i</sub>) = g'(ξ)(x<sub>r</sub> − x<sub>i</sub>) para algún ξ entre ambos. O sea:</p>
+  <p class="fx">E<sub>i+1</sub> = g'(ξ) · E<sub>i</sub></p>
+  <p>El error se multiplica por g'(ξ) en cada paso. Si el valor absoluto es menor que 1, el error se achica y converge; si es mayor que 1, el error crece y diverge. Y como el error nuevo es proporcional al viejo <b>elevado a 1</b>, la convergencia es <b>lineal</b>.</p>
+  <p><b>Lo importante:</b> una misma ecuación admite varias formas de g(x), y unas convergen y otras no. Elegir bien el despeje es parte del problema.</p>`
+ },
+ {
+  t:'Newton-Raphson',
+  h:`<p>El método más usado del capítulo. La idea geométrica: párate en x<sub>i</sub>, traza la <b>recta tangente</b> a la curva en ese punto, y usa como siguiente estimación el punto donde la tangente corta el eje x.</p>
+  <p class="fx">x<sub>i+1</sub> = x<sub>i</sub> − f(x<sub>i</sub>) / f'(x<sub>i</sub>)</p>
+  <p><b>Derivación desde Taylor</b> (esta es la que piden justificar). Expandes f alrededor de x<sub>i</sub> y cortas en el término lineal:</p>
+  <p class="fx">f(x<sub>i+1</sub>) ≈ f(x<sub>i</sub>) + f'(x<sub>i</sub>)(x<sub>i+1</sub> − x<sub>i</sub>)</p>
+  <p>Impones que x<sub>i+1</sub> sea la raíz, o sea f(x<sub>i+1</sub>) = 0:</p>
+  <p class="fx">0 = f(x<sub>i</sub>) + f'(x<sub>i</sub>)(x<sub>i+1</sub> − x<sub>i</sub>)</p>
+  <p>Despejas x<sub>i+1</sub> y sale la fórmula. Newton no es más que <b>truncar Taylor en primer orden</b>.</p>
+  <p><b>Convergencia cuadrática.</b> Si en vez de cortar en el término lineal te quedas con el resto de segundo orden y haces el mismo desarrollo, llegas a:</p>
+  <p class="fx">E<sub>i+1</sub> = − f''(ξ) / (2 f'(ξ)) · E<sub>i</sub><sup>2</sup></p>
+  <p>El error nuevo es proporcional al <b>cuadrado</b> del anterior. En la práctica eso significa que <b>el número de cifras correctas se duplica en cada iteración</b>: 2 cifras, 4, 8, 16. Por eso converge en 3 o 4 pasos cuando funciona.</p>
+  <p><b>Los cuatro modos de falla</b> — hay que saberlos:</p>
+  <ul>
+  <li><b>Punto de inflexión</b> cerca de la raíz: la tangente manda la estimación lejísimos.</li>
+  <li><b>Oscilación</b> alrededor de un máximo o mínimo local: se queda rebotando sin converger.</li>
+  <li><b>Estimación inicial cerca de un extremo</b>: f'(x) ≈ 0, la tangente es casi horizontal y la dispara al infinito.</li>
+  <li><b>División por cero</b>: f'(x<sub>i</sub>) = 0 exacto y el método explota.</li>
+  </ul>
+  <p><b>El otro costo:</b> necesitas la derivada analítica. Si f viene de un modelo enredado o de datos, puede que simplemente no la tengas.</p>`,
+  ojo:'Newton no tiene ninguna garantía de convergencia. Es rápido cuando parte cerca de la raíz y la función se porta bien; fuera de eso puede diverger sin aviso. Por eso todo código serio le pone un tope de iteraciones y un chequeo de que f(x) efectivamente esté bajando.'
+ },
+ {
+  t:'Secante',
+  h:`<p>Resuelve el problema de la derivada: la <b>aproxima</b> con una diferencia finita usando los dos últimos puntos.</p>
+  <p class="fx">f'(x<sub>i</sub>) ≈ ( f(x<sub>i−1</sub>) − f(x<sub>i</sub>) ) / ( x<sub>i−1</sub> − x<sub>i</sub> )</p>
+  <p>Reemplazas eso en la fórmula de Newton y queda:</p>
+  <p class="fx">x<sub>i+1</sub> = x<sub>i</sub> − f(x<sub>i</sub>) (x<sub>i−1</sub> − x<sub>i</sub>) / ( f(x<sub>i−1</sub>) − f(x<sub>i</sub>) )</p>
+  <p><b>La fórmula es idéntica a la de falsa posición.</b> La diferencia es de fondo y la preguntan siempre:</p>
+  <ul>
+  <li><b>Falsa posición</b> es cerrada: los dos puntos siempre encierran la raíz, y elige cuál reemplazar según el signo.</li>
+  <li><b>Secante</b> es abierta: usa los <b>dos últimos</b> valores sin importar los signos. Puede diverger.</li>
+  </ul>
+  <p><b>Orden de convergencia ≈ 1,618</b>, el número áureo. Más lento que Newton (2) pero más rápido que bisección o punto fijo (1). El intercambio: no necesita derivada, y cada iteración cuesta <b>una sola</b> evaluación de f, contra dos de Newton (f y f'). Medido en costo real, muchas veces sale ganando.</p>
+  <p><b>Secante modificada:</b> si solo tienes un punto de partida, se perturba con un δ pequeño (típicamente 10<sup>−6</sup>) y se usa esa diferencia como derivada.</p>`
+ },
+ {
+  t:'Raíces múltiples y polinomios',
+  h:`<p>Una raíz es <b>múltiple</b> cuando la curva toca el eje sin cruzarlo (multiplicidad par) o lo cruza aplanándose (multiplicidad impar). Por ejemplo (x − 3)<sup>2</sup> tiene una raíz doble en x = 3.</p>
+  <p><b>Los tres problemas que causan:</b></p>
+  <ul>
+  <li>Si la multiplicidad es par <b>no hay cambio de signo</b>, así que todos los métodos cerrados quedan descartados de entrada.</li>
+  <li>Newton y secante <b>pierden la convergencia cuadrática</b> y pasan a lineal.</li>
+  <li>Cerca de la raíz f(x) y f'(x) tienden a cero <b>a la vez</b>, y la división se vuelve numéricamente inestable.</li>
+  </ul>
+  <p><b>La solución.</b> Se aplica Newton no a f sino a u(x) = f(x)/f'(x), que tiene las mismas raíces pero todas simples:</p>
+  <p class="fx">x<sub>i+1</sub> = x<sub>i</sub> − f(x<sub>i</sub>) f'(x<sub>i</sub>) / [ ( f'(x<sub>i</sub>) )<sup>2</sup> − f(x<sub>i</sub>) f''(x<sub>i</sub>) ]</p>
+  <p>Recupera la convergencia cuadrática, a costa de necesitar también la segunda derivada.</p>
+  <p><b>Polinomios.</b> Tienen dos particularidades: se evalúan con el <b>método de Horner</b> (anidado), que es más rápido y más estable que calcular potencia por potencia; y pueden tener raíces <b>complejas</b>, que ningún método basado en cambio de signo va a encontrar. Para polinomios se usan métodos específicos (Müller, Bairstow) o directamente <code>np.roots</code>, que las entrega todas de una vez, reales y complejas.</p>`
+ },
+ {
+  t:'Cómo se hace en Python',
+  h:`<p>Para el laboratorio: SciPy trae todo implementado en <code>scipy.optimize</code>. El que hay que usar por defecto es <b>Brent</b>, que combina bisección con interpolación cuadrática inversa — tiene la garantía de convergencia de un método cerrado y casi la velocidad de uno abierto.</p>`,
+  code:`import numpy as np
+from scipy.optimize import brentq, bisect, newton, root_scalar, fsolve
+
+f  = lambda x: x - np.cos(x)
+df = lambda x: 1 + np.sin(x)
+
+# --- Cerrados: necesitan un intervalo con cambio de signo ---
+print(bisect(f, 0, 1))            # bisección pura
+print(brentq(f, 0, 1))            # EL DEFAULT: usa este salvo que pidan otro
+
+# --- Abiertos: necesitan estimación inicial ---
+print(newton(f, x0=0.5, fprime=df))   # Newton-Raphson
+print(newton(f, x0=0.5))              # sin fprime -> usa secante
+
+# --- Interfaz general, informa si convergió y en cuántas iteraciones ---
+r = root_scalar(f, bracket=[0, 1], method='brentq')
+print(r.root, r.iterations, r.converged)
+
+# --- Sistemas no lineales (varias ecuaciones) ---
+g = lambda v: [v[0]**2 + v[1]**2 - 4, v[0] - v[1]]
+print(fsolve(g, [1, 1]))
+
+# --- Todas las raíces de un polinomio, incluidas las complejas ---
+print(np.roots([1, 0, -3, 2]))    # x^3 - 3x + 2
+
+# --- Bisección a mano, que es lo que suelen pedir programar ---
+def biseccion(f, xl, xu, tol=1e-6, nmax=100):
+    if f(xl) * f(xu) > 0:
+        raise ValueError('no hay cambio de signo en el intervalo')
+    xr_ant = xl
+    for i in range(nmax):
+        xr = (xl + xu) / 2
+        if f(xl) * f(xr) < 0:
+            xu = xr
+        else:
+            xl = xr
+        ea = abs((xr - xr_ant) / xr) if xr != 0 else abs(xr - xr_ant)
+        if ea < tol:
+            return xr, i + 1, ea
+        xr_ant = xr
+    return xr, nmax, ea`,
+  ojo:'En laboratorio el error más caro es pasarle a brentq un intervalo sin cambio de signo: tira ValueError y pierdes tiempo. Grafica primero con matplotlib, ubica visualmente el cruce, y recién ahí elige el intervalo.'
+ },
+ {
+  t:'Resumen para la prueba',
+  h:`<p>La tabla que conviene tener en la cabeza:</p>
+  <table>
+  <tr><th>Método</th><th>Tipo</th><th>Necesita</th><th>Orden</th><th>Converge siempre</th></tr>
+  <tr><td>Bisección</td><td>Cerrado</td><td>Intervalo con cambio de signo</td><td>1 (lineal)</td><td>Sí</td></tr>
+  <tr><td>Falsa posición</td><td>Cerrado</td><td>Intervalo con cambio de signo</td><td>1, en general más rápido</td><td>Sí</td></tr>
+  <tr><td>Punto fijo</td><td>Abierto</td><td>Un x₀ y un despeje x = g(x)</td><td>1 (lineal)</td><td>Solo si |g'| &lt; 1</td></tr>
+  <tr><td>Newton-Raphson</td><td>Abierto</td><td>Un x₀ y la derivada f'</td><td>2 (cuadrático)</td><td>No</td></tr>
+  <tr><td>Secante</td><td>Abierto</td><td>Dos x₀ (sin derivada)</td><td>≈1,618</td><td>No</td></tr>
+  </table>
+  <p><b>Lo que más se pregunta:</b></p>
+  <ul>
+  <li>Diferencia entre cerrado y abierto, con el intercambio seguridad/velocidad.</li>
+  <li>Derivar Newton desde la serie de Taylor.</li>
+  <li>Por qué Newton es cuadrático y punto fijo lineal.</li>
+  <li>Diferencia entre falsa posición y secante teniendo la misma fórmula.</li>
+  <li>Calcular cuántas iteraciones necesita la bisección para una tolerancia dada.</li>
+  <li>Los modos de falla de Newton y qué hacer en cada uno.</li>
+  </ul>`,
+  ojo:'Los ejercicios de este módulo los trabajamos en el chat, no acá. Esta guía es el fundamento: léela antes y después practicamos las iteraciones a mano, que es como las piden en la prueba.'
+ }
+ ]
 }
+
 
 ]);

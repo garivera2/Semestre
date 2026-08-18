@@ -75,20 +75,29 @@ Entidad-Relación · Modelo Relacional · Formas Normales · Álgebra Relacional
 
 Están en `app/guias/bd.js`:
 
-1. Entidad-Relación (semana 2)
-2. Modelo Relacional (semana 3)
-3. Formas Normales (semana 3)
+1. Entidad-Relación (semana 2) — 3 ejercicios
+2. Modelo Relacional (semana 3) — 5 ejercicios, incluye un caso completo tipo control
+3. Formas Normales (semana 3) — 5 ejercicios, incluye cierre de atributos y 3FN vs BCNF
+4. Álgebra Relacional (semana 4) — 4 ejercicios, incluye división y auto-join con rho
 
 ## Pendiente
 
-- Álgebra Relacional
 - SQL1 a SQL4
 - Vistas, procedimientos almacenados, triggers
-- Conexión por Python
+- Conexión por Python y gráficos
 
 ## Estado actual
 
 Gabo ya rindió un control y dice que va bien. **No es prioridad** por ahora.
+
+## Cómo trabajar este ramo
+
+Gabo encuentra Bases de Datos complejo, así que **acá sí quiere ejercicios**: hay que proponérselos y enseñarle a resolverlos, no solo darle teoría. A diferencia de Modelos Estocásticos, donde los hace solo.
+
+Concretamente:
+- Proponer ejercicios propios cuando no haya material del ramo a mano
+- Resolverlos explicando el razonamiento paso a paso, no solo el resultado
+- Que las guías nuevas de `bd.js` traigan sección de ejercicios con solución explicada
 
 ## Cómo agregar una guía
 

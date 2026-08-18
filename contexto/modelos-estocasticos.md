@@ -79,11 +79,15 @@ Están en `app/guias/me.js`:
 
 ## Cómo Gabo estudia este ramo
 
-**Le interesa el fundamento conceptual, no los ejercicios resueltos.** Los ejercicios y las ayudantías los hace solo. Lo que necesita de las guías es:
+**Le interesa el fundamento conceptual antes que nada.** Lo que necesita de las guías es:
 
 - Entender de dónde sale cada fórmula y qué significa
 - Saber cuándo aplicar cada modelo
 - Un **formulario** compacto por unidad
+
+**Pero los ejercicios también importan.** El ramo es complejo, así que hay que **proponerle ejercicios y enseñarle a resolverlos**: mostrar el razonamiento, por qué se elige ese modelo y qué supuesto justifica cada paso. No basta con la respuesta ni con la fórmula suelta.
+
+**Dónde van los ejercicios: en el chat, no en las guías.** Las guías del dashboard se quedan solo con fundamento y formulario. Los ejercicios se hacen ping-pong en la conversación — se le propone uno, él responde, se corrige y se explica. Nada de llenar `app/guias/me.js` con baterías de ejercicios.
 
 Dice que el ramo le gusta pero que "es mucha probabilidad", así que conviene reforzar los fundamentos probabilísticos cuando aparezcan.
 

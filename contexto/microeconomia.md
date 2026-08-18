@@ -74,7 +74,12 @@ Están en `app/guias/mi.js`:
 
 ## Cómo Gabo estudia este ramo
 
-**Solo quiere el fundamento y los conceptos.** Las ayudantías y los ejercicios los hace él. Puede mandar sus apuntes de clase si el PPT no alcanza.
+**Aprende con ejercicios, no con teoría.** Ya maneja el fundamento conceptual; lo que le hace falta es aplicarlo.
+
+- **Logística:** él manda la ayudantía (o el enunciado que sea) por el chat y se resuelve ahí mismo, pimponeando pregunta por pregunta. No se escribe un archivo por cada ejercicio.
+- **En las guías:** cada guía de materia nueva cierra con 2 o 3 ejercicios **simples**, solo para fijar lo que esa guía explica.
+- **No adelantar materia.** Nada de formas funcionales o métodos que el profe no haya pasado todavía (a la semana 2 no conocía Cobb-Douglas ni la descomposición sustitución/ingreso). Si no salió en clase o en la ayudantía, no va.
+- Puede mandar apuntes de clase si el PPT no alcanza.
 
 ## Cómo agregar una guía
 

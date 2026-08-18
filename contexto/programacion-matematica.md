@@ -60,7 +60,15 @@ Están en `app/guias/pm.js`:
 
 ## Estado actual
 
-Gabo dice que **no es prioridad** por ahora: la materia de las primeras semanas (simplex, dos fases, holgura complementaria) ya se la sabe. Le basta con resúmenes cortos.
+La teoría de las primeras semanas (simplex, dos fases, holgura complementaria) ya se la sabe, así que los resúmenes conceptuales pueden ser cortos.
+
+**Pero los ejercicios sí importan.** El ramo es complejo y la práctica es donde se juega la nota. Regla para todo chat de este ramo:
+
+- Cada vez que aparezca material con ejercicios (guías del profe, ayudantías, controles y pruebas de años anteriores, ejercicios tipo), **proponérselos a Gabo y enseñárselos**.
+- Enseñar de verdad: enunciado, cómo se ataca, desarrollo paso a paso y **el porqué de cada decisión** — no solo el resultado.
+- **Los ejercicios NO van al dashboard.** `pm.js` se queda solo con teoría y resúmenes, para no engordar la app. Los ejercicios se hacen **acá en el chat**, en formato ping-pong: se propone uno, Gabo responde, se corrige y se explica el porqué. Recién ahí se pasa al siguiente.
+- Cuando no haya material subido, proponer ejercicios propios del nivel del ramo y del contenido que viene en la próxima evaluación.
+- **El material lo manda Gabo.** No ir a buscarlo a Canvas por cuenta propia salvo que él lo pida explícitamente.
 
 ## Cómo agregar una guía
 
