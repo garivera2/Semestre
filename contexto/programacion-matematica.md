@@ -49,8 +49,26 @@
 
 Están en `app/guias/pm.js`:
 
-1. Programación lineal y simplex (semana 1-2) — forma estándar, solución gráfica, simplex, dos fases, dualidad, holgura complementaria
-2. Programación entera y branch and bound (semana 3) — relajación lineal, ramificación, poda por cota
+1. **Programación lineal y simplex** (`pm-u1`, semana 1-2) — forma estándar, solución gráfica, simplex, dos fases, dualidad, holgura complementaria, tabla de correspondencia primal–dual
+2. **Programación entera y branch and bound** (`pm-entera`, semana 3) — relajación lineal, ramificación, poda por cota, el algoritmo formal del profe (Algoritmo 1), ramificación en binarias, cuándo no hace falta seguir ramificando
+3. **Modelamiento: los modelos clásicos** (`pm-modelos`, semana 2) — dieta, transporte balanceado, mochila (binaria/acotada/continua), costo fijo y big-M, localización de plantas, y las restricciones que hay que linealizar
+4. **Repaso Control 1 — plan y checklist** (`pm-c1`, semana 4) — mapa del control y checklist de qué ejercicios hacer de cada ayudantía, control y prueba, con plan día por día
+
+## Material disponible en Canvas (curso 48499)
+
+Revisado el 20 de agosto de 2026. La pestaña *Archivos* está deshabilitada; todo se llega por **Módulos**.
+
+- **Ayudantías 2026-20** — Ayudantía 1 (11 ago, enunciado + pauta) y Ayudantía 2 (18 ago, solo enunciado por ahora). Son las dos que entran al Control 1.
+- **Evaluaciones y Pautas 2026-10** — pautas del semestre pasado, mismo profesor: Controles 1, 2, 3 y recuperativo, y Pruebas 1, 2, 3 y recuperativa.
+  - Relevante para el Control 1: **Control 1** (transporte/redes + PL gráfico + dual), **Prueba 1** (PL entero + gráfico + B&B, entera binaria con holgura complementaria, localización de plantas) y **solo el P3 del Control 2** (criterios de poda en B&B).
+  - El resto (Controles 2 y 3, Pruebas 2 y 3, recuperativas) es optimización no lineal, KKT y programación dinámica: material de más adelante.
+- **Clase 1 (Sec. Bustamante)** — presentación, introducción y un PDF de teoría de juegos.
+- **Calendario** — planilla `Programación Mat 202620.xlsx`.
+- Ojo: la pauta del Control 1 de 2026-10 trae un error de tipeo en la parte de holgura complementaria (mezcla números de otro problema). El resultado correcto es π₁ = 5/2, π₂ = 1/4, w* = 23,75.
+
+## Apuntes de clase de Gabo
+
+Subió un PDF de 5 páginas con lo visto hasta la última clase: modelos clásicos (dieta, transporte, mochila, costo fijo), programación entera y relajación lineal con el contraejemplo de por qué redondear no sirve, y el método Branch and Bound con el árbol del ejemplo max 5x₁ + 4x₂ (relajado en (3,75 · 1,25), z = 23,75; óptimo entero x = (3,2), z = 23). Todo eso ya quedó cubierto en las guías.
 
 ## Pendiente
 
