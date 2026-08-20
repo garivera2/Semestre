@@ -112,6 +112,8 @@ Quiere entender el **fundamento** antes que la implementación, porque las prueb
 
 **Ejercicios: sí, pero en el chat, no en las guías.** El ramo es complejo, así que hay que proponerle ejercicios y enseñarle a resolverlos. Eso se hace ping-pong en la conversación: se le plantea un ejercicio, él lo responde, y recién ahí viene el desarrollo paso a paso explicando el porqué de cada paso, no solo el resultado.
 
+**Python: no es experto.** Gabo sabe la lógica matemática pero la sintaxis de Python le cuesta. Hay que explicarle la notación cuando aparezca (qué es un `lambda`, qué es un array vs una función, por qué falla algo) y darle siempre la forma **más intuitiva y explícita**, no la más elegante: `def` antes que `lambda`, bucles explícitos antes que comprensiones, nombres largos antes que abreviados. Y darle plantillas de código que él pueda rellenar, porque en el laboratorio va con apuntes a mano.
+
 Las guías de `mn.js` llevan el **fundamento** (teoría, justificación de fórmulas, código Python de referencia). No se cargan de baterías de ejercicios resueltos: el dashboard se pone pesado y no es para eso.
 
 ## Cómo agregar una guía

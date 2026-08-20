@@ -266,7 +266,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v21</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v22</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -1379,19 +1379,42 @@ function pintaGuias(){
   document.querySelectorAll('.gcard').forEach(c=>c.onclick=()=>abreGuia(c.dataset.g));
 }
 /* ---- ruta cronológica ---- */
-const SEMANAS=[
- {n:1,f:'3 – 9 ago',t:'Arranque',
-  meta:'La semana de presentación. Si te la perdiste o no entendiste, esto es lo que quedó pendiente.'},
- {n:2,f:'10 – 16 ago',t:'Primera entrega y primer laboratorio',
-  meta:'Semana cargada: entregas de BD y tu primer lab calificado de Métodos, los dos el miércoles.'},
- {n:3,f:'17 – 23 ago',t:'Del diagrama a las tablas',
-  meta:'BD pasa a modelo relacional y normalización. Métodos entra en raíces de funciones.'}
-];
+// Notas escritas a mano para algunas semanas. Las que no estén acá
+// se describen solas a partir de lo que tengan.
+const META={
+ 1:{t:'Arranque',meta:'La semana de presentación. Si te la perdiste o no entendiste, esto es lo que quedó pendiente.'},
+ 2:{t:'Primera entrega y primer laboratorio',meta:'Semana cargada: entregas de BD y tu primer lab calificado de Métodos, los dos el miércoles.'},
+ 3:{t:'Del diagrama a las tablas',meta:'BD pasa a modelo relacional y normalización. Métodos entra en raíces de funciones.'}
+};
+// La ruta se arma sola: aparece toda semana que tenga guías, evaluaciones,
+// o que sea la actual. Así no hay que tocar código cuando avanza el semestre.
+function semanasRuta(){
+  const actual=SEM?SEM.n:0;
+  return W.filter(w=>{
+    const conGuias=G.some(g=>g.sem===w.n);
+    // Por defecto: lo que tenga material, la semana actual y las dos siguientes.
+    // Con "ver todo el semestre" se muestran también las futuras vacías.
+    if(!S.rutaTodo && !conGuias && w.n>actual+2) return false;
+    return conGuias || w.ev.some(e=>PESA.includes(e.t)) || w.n===actual;
+  }).map(w=>{
+    const m=META[w.n]||{};
+    const gs=G.filter(g=>g.sem===w.n);
+    const ramos=[...new Set(gs.map(g=>R[g.ramo].n))];
+    return {
+      n:w.n, a:w.a, b:w.b,
+      f:fmtc(w.a)+' – '+fmtc(w.b),
+      t:m.t||(ramos.length?ramos.join(' · '):'Semana sin material cargado'),
+      meta:m.meta||(gs.length
+        ? 'Material de '+ramos.join(', ')+'.'
+        : 'Todavía no hay guías de esta semana. Mándale el material al chat del ramo y aparecen acá.')
+    };
+  });
+}
 function pintaRuta(){
   const actual=SEM?SEM.n:0;
-  document.getElementById('ruta').innerHTML=SEMANAS.map(s=>{
+  document.getElementById('ruta').innerHTML=semanasRuta().map(s=>{
     const gs=G.filter(g=>g.sem===s.n);
-    const evs=EV.filter(e=>{const w=W.find(x=>x.n===s.n);return w&&e.d>=w.a&&e.d<=w.b&&PESA.includes(e.t)});
+    const evs=EV.filter(e=>e.d>=s.a&&e.d<=s.b&&PESA.includes(e.t));
     const hechas=gs.filter(g=>gHechas(g)===gTot(g)).length;
     const es=s.n===actual;
     return '<div class="card'+(es?' now':'')+'">'+
@@ -1417,7 +1440,9 @@ function pintaRuta(){
       }).join(''):'<div class="xs muted">Sin guías para esta semana todavía.</div>')+
       '</div></div>';
   }).join('')+
-  '<div class="card"><div class="small muted">Las guías de las semanas siguientes las vamos armando a medida que avancen las clases. Si necesitas alguna antes, pídemela.</div></div>';
+  '<div class="card"><div class="small muted">Las guías se van sumando a medida que avanzan las clases. Cada semana aparece sola cuando su ramo escribe material.</div>'+
+  '<button class="btn sm" style="margin-top:11px" onclick="S.rutaTodo=!S.rutaTodo;save();pintaRuta()">'+
+  (S.rutaTodo?'Mostrar solo lo cercano':'Ver todo el semestre')+'</button></div>';
   document.querySelectorAll('.rg').forEach(c=>c.onclick=()=>abreGuia(c.dataset.g));
 }
 document.querySelectorAll('#segguia button').forEach(b=>b.onclick=()=>{
