@@ -49,11 +49,11 @@
 
 Están en `app/guias/pm.js`:
 
-1. Programación lineal y simplex — forma estándar, solución gráfica, simplex, dos fases, dualidad, holgura complementaria
+1. Programación lineal y simplex (semana 1-2) — forma estándar, solución gráfica, simplex, dos fases, dualidad, holgura complementaria
+2. Programación entera y branch and bound (semana 3) — relajación lineal, ramificación, poda por cota
 
 ## Pendiente
 
-- Programación entera y branch & bound
 - Flujo en redes
 - Optimización no lineal sin y con restricciones
 - Programación dinámica

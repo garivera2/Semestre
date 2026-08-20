@@ -74,6 +74,70 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'La holgura complementaria sirve para verificar optimalidad sin resolver el dual completo: si tienes una solución primal candidata, las condiciones te dicen qué restricciones duales deben cumplirse con igualdad, y de ahí despejas las duales. Es una pregunta de prueba muy frecuente.'
  }
  ]
+},
+
+/* ---- PM · PROGRAMACIÓN ENTERA ---- */
+{
+ id:'pm-entera', ramo:'pm', tag:'Semana 3', sem:3,
+ titulo:'Programación entera y branch and bound',
+ bajada:'Cuando las variables tienen que ser enteras: relajación lineal y ramificación. Materia del Control 1.',
+ min:30,
+ secciones:[
+ {
+  t:'El problema y por qué no basta con redondear',
+  h:`<p>Muchas variables no admiten decimales: número de camiones, de personas, de máquinas. Y las variables <b>binarias</b> (0 o 1) modelan decisiones de sí/no — abrir o no una planta, elegir o no un proyecto.</p>
+  <p>Eso da un <b>problema de programación entera</b> (PLE): igual que un PL, pero con la restricción extra de que ciertas variables sean enteras.</p>
+  <p><b>La tentación es resolver el PL normal y redondear. No funciona</b>, por dos razones:</p>
+  <ul>
+  <li><b>Puede quedar infactible.</b> Si la solución relajada es x = 4,7 y la restricción es x ≤ 4,7, redondear hacia arriba te saca de la región factible.</li>
+  <li><b>Puede quedar lejos del óptimo.</b> El verdadero óptimo entero puede estar en un punto completamente distinto, no en el vecino del fraccionario.</li>
+  </ul>
+  <p>Por eso hace falta un método propio.</p>
+  <p><b>Y ojo con algo importante:</b> agregar la restricción de integralidad hace el problema <b>mucho más difícil</b>. El PL se resuelve en tiempo polinomial; el entero es NP-difícil. No es un detalle menor, es un salto de categoría.</p>`
+ },
+ {
+  t:'Relajación lineal',
+  h:`<p>La <b>relajación lineal</b> consiste en resolver el problema <b>ignorando la restricción de que las variables sean enteras</b>. Queda un PL común que resuelves con simplex.</p>
+  <p>Y acá está lo clave: <b>la relajación te da una cota</b>.</p>
+  <p class="fx">En maximización:  valor de la relajación ≥ óptimo entero</p>
+  <p><b>Por qué:</b> la región factible del problema relajado <b>contiene</b> a la del entero — los puntos enteros son un subconjunto de todos los puntos. Si optimizas sobre un conjunto más grande, no puedes obtener menos.</p>
+  <p><b>Dos casos al resolverla:</b></p>
+  <ul>
+  <li>Si la solución sale <b>entera por casualidad</b> → ya terminaste, ese es el óptimo del problema entero</li>
+  <li>Si sale <b>fraccionaria</b> → tienes una cota superior y hay que ramificar</li>
+  </ul>`,
+  ojo:'Esa cota es lo que hace eficiente a branch and bound. Sin ella tendrías que revisar todas las combinaciones enteras posibles, que crecen exponencialmente. La cota te permite descartar ramas completas sin explorarlas.'
+ },
+ {
+  t:'Branch and bound',
+  h:`<p>El método construye un <b>árbol</b>: cada nodo es un subproblema con restricciones extra.</p>
+  <p><b>Ramificar (branch).</b> Tomas una variable que salió fraccionaria, digamos x = 4,7, y creas <b>dos subproblemas</b>:</p>
+  <p class="fx">Rama izquierda: x ≤ 4    ·    Rama derecha: x ≥ 5</p>
+  <p>Fíjate que ninguna solución entera se pierde: todo entero cumple una u otra. Lo que sí eliminas es el pedazo fraccionario entre 4 y 5, que es justo lo que estorbaba.</p>
+  <p><b>Acotar (bound).</b> Vas guardando la <b>mejor solución entera encontrada hasta ahora</b>, llamada incumbente. Ese valor es tu cota inferior en maximización.</p>
+  <p><b>Podar.</b> Un nodo se descarta sin seguir explorándolo por tres motivos:</p>
+  <table class="tb"><tr><th>Motivo</th><th>Qué pasó</th></tr>
+  <tr><td><b>Por infactibilidad</b></td><td>El subproblema no tiene solución</td></tr>
+  <tr><td><b>Por integralidad</b></td><td>La solución salió entera. Si es mejor que la incumbente, la reemplaza</td></tr>
+  <tr><td><b>Por cota</b></td><td>La relajación del nodo es <b>peor</b> que la incumbente. Ninguna solución de esa rama puede superarla, así que no vale la pena mirarla</td></tr>
+  </table>
+  <p>El algoritmo termina cuando <b>no quedan nodos activos</b>. La incumbente final es el óptimo entero.</p>`,
+  ojo:'La poda por cota es el corazón del método y la que más se pregunta. La justificación: si en el mejor de los casos esa rama da 18 y ya tienes una solución entera de 20, no hay nada que buscar ahí. Descartas todo el subárbol de un viaje.'
+ },
+ {
+  t:'Ejemplo mínimo',
+  h:`<p>Supón que maximizas y la relajación en la raíz da <b>z = 23,5</b> con x₁ = 4,7.</p>
+  <ol>
+  <li><b>Raíz:</b> z = 23,5, fraccionaria. Como el objetivo tiene coeficientes enteros, ya sabes que el óptimo entero es <b>a lo más 23</b></li>
+  <li><b>Ramificas</b> en x₁ ≤ 4 y x₁ ≥ 5</li>
+  <li><b>Nodo x₁ ≤ 4:</b> da z = 21 con solución entera → se vuelve la <b>incumbente</b>. Cota inferior = 21</li>
+  <li><b>Nodo x₁ ≥ 5:</b> la relajación da z = 20,8. Como 20,8 &lt; 21, <b>se poda por cota</b> — ninguna solución entera de esa rama puede superar 21</li>
+  <li><b>No quedan nodos.</b> El óptimo entero es <b>z = 21</b></li>
+  </ol>
+  <p>Fíjate que nunca exploraste el subárbol de la derecha. Esa es toda la gracia del método.</p>`,
+  ojo:'Truco útil cuando los coeficientes del objetivo son enteros: si la relajación da 23,5, puedes redondear la cota a 23 inmediatamente. Se llama redondeo de la cota y a veces te permite podar antes.'
+ }
+ ]
 }
 
 ]);

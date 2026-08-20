@@ -1,5 +1,5 @@
 // Service worker mínimo: cachea la app para que funcione sin internet.
-const CACHE = 'semestre-v22';
+const CACHE = 'semestre-v23';
 const FILES = ['./', './index.html', './manifest.json', './icon.svg',
   './guias/mn.js', './guias/bd.js', './guias/me.js', './guias/mi.js', './guias/pm.js'];
 
