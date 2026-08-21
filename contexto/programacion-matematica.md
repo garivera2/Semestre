@@ -52,7 +52,28 @@ Están en `app/guias/pm.js`:
 1. **Programación lineal y simplex** (`pm-u1`, semana 1-2) — forma estándar, solución gráfica, simplex, dos fases, dualidad, holgura complementaria, tabla de correspondencia primal–dual
 2. **Programación entera y branch and bound** (`pm-entera`, semana 3) — relajación lineal, ramificación, poda por cota, el algoritmo formal del profe (Algoritmo 1), ramificación en binarias, cuándo no hace falta seguir ramificando
 3. **Modelamiento: los modelos clásicos** (`pm-modelos`, semana 2) — dieta, transporte balanceado, mochila (binaria/acotada/continua), costo fijo y big-M, localización de plantas, y las restricciones que hay que linealizar
-4. **Repaso Control 1 — plan y checklist** (`pm-c1`, semana 4) — mapa del control y checklist de qué ejercicios hacer de cada ayudantía, control y prueba, con plan día por día
+
+## Repasos de controles y pruebas
+
+Sección **aparte de las guías**, en `app/repasos/pm.js`. Acá va, por cada control/prueba:
+
+- **Qué materia entra** y las **fórmulas** que hay que saber
+- Un **checklist de ejercicios** de Canvas: cuáles conviene hacer y por qué
+
+Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
+
+Ya escrito: **`pm-c1` · Control 1 · Programación Matemática** (25 de agosto). Siete bloques de resumen — qué entra, formularios de dualidad, modelamiento, PL/gráfico y B&B, errores que cuestan puntos, y plan día por día — más un checklist de 17 ejercicios agrupados en 5 fuentes.
+
+Cuando Gabo pida "arma el repaso del Control X", hay que:
+
+1. Revisar Canvas de este ramo y ver qué controles, pruebas y ayudantías pasadas hay
+2. Escribir el resumen de materia y el formulario
+3. Armar el checklist indicando de cada ejercicio **por qué sirve** para esa evaluación
+4. Agregarlo a `app/repasos/pm.js` siguiendo la estructura que está comentada al inicio del archivo
+5. Subir el `CACHE` de `app/sw.js` y el `v__` de `app/index.html`
+6. Verificar: `node --check app/repasos/pm.js`
+
+**No mezclar esto con las guías.** Las guías son la materia; los repasos son la preparación de una evaluación concreta.
 
 ## Material disponible en Canvas (curso 48499)
 
@@ -87,26 +108,6 @@ La teoría de las primeras semanas (simplex, dos fases, holgura complementaria) 
 - **Los ejercicios NO van al dashboard.** `pm.js` se queda solo con teoría y resúmenes, para no engordar la app. Los ejercicios se hacen **acá en el chat**, en formato ping-pong: se propone uno, Gabo responde, se corrige y se explica el porqué. Recién ahí se pasa al siguiente.
 - Cuando no haya material subido, proponer ejercicios propios del nivel del ramo y del contenido que viene en la próxima evaluación.
 - **El material lo manda Gabo.** No ir a buscarlo a Canvas por cuenta propia salvo que él lo pida explícitamente.
-
-## Repasos de controles y pruebas
-
-Sección **aparte de las guías**, en `app/repasos/pm.js`. Acá va, por cada control/prueba:
-
-- **Qué materia entra** y las **fórmulas** que hay que saber
-- Un **checklist de ejercicios** de Canvas: cuáles conviene hacer y por qué
-
-Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
-
-Cuando Gabo pida "arma el repaso del Control X", hay que:
-
-1. Revisar Canvas de este ramo y ver qué controles, pruebas y ayudantías pasadas hay
-2. Escribir el resumen de materia y el formulario
-3. Armar el checklist indicando de cada ejercicio **por qué sirve** para esa evaluación
-4. Agregarlo a `app/repasos/pm.js` siguiendo la estructura que está comentada al inicio del archivo
-5. Subir el `CACHE` de `app/sw.js` y el `v__` de `app/index.html`
-6. Verificar: `node --check app/repasos/pm.js`
-
-**No mezclar esto con las guías.** Las guías son la materia; los repasos son la preparación de una evaluación concreta.
 
 ## Cómo agregar una guía
 
