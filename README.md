@@ -12,12 +12,14 @@ El chat es memoria de corto plazo: cada conversación empieza de cero. **Este re
 Semestre/
 ├── app/                    la aplicación web
 │   ├── index.html          dashboard completo
-│   ├── guias/              una guía por ramo
+│   ├── guias/              la materia, una guía por ramo
 │   │   ├── mn.js           Métodos Numéricos
 │   │   ├── bd.js           Bases de Datos
 │   │   ├── me.js           Modelos Estocásticos
 │   │   ├── mi.js           Microeconomía
 │   │   └── pm.js           Programación Matemática
+│   ├── repasos/            controles y pruebas, uno por ramo
+│   │   └── mn.js bd.js me.js mi.js pm.js
 │   ├── sw.js               permite funcionar sin internet
 │   ├── manifest.json       para instalarla como app
 │   └── icon.svg
@@ -69,6 +71,16 @@ cd ~/Desktop/Semestre && git push origin master
 
 ---
 
+## Pedir el repaso de una evaluación
+
+En el chat del ramo:
+
+> Arma el repaso del Control 1 en la sección de pruebas. Revisa Canvas, hazme el resumen con la materia y las fórmulas, y el checklist de qué ejercicios hacer de cada control y ayudantía.
+
+Eso se guarda en `app/repasos/<ramo>.js` y aparece en **Guías → Pruebas**, separado de la materia.
+
+---
+
 ## Flujo típico de una sesión
 
 1. Abres el chat del ramo y pegas el mensaje inicial
@@ -92,7 +104,7 @@ La próxima vez se parte de cero sin perder nada, porque todo quedó en el repos
 
 **Estudio** — plan semana a semana con checklist y apuntes.
 
-**Guías** — ruta de estudio cronológica y todas las guías por ramo.
+**Guías** — tres vistas: la **ruta de estudio** cronológica, **todas las guías** por ramo, y **pruebas**, que es el repaso de cada control con su checklist de ejercicios.
 
 **Ramos** — de qué trata cada uno, por qué importa y cómo conviene estudiarlo.
 

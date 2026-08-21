@@ -101,6 +101,12 @@ Están en `app/guias/mn.js`:
 5. Laboratorio 1 · Serie de Taylor (semana 2)
 6. Programación con Python (semana 3)
 
+## Apuntes y material acumulado
+
+`contexto/apuntes-mn.md` guarda los apuntes de clase transcritos semana a semana, el
+inventario de archivos de Canvas y el desglose de las ayudantías. Es la base para armar
+el resumen de la Prueba 1. Cada semana nueva se agrega ahí.
+
 ## Pendiente
 
 - Guía de raíces (Cap 5-6) para la clase del 21 de agosto
@@ -115,6 +121,26 @@ Quiere entender el **fundamento** antes que la implementación, porque las prueb
 **Python: no es experto.** Gabo sabe la lógica matemática pero la sintaxis de Python le cuesta. Hay que explicarle la notación cuando aparezca (qué es un `lambda`, qué es un array vs una función, por qué falla algo) y darle siempre la forma **más intuitiva y explícita**, no la más elegante: `def` antes que `lambda`, bucles explícitos antes que comprensiones, nombres largos antes que abreviados. Y darle plantillas de código que él pueda rellenar, porque en el laboratorio va con apuntes a mano.
 
 Las guías de `mn.js` llevan el **fundamento** (teoría, justificación de fórmulas, código Python de referencia). No se cargan de baterías de ejercicios resueltos: el dashboard se pone pesado y no es para eso.
+
+## Repasos de controles y pruebas
+
+Sección **aparte de las guías**, en `app/repasos/mn.js`. Acá va, por cada control/prueba:
+
+- **Qué materia entra** y las **fórmulas** que hay que saber
+- Un **checklist de ejercicios** de Canvas: cuáles conviene hacer y por qué
+
+Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
+
+Cuando Gabo pida "arma el repaso del Control X", hay que:
+
+1. Revisar Canvas de este ramo y ver qué controles, pruebas y ayudantías pasadas hay
+2. Escribir el resumen de materia y el formulario
+3. Armar el checklist indicando de cada ejercicio **por qué sirve** para esa evaluación
+4. Agregarlo a `app/repasos/mn.js` siguiendo la estructura que está comentada al inicio del archivo
+5. Subir el `CACHE` de `app/sw.js` y el `v__` de `app/index.html`
+6. Verificar: `node --check app/repasos/mn.js`
+
+**No mezclar esto con las guías.** Las guías son la materia; los repasos son la preparación de una evaluación concreta.
 
 ## Cómo agregar una guía
 

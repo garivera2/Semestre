@@ -81,6 +81,26 @@ Están en `app/guias/mi.js`:
 - **No adelantar materia.** Nada de formas funcionales o métodos que el profe no haya pasado todavía (a la semana 2 no conocía Cobb-Douglas ni la descomposición sustitución/ingreso). Si no salió en clase o en la ayudantía, no va.
 - Puede mandar apuntes de clase si el PPT no alcanza.
 
+## Repasos de controles y pruebas
+
+Sección **aparte de las guías**, en `app/repasos/mi.js`. Acá va, por cada control/prueba:
+
+- **Qué materia entra** y las **fórmulas** que hay que saber
+- Un **checklist de ejercicios** de Canvas: cuáles conviene hacer y por qué
+
+Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
+
+Cuando Gabo pida "arma el repaso del Control X", hay que:
+
+1. Revisar Canvas de este ramo y ver qué controles, pruebas y ayudantías pasadas hay
+2. Escribir el resumen de materia y el formulario
+3. Armar el checklist indicando de cada ejercicio **por qué sirve** para esa evaluación
+4. Agregarlo a `app/repasos/mi.js` siguiendo la estructura que está comentada al inicio del archivo
+5. Subir el `CACHE` de `app/sw.js` y el `v__` de `app/index.html`
+6. Verificar: `node --check app/repasos/mi.js`
+
+**No mezclar esto con las guías.** Las guías son la materia; los repasos son la preparación de una evaluación concreta.
+
 ## Cómo agregar una guía
 
 1. Edita `app/guias/mi.js` — agrega un objeto al final del array, antes del `]);`

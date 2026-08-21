@@ -99,6 +99,26 @@ Concretamente:
 - Resolverlos explicando el razonamiento paso a paso, no solo el resultado
 - Que las guías nuevas de `bd.js` traigan sección de ejercicios con solución explicada
 
+## Repasos de controles y pruebas
+
+Sección **aparte de las guías**, en `app/repasos/bd.js`. Acá va, por cada control/prueba:
+
+- **Qué materia entra** y las **fórmulas** que hay que saber
+- Un **checklist de ejercicios** de Canvas: cuáles conviene hacer y por qué
+
+Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
+
+Cuando Gabo pida "arma el repaso del Control X", hay que:
+
+1. Revisar Canvas de este ramo y ver qué controles, pruebas y ayudantías pasadas hay
+2. Escribir el resumen de materia y el formulario
+3. Armar el checklist indicando de cada ejercicio **por qué sirve** para esa evaluación
+4. Agregarlo a `app/repasos/bd.js` siguiendo la estructura que está comentada al inicio del archivo
+5. Subir el `CACHE` de `app/sw.js` y el `v__` de `app/index.html`
+6. Verificar: `node --check app/repasos/bd.js`
+
+**No mezclar esto con las guías.** Las guías son la materia; los repasos son la preparación de una evaluación concreta.
+
 ## Cómo agregar una guía
 
 1. Edita `app/guias/bd.js` — agrega un objeto al final del array, antes del `]);`

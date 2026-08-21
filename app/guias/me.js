@@ -149,5 +149,135 @@ window.GUIAS = (window.GUIAS || []).concat([
  }
  ]
 }
+,
+
+/* ---- ME · REPASO CONTROL 1 ---- */
+{
+ id:'me-repaso-c1', ramo:'me', tag:'Repaso · Control 1', sem:3,
+ titulo:'Repaso para el Control 1',
+ bajada:'Unidades 1 y 2. Qué entra, qué te da el formulario, el criterio para elegir modelo y la lista de ejercicios de Canvas con checklist.',
+ min:25,
+ secciones:[
+ {
+  t:'Qué entra y cuándo',
+  h:`<p><b>Jueves 27 de agosto</b>, durante la cátedra (10:30, sala C-213). Entra la <b>Unidad 1</b> (repaso de probabilidad) y la <b>Unidad 2</b> (proceso de Poisson). Es individual.</p>
+  <p>Pesa dentro del 15% que se reparten los cuatro controles, así que por sí solo no decide nada — pero seis días después viene la <b>Prueba 1 (mié 2 de septiembre)</b> con exactamente la misma materia y un 20%. Todo lo que estudies acá te sirve dos veces.</p>
+  <p><b>Cómo se evalúa:</b> el profesor lo dijo explícito — no es memorizar fórmulas sueltas, es <b>reconocer la estructura del problema, elegir el modelo correcto y justificar los supuestos</b>. En las pautas de controles pasados hay puntaje asignado a frases como "por incrementos independientes" y "por incrementos estacionarios". Escribir la justificación <b>da puntos</b>.</p>`,
+  ojo:'En las pautas viejas el desarrollo vale más que el número final. Si te equivocas en la aritmética pero el planteamiento y la justificación están bien, rescatas casi todo el puntaje. Al revés no.'
+ },
+ {
+  t:'El criterio: cuándo exponencial directa y cuándo hay que pasar por Poisson',
+  h:`<p>Esta es la duda que más cuesta y la que ordena el capítulo entero. La pregunta que hay que hacerse siempre es: <b>¿me están preguntando por una cantidad o por un tiempo?</b> Y si es por un tiempo, <b>¿hasta el evento número cuántos?</b></p>
+  <table class="tb"><tr><th>La pregunta es…</th><th>Qué usas</th><th>Cómo</th></tr>
+  <tr><td>"cuántos eventos en un periodo"</td><td><b>Poisson directo</b></td><td>N(t) ~ Poisson(λt)</td></tr>
+  <tr><td>"cuánto tiempo hasta el <b>próximo</b>" (n = 1)</td><td><b>Exponencial directa</b></td><td>P(T &gt; t) = e<sup>−λt</sup></td></tr>
+  <tr><td>"cuánto tiempo hasta el <b>n-ésimo</b>" (n ≥ 2)</td><td><b>Traduces a Poisson</b></td><td>S<sub>n</sub> es Gamma, y su acumulada no se integra a mano</td></tr>
+  <tr><td>"dado que hubo n eventos en (0,t)…"</td><td><b>Binomial / Uniforme</b></td><td>cada evento cae uniforme en el intervalo</td></tr>
+  <tr><td>"¿cuál de los dos ocurre primero?"</td><td><b>Carrera de exponenciales</b></td><td>λ<sub>1</sub>/(λ<sub>1</sub>+λ<sub>2</sub>)</td></tr>
+  </table>
+  <p><b>La regla en una línea:</b> la exponencial solo sabe responder por <b>el próximo</b> evento. Apenas te preguntan por el segundo, el tercero o el quinto, la exponencial sola ya no alcanza y hay que pasar por el conteo.</p>
+  <p><b>El puente</b> — esta equivalencia es la que tienes que tener automática:</p>
+  <p class="fx">S<sub>n</sub> &gt; t  ⟺  N(t) ≤ n − 1</p>
+  <p class="fx">S<sub>n</sub> ≤ t  ⟺  N(t) ≥ n</p>
+  <p>En palabras: <i>"el n-ésimo evento todavía no ocurre a tiempo t"</i> es lo mismo que <i>"hasta t van a lo más n−1 eventos"</i>. Son el mismo suceso mirado desde el tiempo o desde el conteo. Traducir de uno al otro convierte una integral fea en una suma de Poisson.</p>
+  <p><b>Por qué es así.</b> El tiempo hasta el n-ésimo evento es S<sub>n</sub> = T₁ + … + T<sub>n</sub>, una suma de n exponenciales, que es Gamma(n, λ). Su acumulada no tiene forma cerrada simple. La de Poisson sí. Por eso nadie integra la Gamma: se traduce y se suma.</p>`,
+  ojo:'Ojo con el caso n = 1: ahí las dos vías dan lo mismo, porque P(T₁ > t) = P(N(t) = 0) = e^(−λt). Por eso cuando el ejercicio pide "el próximo" puedes ir directo por exponencial y ahorrarte la traducción. La traducción es obligatoria recién desde el segundo evento.'
+ },
+ {
+  t:'Cómo se ve el criterio en la Ayudantía 1',
+  h:`<p>La ayudantía que ya hiciste es literalmente un entrenamiento de este criterio. Míralo así:</p>
+  <ul>
+  <li><b>P3 b)</b> "probabilidad de que el <b>primer</b> cliente llegue después de 3 minutos" → n = 1 → <b>exponencial directa</b>: e<sup>−0,5·3</sup> = 0,223</li>
+  <li><b>P3 c)</b> "que el <b>segundo</b> cliente llegue antes de 4 minutos" → n = 2 → <b>hay que traducir</b>: P(S₂ ≤ 4) = P(N(4) ≥ 2) = 1 − e<sup>−2</sup>(1 + 2) = 0,594</li>
+  <li><b>P4 b)</b> "que el <b>tercer</b> vehículo llegue después de 20 minutos" → n = 3 → <b>traducir</b>: P(S₃ &gt; 1/3) = P(N(1/3) ≤ 2) = 0,423</li>
+  <li><b>P4 d)</b> "tiempo entre dos llegadas consecutivas mayor que 10 min" → es un tiempo entre eventos, o sea n = 1 → <b>exponencial directa</b>: e<sup>−1,5</sup> = 0,223</li>
+  <li><b>P4 e) y P3 e)</b> "ya pasaron 10 minutos, ¿cuál es la probabilidad de que…" → <b>falta de memoria</b>: borras el tiempo transcurrido y aplicas exponencial directa</li>
+  </ul>
+  <p>Fíjate que las cuatro primeras son la <b>misma pregunta</b> con distinto n, y solo el n decide el camino.</p>`,
+  ojo:'Errores que cometiste en tu desarrollo y conviene corregir antes del control: en P1 d) el producto da 0,00597 (no 0,00691); en P4 e) da 0,528 (no 0,0527, se te corrió la coma); en P4 la tasa es 9 vehículos por HORA, no por minuto (lo usaste bien, pero lo anotaste mal); y en P1 c) dejaste el planteamiento sin cerrar, da 0,161. El resto está correcto.'
+ },
+ {
+  t:'Lo que te da el formulario (y lo que tienes que traer tú)',
+  h:`<p>En Canvas está el <b>"Prueba 1 - Formulario"</b>, que es el que te van a pasar. Su índice trae:</p>
+  <ul>
+  <li><b>Distribuciones discretas:</b> binomial, geométrica, binomial negativa, Poisson, uniforme discreta</li>
+  <li><b>Distribuciones continuas:</b> uniforme, exponencial y las demás</li>
+  <li><b>Proceso de conteo</b> — la definición formal</li>
+  <li><b>Proceso de Poisson</b> + un corolario de "resultado inverso"</li>
+  <li><b>Proceso de Poisson no homogéneo</b></li>
+  </ul>
+  <p>O sea: <b>las fórmulas te las dan</b>. Ábrelo tú antes del control y confirma si trae explícitos la descomposición (thinning), la superposición y la carrera de exponenciales, porque en el índice no aparecen como definición propia — si no están, esos tres van de memoria.</p>
+  <p><b>Lo que el formulario no te puede dar</b>, y es justo lo que se evalúa:</p>
+  <ul>
+  <li>El <b>criterio</b> de la sección anterior para elegir modelo</li>
+  <li>Reconocer que un enunciado con "un porcentaje son de tipo 1" es <b>descomposición</b></li>
+  <li>Reconocer que "¿cuál llega primero?" es <b>carrera de exponenciales</b></li>
+  <li>Reconocer que "dado que llegaron n en el periodo" abre la puerta a la <b>binomial</b></li>
+  <li>Saber <b>justificar</b> con incrementos independientes y estacionarios</li>
+  </ul>`
+ },
+ {
+  t:'Ejercicios · Guía Capítulo 2 (Poisson) — los que más rinden',
+  h:`<p>Está en Canvas como <b>"Capítulo 2 - Ejercicios.pdf"</b>, subida el 19 de agosto y con solución incluida. Son 7 problemas y <b>los siete valen la pena</b>: es lo más parecido al control que vas a encontrar. Prioriza en este orden.</p>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p1"><span><b>P2 · 1</b> — Distribución y esperanza condicionales de N(t). Es puro incrementos independientes. <i>Empieza por acá.</i></span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p3"><span><b>P2 · 3</b> — Centro comercial: clientes clasificados por tipo. <b>Descomposición</b> pura.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p6"><span><b>P2 · 6</b> — Dos líneas de transporte a Ciudad Empresarial. <b>Superposición</b> y carrera de exponenciales.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p5"><span><b>P2 · 5</b> — Tubo fluorescente. Tiempos entre eventos y falta de memoria.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p2"><span><b>P2 · 2</b> — El evento en el destino de vacaciones. Condicionamiento.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p4"><span><b>P2 · 4</b> — Estudiantes inscritos en el curso. Mezcla de conteo y condicional.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g2.p7"><span><b>P2 · 7</b> — Fondo de inversión con N tipos de oportunidades. Descomposición múltiple, el más difícil.</span></label>`,
+  ojo:'Hazlos tapando la solución. La guía trae el desarrollo completo abajo de cada uno, así que es muy fácil leerlo y creer que lo entendiste. Si te trancas más de diez minutos, mira solo la primera línea del desarrollo y sigue solo.'
+ },
+ {
+  t:'Ejercicios · Guía Capítulo 1 (Probabilidad) — solo los que te sirven',
+  h:`<p>Está como <b>"Capítulo 1 - Ejercicios.pdf"</b>. Son 27 problemas y <b>no todos apuntan a este curso</b>: los primeros son combinatoria y demostraciones de teoría de conjuntos, que en Modelos Estocásticos casi no aparecen. Sáltatelos y ve a los que sí caen.</p>
+  <p><b>Prioridad alta</b> — condicional, Bayes y distribuciones:</p>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g1.b1"><span><b>C1 · 10, 11, 12</b> — Independencia y probabilidad condicional. Rápidos y te calibran.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g1.b2"><span><b>C1 · 14, 15</b> — Cajas con plumones y el test del virus. <b>Bayes clásico</b>: te dan el efecto, piden la causa. El 15 es el caso típico de test médico con falsos positivos.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g1.b3"><span><b>C1 · 17, 18, 19</b> — Binomial y Poisson aplicadas. El 19 (tornillos defectuosos) es la aproximación Poisson a la binomial.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g1.b4"><span><b>C1 · 20, 21, 22, 23</b> — Densidades continuas, esperanza y varianza. El 22 (ampolletas del semáforo) es exponencial disfrazada.</span></label>
+  <p><b>Prioridad media</b> — condicionamiento aplicado, buen entrenamiento de lectura de enunciado:</p>
+  <label class="chk"><input type="checkbox" data-c="me.c1.g1.b5"><span><b>C1 · 13, 24, 25, 26, 27</b> — Tiros libres, micro o metro, la máquina del trabajador, la final de Champions, la transmisión de bits.</span></label>
+  <p><b>Sáltate</b> los ejercicios 1 a 9 (conjuntos y combinatoria) salvo que quieras calentar, y el 16.</p>`
+ },
+ {
+  t:'Ayudantías',
+  h:`<p>Las dos están en Canvas con pauta.</p>
+  <label class="chk"><input type="checkbox" data-c="me.c1.ay.0"><span><b>Ayudantía 0 + pauta</b> — repaso de probabilidad. Si la Unidad 1 la tienes floja, parte por acá.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.ay.1a"><span><b>Ayudantía 1 · corregir tus errores</b> — P1 c) y d), P4 e) y la tasa mal anotada de P4. Ya está identificado arriba.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.ay.1b"><span><b>Ayudantía 1 · P5 de nuevo</b> — el de las tres pilas. Mínimo y máximo de exponenciales, que es lo que menos se practica y sí aparece en pruebas.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.ay.1c"><span><b>Ayudantía 1 · contrastar con la pauta oficial</b> — Pauta_Ayudantia_1.pdf, sobre todo la P5 c) donde dudaste del sentido de la carrera de exponenciales.</span></label>`
+ },
+ {
+  t:'Controles y pruebas pasadas del Capítulo 2 — el termómetro real',
+  h:`<p>El archivo <b>"Capítulo 2 - Controles y Pruebas Pasadas.pdf"</b> (60 páginas, con solución) es lo más valioso que hay en Canvas para este control. Contiene ocho evaluaciones reales. Estas son, con lo que evalúa cada una:</p>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.1"><span><b>Control 1 · 23 de agosto de 2024</b> — procesadores y trabajos, 3 preguntas de 1 punto. <b>Es el control del año pasado en la misma fecha del semestre que el tuyo. Este es el más representativo: hazlo primero y cronometrado.</b></span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.2"><span><b>Control 1 · 31 de marzo de 2025</b> — centro de salud con 3 médicos. Descomposición doble (tipo de paciente y previsión), carrera de exponenciales, tiempo hasta el 5.º evento y condicionamiento binomial. Cubre casi todo el capítulo en un solo enunciado.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.3"><span><b>Control 1 · farmacia de turno y bomba de bencina</b> — el de la farmacia usa uniformidad condicional; el de la bomba, mínimo de exponenciales con operarios que salen de su puesto.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.4"><span><b>Control · jugador de fútbol</b>, goles a tasa 1,5 por partido con descomposición por tipo de gol.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.5"><span><b>Prueba 1 · trabajos que se terminan en menos de 1 hora</b> — seis partes (a–f) que recorren descomposición, tiempo hasta el n-ésimo, condicionamiento y mínimo de exponenciales. <b>La más completa de todas.</b></span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.6"><span><b>Prueba 1 · 1 de septiembre de 2023</b> — cinta transportadora y clientes de tienda de esquí, 2 preguntas de 3 puntos.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.7"><span><b>Prueba N.º 1 con pauta de puntaje detallada</b> — no la hagas: <b>léela</b>. Muestra exactamente cuántos puntos vale cada justificación y cómo redactar para no perderlos.</span></label>
+  <label class="chk"><input type="checkbox" data-c="me.c1.pp.8"><span><b>Correos del profesor</b> — bandeja de entrada, llegadas con tasa que cambia. Es el que más se parece a un <b>Poisson no homogéneo</b>.</span></label>`,
+  ojo:'Los enunciados se repiten en estructura, no en historia. Siempre hay una tasa, una descomposición por tipo, una pregunta de "cuántos" y una de "cuánto tiempo hasta el n-ésimo". Si reconoces ese esqueleto, el enunciado nuevo deja de dar miedo.'
+ },
+ {
+  t:'Plan de los 7 días',
+  h:`<p>Hoy es viernes 21 y el control es el jueves 27: quedan seis días. Esto cabe sin apurarse.</p>
+  <table class="tb"><tr><th>Día</th><th>Qué</th></tr>
+  <tr><td><b>Vie 21</b></td><td>Corregir tus errores de la Ayudantía 1 y dejar el criterio exponencial/Poisson automático. Guía Capítulo 2, problemas 1 y 3.</td></tr>
+  <tr><td><b>Sáb 22</b></td><td>Guía Capítulo 2, problemas 6 y 5. Repasar Bayes con los ejercicios 14 y 15 del Capítulo 1.</td></tr>
+  <tr><td><b>Dom 23</b></td><td>Control 1 de agosto 2024 <b>cronometrado</b>, sin apuntes. Corregir con la pauta y anotar en qué te trancaste.</td></tr>
+  <tr><td><b>Lun 24</b></td><td>Atacar justo eso en lo que te trancaste. Guía Capítulo 2, problemas 2 y 4.</td></tr>
+  <tr><td><b>Mar 25</b></td><td>Control del centro de salud (marzo 2025) y el de la farmacia. Leer la pauta con puntaje.</td></tr>
+  <tr><td><b>Mié 26</b></td><td>Ayudantía (15:30, H-012) y escribir tu <b>formulario a mano</b>. La tabla de la guía de la Unidad 2 es la base.</td></tr>
+  <tr><td><b>Jue 27</b></td><td>Control, 10:30 en C-213.</td></tr>
+  </table>
+  <p>Si tienes que recortar, lo que no puede faltar es el <b>Control 1 de agosto 2024 cronometrado</b> y los <b>problemas 1, 3 y 6 de la Guía del Capítulo 2</b>.</p>`,
+  ojo:'Escribir el formulario a mano el miércoles no es un trámite: es el repaso. Al decidir qué entra y qué no, te obligas a revisar todo el capítulo una vez más.'
+ }
+ ]
+}
+
 
 ]);

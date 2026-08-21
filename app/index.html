@@ -16,6 +16,11 @@
 <script src="guias/me.js"></script>
 <script src="guias/mi.js"></script>
 <script src="guias/pm.js"></script>
+<script src="repasos/mn.js"></script>
+<script src="repasos/bd.js"></script>
+<script src="repasos/me.js"></script>
+<script src="repasos/mi.js"></script>
+<script src="repasos/pm.js"></script>
 <style>
 :root{
   --bg:#000; --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07); --panel3:rgba(255,255,255,.11);
@@ -266,7 +271,7 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="row" style="gap:10px">
     <div style="text-align:right">
       <div class="row" style="gap:6px;justify-content:flex-end"><span id="syncdot"></span><span class="xs muted" id="synctxt">local</span></div>
-      <div class="xs" style="color:var(--tx3);margin-top:2px">v24</div>
+      <div class="xs" style="color:var(--tx3);margin-top:2px">v25</div>
     </div>
     <button class="thbtn" id="thbtn" title="Cambiar tema">◐</button>
   </div>
@@ -360,10 +365,12 @@ footer{text-align:center;color:var(--tx3);font-size:11px;padding:26px 16px 12px}
   <div class="seg" id="segguia" style="margin-top:16px">
     <button data-t="ruta" class="on">Ruta de estudio</button>
     <button data-t="todas">Todas las guías</button>
+    <button data-t="pruebas">Pruebas</button>
   </div>
   <div class="sec-desc">Material escrito siguiendo el temario y el material de Canvas de tus ramos. Teoría, ejemplos y ejercicios con solución.</div>
   <div id="ruta"></div>
   <div id="guias" class="hide"></div>
+  <div id="pruebas" class="hide"></div>
   <div id="guiadet" class="hide"></div>
 </section>
 
@@ -1449,8 +1456,78 @@ document.querySelectorAll('#segguia button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#segguia button').forEach(x=>x.classList.toggle('on',x===b));
   document.getElementById('ruta').classList.toggle('hide',b.dataset.t!=='ruta');
   document.getElementById('guias').classList.toggle('hide',b.dataset.t!=='todas');
+  document.getElementById('pruebas').classList.toggle('hide',b.dataset.t!=='pruebas');
   document.getElementById('guiadet').classList.add('hide');
+  window.scrollTo({top:0,behavior:'instant'});
 });
+/* ---- repasos de controles y pruebas ---- */
+const RP=window.REPASOS||[];
+const rpTot=r=>(r.ejercicios||[]).reduce((a,g)=>a+g.items.length,0);
+const rpHechos=r=>(r.ejercicios||[]).reduce((a,g,i)=>a+g.items.filter((_,j)=>S.chk['rep.'+r.id+'.'+i+'.'+j]).length,0);
+function pintaPruebas(){
+  const el=document.getElementById('pruebas');
+  if(!RP.length){
+    el.innerHTML='<div class="sec-desc">Acá van los repasos de cada control y prueba: qué materia entra, las fórmulas que hay que saber, y el checklist de ejercicios de Canvas que conviene hacer.</div>'+
+     '<div class="card"><div class="muted small">Todavía no hay repasos cargados.<br><br>Pídeselo al chat del ramo: <i>"arma el repaso del Control 1 en la sección de pruebas"</i>. Él revisa Canvas, escribe el resumen y arma el checklist con los ejercicios que sirven.</div></div>';
+    return;
+  }
+  const orden=[...RP].sort((a,b)=>(a.fecha||'9')<(b.fecha||'9')?-1:1);
+  el.innerHTML='<div class="sec-desc">Qué entra en cada evaluación, las fórmulas que necesitas, y el checklist de ejercicios de Canvas. Marca lo que vas haciendo.</div>'+
+   orden.map(r=>{
+    const t=rpTot(r), d=rpHechos(r), p=t?Math.round(d/t*100):0;
+    const n=r.fecha?dias(r.fecha):null;
+    const pasada=n!==null&&n<0;
+    return '<div class="card rpcard'+(pasada?'':'')+'" data-rp="'+r.id+'" style="cursor:pointer'+(pasada?';opacity:.5':'')+'">'+
+      '<div class="row sb"><span class="pill '+R[r.ramo].cls+'">'+R[r.ramo].s+'</span>'+
+      (n!==null?'<span class="xs '+dcls(n)+'" style="font-weight:800">'+(pasada?'ya pasó':dtxt(n))+'</span>':'')+'</div>'+
+      '<h3 style="font-size:16px;margin:11px 0 3px">'+esc(r.eva)+'</h3>'+
+      '<div class="xs muted">'+(r.fecha?fmt(r.fecha)+' · ':'')+esc(r.bajada||'')+'</div>'+
+      (t?'<div class="bar2" style="margin-top:12px"><i style="width:'+p+'%;background:'+R[r.ramo].c+'"></i></div>'+
+        '<div class="row sb"><span class="xs muted">'+d+' de '+t+' ejercicios</span>'+
+        '<span class="xs" style="color:'+(p===100?'var(--ok)':'var(--tx3)')+'">'+(p===100?'✓ listo':p+'%')+'</span></div>':'')+
+      '</div>';
+   }).join('');
+  document.querySelectorAll('.rpcard').forEach(c=>c.onclick=()=>abreRepaso(c.dataset.rp));
+}
+function abreRepaso(id){
+  const r=RP.find(x=>x.id===id); if(!r)return;
+  const n=r.fecha?dias(r.fecha):null;
+  let h='<button class="btn sm" style="margin-bottom:14px" onclick="cierraGuia()">‹ Volver</button>'+
+   '<span class="pill '+R[r.ramo].cls+'">'+R[r.ramo].s+'</span>'+
+   '<h2 style="margin:11px 0 4px">'+esc(r.eva)+'</h2>'+
+   '<div class="sec-desc">'+(r.fecha?fmt(r.fecha)+(n!==null&&n>=0?' · '+dtxt(n):'')+' · ':'')+esc(r.bajada||'')+'</div>';
+
+  (r.resumen||[]).forEach((s,i)=>{
+    h+='<details class="acc"'+(i===0?' open':'')+'><summary><span>'+esc(s.t)+'</span></summary>'+
+       '<div class="bd guia">'+(s.h||'')+'</div></details>';
+  });
+
+  if((r.ejercicios||[]).length){
+    h+='<div class="eyebrow">Checklist de ejercicios</div>'+
+       '<div class="sec-desc">Los ejercicios se resuelven en el chat del ramo. Acá solo llevas la cuenta.</div>';
+    r.ejercicios.forEach((g,i)=>{
+      const hechos=g.items.filter((_,j)=>S.chk['rep.'+r.id+'.'+i+'.'+j]).length;
+      h+='<details class="acc" open><summary><span>'+esc(g.fuente)+'</span>'+
+         '<span class="chip">'+hechos+'/'+g.items.length+'</span></summary><div class="bd">';
+      g.items.forEach((it,j)=>{
+        const k='rep.'+r.id+'.'+i+'.'+j, on=!!S.chk[k];
+        h+='<label class="chk'+(on?' done':'')+'"><input type="checkbox" data-c="'+k+'"'+(on?' checked':'')+'>'+
+           '<span style="flex:1">'+esc(it.x)+(it.por?'<div class="xs muted">'+esc(it.por)+'</div>':'')+'</span></label>';
+      });
+      h+='</div></details>';
+    });
+  }
+  document.getElementById('guiadet').innerHTML=h;
+  ['guias','ruta','pruebas'].forEach(v=>document.getElementById(v).classList.add('hide'));
+  document.getElementById('guiadet').classList.remove('hide');
+  document.querySelectorAll('#guiadet [data-c]').forEach(el=>el.onchange=()=>{
+    S.chk[el.dataset.c]=el.checked; save();
+    el.closest('.chk').classList.toggle('done',el.checked);
+    const det=el.closest('details'), chip=det.querySelector('.chip');
+    if(chip){const all=det.querySelectorAll('[data-c]');chip.textContent=[...all].filter(x=>x.checked).length+'/'+all.length}
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
 function abreGuia(id){
   const g=G.find(x=>x.id===id);
   let h='<button class="btn sm" style="margin-bottom:14px" onclick="cierraGuia()">‹ Volver a las guías</button>'+
@@ -1470,26 +1547,34 @@ function abreGuia(id){
         '<details class="sol"><summary>Ver solución</summary><div class="sb2">'+e.a+'</div></details></div>';
     });
     h+='<label class="chk" style="margin-top:14px;border-top:.5px solid var(--line);border-bottom:0;padding-top:12px">'+
-      '<input type="checkbox" data-c="'+key+'"'+(on?' checked':'')+'><span>'+(s.ej?'Ya hice estos ejercicios':'Ya estudié esta sección')+'</span></label>';
+      '<input type="checkbox" data-sec="1" data-c="'+key+'"'+(on?' checked':'')+'><span>'+(s.ej?'Ya hice estos ejercicios':'Ya estudié esta sección')+'</span></label>';
     h+='</div></details>';
   });
   document.getElementById('guiadet').innerHTML=h;
-  document.getElementById('guias').classList.add('hide');
-  document.getElementById('ruta').classList.add('hide');
+  ['guias','ruta','pruebas'].forEach(v=>document.getElementById(v).classList.add('hide'));
   document.getElementById('guiadet').classList.remove('hide');
-  document.querySelectorAll('#guiadet [data-c]').forEach(el=>el.onchange=()=>{
+  document.querySelectorAll('#guiadet [data-c]').forEach(el=>{
+    // restaura el estado guardado (sirve para los checkboxes escritos a mano en las guías)
+    el.checked=!!S.chk[el.dataset.c];
+    const lb0=el.closest('.chk'); if(lb0) lb0.classList.toggle('done',el.checked);
+    el.onchange=()=>{
     S.chk[el.dataset.c]=el.checked;save();
+    const lb=el.closest('.chk'); if(lb) lb.classList.toggle('done',el.checked);
+    if(!el.dataset.sec) return;
     const n=el.closest('details').querySelector('.gnum');
     n.classList.toggle('ok',el.checked);
     n.textContent=el.checked?'✓':n.dataset.i||n.textContent;
+    };
   });
   window.scrollTo({top:0,behavior:'instant'});
 }
 function cierraGuia(){
   document.getElementById('guiadet').classList.add('hide');
-  const enRuta=document.querySelector('#segguia button[data-t=ruta]').classList.contains('on');
-  document.getElementById(enRuta?'ruta':'guias').classList.remove('hide');
-  pintaGuias(); pintaRuta(); window.scrollTo({top:0,behavior:'instant'});
+  const activa=document.querySelector('#segguia button.on');
+  const t=activa?activa.dataset.t:'ruta';
+  document.getElementById(t==='ruta'?'ruta':t==='pruebas'?'pruebas':'guias').classList.remove('hide');
+  pintaGuias(); pintaRuta(); pintaPruebas();
+  window.scrollTo({top:0,behavior:'instant'});
 }
 function cop(b){
   const t=b.parentElement.querySelector('code').textContent;
@@ -1625,7 +1710,7 @@ document.querySelectorAll('#segnotas button').forEach(b=>b.onclick=()=>{
   ['cal','gas','cfg'].forEach(v=>document.getElementById('t-'+v).classList.toggle('hide',v!==b.dataset.t));
   window.scrollTo({top:0,behavior:'instant'});
 });
-function pintaTodo(){pintaHome();pintaPend();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaRuta();pintaGastos();pintaNotif();pintaSync();estadoSync()}
+function pintaTodo(){pintaHome();pintaPend();pintaCal();pintaGrid();pintaHor();pintaCalc();pintaPlan();pintaGuias();pintaRuta();pintaPruebas();pintaGastos();pintaNotif();pintaSync();estadoSync()}
 pintaTodo();
 revisaAvisos();
 const CONF=()=>S.sync.url&&S.sync.key&&S.sync.id;

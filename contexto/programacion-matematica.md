@@ -88,6 +88,26 @@ La teoría de las primeras semanas (simplex, dos fases, holgura complementaria) 
 - Cuando no haya material subido, proponer ejercicios propios del nivel del ramo y del contenido que viene en la próxima evaluación.
 - **El material lo manda Gabo.** No ir a buscarlo a Canvas por cuenta propia salvo que él lo pida explícitamente.
 
+## Repasos de controles y pruebas
+
+Sección **aparte de las guías**, en `app/repasos/pm.js`. Acá va, por cada control/prueba:
+
+- **Qué materia entra** y las **fórmulas** que hay que saber
+- Un **checklist de ejercicios** de Canvas: cuáles conviene hacer y por qué
+
+Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
+
+Cuando Gabo pida "arma el repaso del Control X", hay que:
+
+1. Revisar Canvas de este ramo y ver qué controles, pruebas y ayudantías pasadas hay
+2. Escribir el resumen de materia y el formulario
+3. Armar el checklist indicando de cada ejercicio **por qué sirve** para esa evaluación
+4. Agregarlo a `app/repasos/pm.js` siguiendo la estructura que está comentada al inicio del archivo
+5. Subir el `CACHE` de `app/sw.js` y el `v__` de `app/index.html`
+6. Verificar: `node --check app/repasos/pm.js`
+
+**No mezclar esto con las guías.** Las guías son la materia; los repasos son la preparación de una evaluación concreta.
+
 ## Cómo agregar una guía
 
 1. Edita `app/guias/pm.js` — agrega un objeto al final del array, antes del `]);`
