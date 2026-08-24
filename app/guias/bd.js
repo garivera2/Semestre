@@ -507,4 +507,206 @@ window.GUIAS = (window.GUIAS || []).concat([
  ]
 }
 
+,
+
+/* ---- BD · CLASE 03: DE PLANILLA A 3FN ---- */
+{
+ id:'bd-c03', ramo:'bd', tag:'Semana 3', sem:3,
+ titulo:'Clase 03 · De planilla a 3FN',
+ bajada:'La clase del profe Díaz desarmada, con los dos ejercicios evaluados resueltos: planilla A vs B y la editorial de revistas.',
+ min:60,
+ secciones:[
+ {
+  t:'El hilo de la clase, que es también el método',
+  h:`<p>El profe estructuró toda la clase 03 con una sola secuencia, y la repitió al principio y al final. Vale la pena memorizarla porque <b>es el orden en que hay que atacar cualquier ejercicio</b>:</p>
+  <p class="fx">identificar → conectar → separar → verificar</p>
+  <table class="tb"><tr><th>Paso</th><th>La pregunta que responde</th><th>Herramienta</th></tr>
+  <tr><td><b>Identificar</b></td><td>¿Qué dato distingue a cada cosa?</td><td>Llaves: superclave, candidata, PK</td></tr>
+  <tr><td><b>Conectar</b></td><td>¿Cómo vinculo sin copiar datos?</td><td>FK y cardinalidad</td></tr>
+  <tr><td><b>Separar</b></td><td>¿En qué relación debe vivir cada dato?</td><td>Formas normales</td></tr>
+  <tr><td><b>Verificar</b></td><td>¿Quedó bien?</td><td>Checklist de 4 puntos</td></tr></table>
+  <p><b>El checklist de verificación, en este orden exacto:</b></p>
+  <ol>
+  <li><b>1FN</b> — ¿cada celda contiene un valor atómico?</li>
+  <li><b>2FN</b> — ¿todo dato no primo depende de la PK completa?</li>
+  <li><b>3FN</b> — ¿un dato descriptivo depende de otro dato descriptivo?</li>
+  <li><b>Integridad</b> — ¿las FK representan las referencias del dominio?</li>
+  </ol>
+  <p>El cuarto punto es el que casi nadie hace y es donde se pierden puntos baratos: no basta con que las tablas estén normalizadas, las FK tienen que <b>apuntar a lo que corresponde</b> según el enunciado.</p>
+  <p>Y la frase con la que cerró la unidad, que resume el criterio completo:</p>
+  <p class="fx">No se trata de crear más tablas.<br>Se trata de evitar hechos contradictorios.</p>`,
+  ojo:'Esa frase es la defensa contra el error de sobre-normalizar. Si separas una tabla y no eliminaste ninguna redundancia ni ninguna anomalía, no ganaste nada: solo agregaste un JOIN. La normalización se justifica por el hecho repetido que elimina, no por la cantidad de tablas que produce.'
+ },
+ {
+  t:'Lo que dijo el profe con las estadísticas',
+  h:`<p>En la lámina 21 el profe puso una tabla comparando las tasas de perfectos de este semestre contra las de los últimos ocho, con test de Fisher y corrección de Holm. Los saltos:</p>
+  <table class="tb"><tr><th>Quiz</th><th>Media histórica</th><th>2026-2</th><th>p</th></tr>
+  <tr><td>ER-1</td><td>49,7%</td><td>85%</td><td>1,5e-8</td></tr>
+  <tr><td>ER-2</td><td>7,7%</td><td>7%</td><td>0,80</td></tr>
+  <tr><td>FN-1</td><td>10,0%</td><td><b>65%</b></td><td>&lt;1e-15</td></tr>
+  <tr><td>MR-1</td><td>38,4%</td><td><b>89%</b></td><td>3,8e-15</td></tr>
+  <tr><td>MR-2</td><td>36,0%</td><td>69%</td><td>9,4e-8</td></tr></table>
+  <p>Su lectura textual: en 4 de 5 quizzes el aumento es demasiado grande para atribuirlo a variación histórica, y es <b>"una señal para verificar comprensión, no una acusación individual"</b>.</p>
+  <p><b>Qué significa para ti, en concreto:</b> las notas de las entregas de Canvas dejaron de ser evidencia creíble de que el curso entendió. La consecuencia práctica es que <b>la fase individual del C1 va a apretar</b>, porque es exactamente donde se verifica comprensión sin tecnología de por medio.</p>
+  <p>Fíjate además en cuál quiz NO subió: ER-2, que se quedó en 7%. Ese es el que mide lo que de verdad cuesta. Y FN-1 es el que más saltó, de 10% a 65% — o sea, formas normales es donde el profe va a mirar con más atención si entendiste o repetiste.</p>`,
+  ojo:'No es un dato para ponerse nervioso, es un dato para orientar el estudio: el ejercicio de esta clase, hecho a mano y sin ayuda, vale más que cualquier otra cosa que hagas esta semana. Si lo puedes resolver en papel explicando cada decisión, la fase individual deja de ser un problema.'
+ },
+ {
+  t:'Evaluación breve: ¿diseño A o diseño B?',
+  h:`<p>El primer ejercicio evaluado partía de esta planilla:</p>
+  <table class="tb"><tr><th>ID sol.</th><th>Fecha</th><th>Correo</th><th>Persona</th><th>Material</th><th>Nombre</th><th>Cant.</th></tr>
+  <tr><td>S01</td><td>12/07</td><td>ana@centro.cl</td><td>Ana</td><td>M10</td><td>Cartulina</td><td>5</td></tr>
+  <tr><td>S01</td><td>12/07</td><td>ana@centro.cl</td><td>Ana</td><td>M20</td><td>Plumón</td><td>3</td></tr>
+  <tr><td>S02</td><td>13/07</td><td>ana@centro.cl</td><td>Ana</td><td>M10</td><td>Cartulina</td><td>2</td></tr></table>
+  <p>Y ofrecía dos diseños que se diferencian en <b>una sola cosa</b>: dónde vive el correo.</p>
+  <table class="tb"><tr><th>Diseño A</th><th>Diseño B</th></tr>
+  <tr><td>PERSONA(<u>correo</u>, nombre_persona)<br>MATERIAL(<u>cod_material</u>, nombre_material)<br>SOLICITUD(<u>id_sol</u>, fecha)<br>DETALLE(<u>id_sol</u>, <u>cod_material</u>, <b>correo</b>, cantidad)</td>
+  <td>PERSONA(<u>correo</u>, nombre_persona)<br>MATERIAL(<u>cod_material</u>, nombre_material)<br>SOLICITUD(<u>id_sol</u>, fecha, <b>correo</b>)<br>DETALLE(<u>id_sol</u>, <u>cod_material</u>, cantidad)</td></tr></table>
+  <p><b>Respuesta: el diseño B.</b></p>
+  <p><b>Por qué A falla.</b> En A, la PK de DETALLE es {id_sol, cod_material}. Pero el correo depende <b>solo de id_sol</b> — quién hizo la solicitud es un hecho de la solicitud, no de cada línea de material.</p>
+  <p>Eso es una <b>dependencia parcial</b>: un atributo no primo determinado por una parte de la clave compuesta. Rompe la <b>2FN</b>, y por lo tanto tampoco está en 3FN.</p>
+  <p>Se ve en los datos: S01 tiene dos materiales, así que el correo de Ana aparece <b>dos veces</b> en DETALLE. Si Ana cambia su correo, hay que editar las dos filas.</p>
+  <p><b>Por qué B funciona.</b> El correo vive en SOLICITUD, que es la relación cuya clave lo determina. Una fila por solicitud, un correo por fila, cero repetición.</p>
+  <p><b>La pregunta que resuelve el ejercicio en 10 segundos:</b> "¿este dato es un hecho sobre la solicitud completa, o sobre cada línea de detalle?" El correo es de la solicitud. La cantidad sí es de la línea — por eso la cantidad se queda en DETALLE y nadie la discute.</p>`,
+  ojo:'Ojo con el orden de la clave en A: {id_sol, cod_material}. El error de lectura frecuente es pensar que correo depende de la clave completa porque "está en la misma fila". Estar en la misma fila no es depender. Depender significa que si fijas la clave, el valor queda determinado — y acá basta con fijar id_sol para saber el correo, sin mirar cod_material.'
+ },
+ {
+  t:'Segunda pregunta: agregar los talleres',
+  h:`<p><b>El requisito nuevo:</b> existen varios talleres, TALLER(<u>id_taller</u>, nombre_taller), y <b>una misma solicitud puede incluir el mismo material para más de un taller</b>.</p>
+  <p><b>La solución:</b></p>
+  <p class="fx">TALLER(<u>id_taller</u>, nombre_taller)<br>DETALLE(<u>id_sol</u>, <u>cod_material</u>, <u>id_taller</u>, cantidad)</p>
+  <p>id_taller entra <b>a la clave primaria</b> de DETALLE, y además es FK hacia TALLER.</p>
+  <p><b>Por qué tiene que entrar a la PK y no basta con agregarlo como columna.</b> Lee otra vez el requisito: <i>el mismo material</i>, en <i>la misma solicitud</i>, para <i>dos talleres distintos</i>. O sea, tienen que poder existir estas dos filas a la vez:</p>
+  <table class="tb"><tr><th>id_sol</th><th>cod_material</th><th>id_taller</th><th>cantidad</th></tr>
+  <tr><td>S01</td><td>M10</td><td>T1</td><td>5</td></tr>
+  <tr><td>S01</td><td>M10</td><td>T2</td><td>3</td></tr></table>
+  <p>Con la PK vieja {id_sol, cod_material}, esas dos filas <b>colisionan</b>: tienen la misma clave. El motor rechaza la segunda. El requisito sería imposible de representar.</p>
+  <p>Al meter id_taller en la clave, las dos filas se distinguen y el modelo puede expresar lo que el negocio necesita.</p>
+  <p><b>La regla general:</b> cuando un requisito nuevo dice "el mismo X puede repetirse según Y", ese Y casi siempre tiene que entrar a la clave primaria. La clave define <b>qué cuenta como un registro distinto</b>, y el enunciado te está diciendo justamente eso.</p>`,
+  ojo:'Nota de diseño: la cantidad sigue siendo correcta donde está, porque ahora es la cantidad de ese material para ese taller dentro de esa solicitud — depende de la clave completa nueva. Si dejaras cantidad dependiendo solo de {id_sol, cod_material} tendrías otra vez una dependencia parcial, ahora respecto de la clave ampliada.'
+ },
+ {
+  t:'El ejercicio final: editorial de revistas',
+  h:`<p>Este es el ejercicio grande de la clase — 60 minutos, grupos de 3, 12 puntos, y hay que entregar un <b>diagrama MR en 3FN indicando PK y FK</b>.</p>
+  <p><b>El enunciado, en sus reglas:</b></p>
+  <ul>
+  <li>Cada revista tiene ISSN, nombre y área.</li>
+  <li>Una revista publica <b>números</b>, identificados por <b>ISSN + volumen + número</b>, con fecha de publicación.</li>
+  <li>Cada artículo tiene DOI, título, fecha de envío y estado.</li>
+  <li>Un artículo pertenece a un número <b>cuando es aceptado</b>, pero puede existir antes de ser asignado. Mientras no tenga número, esos tres datos van nulos; al asignarlo, deben referenciar <b>en conjunto</b> un número existente.</li>
+  <li>Los académicos se identifican por ORCID, con nombre y afiliación. <b>Almacene cada académico una sola vez</b>: uno mismo puede ser autor en un artículo y revisor en otro.</li>
+  <li>Un artículo puede tener varios autores y se debe guardar el <b>orden de autoría</b>.</li>
+  <li>Cada revisión corresponde a un artículo y a un revisor: fecha de asignación, fecha de respuesta, recomendación y comentario. Un artículo tiene varias revisiones, un revisor revisa muchos artículos. <b>Un revisor emite como máximo una revisión por artículo.</b></li>
+  </ul>
+
+  <p><b>PASO 1 · IDENTIFICAR.</b> Los sustantivos con identidad propia y qué los identifica:</p>
+  <table class="tb"><tr><th>Cosa</th><th>PK</th><th>De dónde sale</th></tr>
+  <tr><td>REVISTA</td><td>issn</td><td>dado directo</td></tr>
+  <tr><td>NUMERO</td><td>{issn, volumen, numero}</td><td><b>dado explícito:</b> "identificados por ISSN + volumen + número"</td></tr>
+  <tr><td>ARTICULO</td><td>doi</td><td>dado directo</td></tr>
+  <tr><td>ACADEMICO</td><td>orcid</td><td>dado directo</td></tr></table>
+  <p>NUMERO es una <b>entidad débil</b> de REVISTA: volumen 3 número 1 no significa nada sin decir de qué revista. Por eso el issn es parte de su clave <b>y</b> FK hacia REVISTA al mismo tiempo.</p>
+
+  <p><b>PASO 2 · CONECTAR.</b> Las cardinalidades y dónde queda cada FK:</p>
+  <table class="tb"><tr><th>Vínculo</th><th>Cardinalidad</th><th>Decisión</th></tr>
+  <tr><td>REVISTA–NUMERO</td><td>1:N</td><td>issn en NUMERO (y en su PK)</td></tr>
+  <tr><td>NUMERO–ARTICULO</td><td>1:N</td><td>la tripleta entera en ARTICULO, <b>nullable</b></td></tr>
+  <tr><td>ARTICULO–ACADEMICO (autoría)</td><td>N:M con atributo</td><td>relación nueva AUTORIA</td></tr>
+  <tr><td>ARTICULO–ACADEMICO (revisión)</td><td>N:M con atributos</td><td>relación nueva REVISION</td></tr></table>
+
+  <p><b>PASO 3 · EL MODELO.</b></p>
+  <p class="fx">REVISTA(<u>issn</u>, nombre, area)<br><br>
+  NUMERO(<u>issn</u>, <u>volumen</u>, <u>numero</u>, fecha_publicacion)<br>
+  &nbsp;&nbsp;FK issn → REVISTA<br><br>
+  ACADEMICO(<u>orcid</u>, nombre, afiliacion)<br><br>
+  ARTICULO(<u>doi</u>, titulo, fecha_envio, estado, issn, volumen, numero)<br>
+  &nbsp;&nbsp;FK (issn, volumen, numero) → NUMERO &nbsp;<i>compuesta y nullable</i><br><br>
+  AUTORIA(<u>doi</u>, <u>orcid</u>, orden_autoria)<br>
+  &nbsp;&nbsp;FK doi → ARTICULO, FK orcid → ACADEMICO<br><br>
+  REVISION(<u>doi</u>, <u>orcid</u>, fecha_asignacion, fecha_respuesta, recomendacion, comentario)<br>
+  &nbsp;&nbsp;FK doi → ARTICULO, FK orcid → ACADEMICO</p>
+
+  <p><b>PASO 4 · VERIFICAR.</b> Pasando el checklist por cada relación:</p>
+  <ul>
+  <li><b>1FN:</b> ningún atributo guarda listas. Los varios autores de un artículo están como filas de AUTORIA, no como una lista en ARTICULO.</li>
+  <li><b>2FN:</b> las dos relaciones con clave compuesta son AUTORIA y REVISION. En AUTORIA, orden_autoria depende de <b>ambos</b> (el orden es de ese autor en ese artículo). En REVISION, todos los datos del proceso dependen del par completo. Sin dependencias parciales.</li>
+  <li><b>3FN:</b> ningún atributo descriptivo determina a otro. nombre y afiliacion viven junto a orcid, que es su determinante. nombre y area viven junto a issn.</li>
+  <li><b>Integridad:</b> cada FK apunta a la relación donde ese identificador es PK.</li>
+  </ul>`,
+  ojo:'Fíjate en la simetría entre AUTORIA y REVISION: las dos son N:M entre los mismos dos conjuntos, ARTICULO y ACADEMICO. Que existan dos relaciones distintas y no una sola con un campo "rol" es correcto, porque cada vínculo tiene atributos propios completamente diferentes — el orden de autoría no tiene sentido en una revisión, ni la recomendación en una autoría.'
+ },
+ {
+  t:'Los cinco detalles que decidían el puntaje',
+  h:`<p>La estructura general la saca cualquiera. Lo que separa un 12 de un 7 son estas cinco decisiones, y cada una está <b>escrita explícitamente en el enunciado</b> — no hay que adivinarlas, hay que leerlas.</p>
+
+  <p><b>1. La FK de ARTICULO es compuesta, no tres FK sueltas.</b><br>
+  El enunciado dice que los tres datos "deben referenciar <b>en conjunto</b> un número existente". Eso significa una sola restricción:</p>
+  <p class="fx">FOREIGN KEY (issn, volumen, numero) → NUMERO</p>
+  <p>Si declararas issn → REVISTA por un lado y volumen y numero sueltos, permitirías un artículo apuntando a la revista correcta pero a un volumen que no existe. La referencia se valida como <b>tripleta</b>.</p>
+
+  <p><b>2. Esa FK puede ser nula, y las tres columnas juntas.</b><br>
+  "Puede existir antes de ser asignado". Es participación <b>opcional</b>. O están las tres nulas, o están las tres con valores que forman un número real. Nunca una sí y dos no.</p>
+
+  <p><b>3. Un solo ACADEMICO, no AUTOR y REVISOR por separado.</b><br>
+  "Almacene cada académico una sola vez: un mismo académico puede ser autor en un artículo y revisor en otro." Es la trampa principal del ejercicio y el enunciado la señala con letras grandes.</p>
+  <p>Si hicieras tablas AUTOR(orcid, nombre, afiliacion) y REVISOR(orcid, nombre, afiliacion), alguien que hace las dos cosas queda duplicado — y cuando cambie de universidad, tienes que acordarte de actualizar dos lugares. Es la anomalía de actualización, exactamente la que la unidad completa viene combatiendo.</p>
+  <p>El rol no es una propiedad de la persona. <b>Es una propiedad del vínculo</b>, y por eso vive en AUTORIA o en REVISION, no en ACADEMICO.</p>
+
+  <p><b>4. La PK de REVISION sale de una sola frase.</b><br>
+  "Un revisor puede emitir como máximo <b>una</b> revisión por artículo." Esa restricción es la que permite que {doi, orcid} alcance como clave.</p>
+  <p>Si el enunciado dijera que un revisor puede revisar el mismo artículo varias veces (segunda ronda, por ejemplo), {doi, orcid} ya no distinguiría las filas y necesitarías agregar algo: un nro_ronda, o la fecha_asignacion. <b>Una frase del enunciado cambia la clave primaria.</b></p>
+
+  <p><b>5. orden_autoria va en AUTORIA, no en ACADEMICO ni en ARTICULO.</b><br>
+  Es el ejemplo canónico de atributo de vínculo. Un académico no tiene un "orden" en abstracto; lo tiene <b>en un artículo determinado</b>. Puede ser primer autor en uno y tercero en otro.</p>
+  <p><b>Detalle que suma:</b> conviene además declarar UNIQUE(doi, orden_autoria), para que un artículo no pueda tener dos primeros autores. El enunciado no lo pide, pero muestra que entendiste qué representa el dato.</p>`,
+  ojo:'Los cinco detalles tienen algo en común: todos salen de leer con cuidado, no de saber más teoría. En el control, antes de dibujar nada, subraya en el enunciado las frases que dicen "identificado por", "puede", "debe", "como máximo", "una sola vez". Cada una de esas frases es una decisión de diseño ya tomada por el profe, esperando que la traduzcas.'
+ },
+ {
+  t:'Ejercicios',
+  ej:[
+   {q:'Variación del ejercicio de la editorial: ahora un revisor SÍ puede revisar el mismo artículo más de una vez, en rondas sucesivas, y hay que saber a qué ronda corresponde cada revisión. ¿Qué cambia en el modelo?',
+    a:`<b>Cambia la clave primaria de REVISION, y nada más:</b><br><br>
+    <span class="fx-i">REVISION(<u>doi</u>, <u>orcid</u>, <u>nro_ronda</u>, fecha_asignacion, fecha_respuesta, recomendacion, comentario)</span><br><br>
+    <b>Por qué.</b> Con la regla original, el par {doi, orcid} identificaba una fila porque había a lo más una revisión por combinación. Al permitir varias, ese par pasa a repetirse y deja de ser clave: dos rondas del mismo revisor sobre el mismo artículo colisionarían.<br><br>
+    nro_ronda entra a la PK y funciona como <b>identificador parcial</b> — igual que el nro_consulta dentro de una ficha clínica. La ronda 1 existe en muchos pares artículo-revisor; solo tiene sentido dentro de uno.<br><br>
+    <b>Lo que NO cambia:</b> las otras cinco relaciones quedan idénticas. Un requisito nuevo bien acotado toca un lugar del modelo, y ese es un buen indicador de que el diseño original estaba bien separado. Si un cambio chico te obliga a rehacer medio modelo, casi siempre es porque algo estaba mal normalizado.<br><br>
+    <b>Alternativa que también se acepta:</b> usar fecha_asignacion en la clave, {doi, orcid, fecha_asignacion}. Funciona, pero es peor: depende de que nunca se asignen dos rondas el mismo día, y las claves basadas en fechas son frágiles. nro_ronda es explícito y además representa un dato que el negocio quiere consultar.`},
+   {q:'En el modelo de la editorial, ¿por qué NUMERO no puede tener simplemente una PK simple tipo id_numero autoincremental? ¿Estaría mal?',
+    a:`<b>No estaría mal como diseño real, pero sí estaría mal en este ejercicio.</b> Vale la pena entender la diferencia, porque son dos preguntas distintas.<br><br>
+    <b>Por qué en el ejercicio se pide compuesta.</b> El enunciado dice literalmente que los números están "identificados por ISSN + volumen + número". Te están dando la clave. Cambiarla por un id inventado ignora un dato que el enunciado entregó a propósito, y además hace desaparecer del modelo la relación de dependencia entre NUMERO y REVISTA que el profe quería que representaras.<br><br>
+    <b>Por qué en la práctica sí se hace.</b> Una PK sustituta (surrogate key) tiene ventajas reales:<br>
+    • Las FK que la referencian son una columna en vez de tres. En ARTICULO ahorrarías dos columnas.<br>
+    • Los JOIN son más baratos.<br>
+    • Si algún día cambia la forma de numerar, no arrastras el cambio a todas las tablas que referencian.<br><br>
+    <b>El costo.</b> Necesitas igual declarar UNIQUE(issn, volumen, numero), porque esa combinación sigue siendo única en el mundo real y sin la restricción podrías cargar dos filas del mismo número. O sea, la clave natural no desaparece: se degrada a clave alterna.<br><br>
+    <b>Cómo responderlo si sale en el control:</b> señala que la clave natural es la que pide el enunciado, y menciona la sustituta como alternativa de implementación indicando que exige UNIQUE sobre la natural. Esa respuesta muestra que distingues el modelo lógico del físico — que es justamente la separación de niveles con que abrió la unidad.`},
+   {q:'Vuelve al diseño A de la planilla de solicitudes (el incorrecto). Sin cambiar nada de lugar, ¿qué tendría que ser cierto del negocio para que A fuera correcto?',
+    a:`<b>Que una solicitud pudiera tener materiales pedidos por personas distintas.</b><br><br>
+    Recuerda por qué A falla: DETALLE(<u>id_sol</u>, <u>cod_material</u>, correo, cantidad) tiene una dependencia parcial porque <span class="fx-i">id_sol → correo</span>. El correo se repite en cada línea de la misma solicitud.<br><br>
+    Pero esa dependencia existe solo porque <b>la regla del negocio</b> dice que una solicitud pertenece a una persona. Si la regla fuera otra — una solicitud es un carro compartido donde cada línea la pide alguien distinto — entonces:<br><br>
+    • <span class="fx-i">id_sol → correo</span> <b>dejaría de ser cierta</b>: la misma solicitud tendría correos distintos según la línea.<br>
+    • El correo pasaría a depender de la clave completa {id_sol, cod_material}.<br>
+    • No habría dependencia parcial, y A estaría en 2FN y en 3FN.<br><br>
+    <b>Lo que hay que llevarse de esto:</b> la misma estructura de tablas es correcta o incorrecta <b>según las reglas del negocio</b>, no por su forma. No existe "esta tabla está mal normalizada" en abstracto — existe "está mal normalizada dado que estas dependencias funcionales se cumplen".<br><br>
+    Por eso el profe insiste en que las DF se deducen del dominio y no de los datos que ves en la planilla. Y por eso en el control, cuando justifiques, tienes que <b>nombrar la dependencia</b> que se viola: decir "A no está en 2FN" vale la mitad de decir "A no está en 2FN porque id_sol → correo es parcial respecto de la PK {id_sol, cod_material}".`},
+   {q:'Enunciado nuevo para practicar completo. Un gimnasio registra: SOCIO con rut, nombre y varios teléfonos. CLASE con código, nombre y cupo. Cada clase la dicta un INSTRUCTOR (rut, nombre, especialidad). Las clases se dan en SESIONES, numeradas dentro de cada clase (sesión 1, 2, 3), con fecha y sala. Un socio se inscribe en sesiones y queda registrada su asistencia. Modela en 3FN indicando PK y FK.',
+    a:`<b>El modelo:</b><br><br>
+    <span class="fx-i">SOCIO(<u>rut_socio</u>, nombre)</span><br>
+    <span class="fx-i">SOCIO_TELEFONO(<u>rut_socio</u>, <u>telefono</u>)</span> — FK rut_socio → SOCIO<br>
+    <span class="fx-i">INSTRUCTOR(<u>rut_instructor</u>, nombre, especialidad)</span><br>
+    <span class="fx-i">CLASE(<u>cod_clase</u>, nombre, cupo, rut_instructor)</span> — FK → INSTRUCTOR<br>
+    <span class="fx-i">SESION(<u>cod_clase</u>, <u>nro_sesion</u>, fecha, sala)</span> — FK cod_clase → CLASE<br>
+    <span class="fx-i">INSCRIPCION(<u>rut_socio</u>, <u>cod_clase</u>, <u>nro_sesion</u>, asistio)</span> — FK rut_socio → SOCIO, FK (cod_clase, nro_sesion) → SESION<br><br>
+    <b>Las decisiones, una por una:</b><br><br>
+    <b>1. Teléfonos → tabla propia.</b> Multivaluado. PK compuesta por los dos atributos.<br><br>
+    <b>2. Instructor separado.</b> Si pusieras nombre y especialidad del instructor dentro de CLASE, tendrías una transitiva: <span class="fx-i">cod_clase → rut_instructor → especialidad</span>. Falla 3FN, y la especialidad se repetiría en cada clase que dicte.<br><br>
+    <b>3. SESION es entidad débil de CLASE.</b> La pista es "numeradas dentro de cada clase": el número 1 se repite entre clases distintas. PK = clave de la fuerte + identificador parcial.<br><br>
+    <b>4. La FK de INSCRIPCION hacia SESION es compuesta</b>, igual que en la editorial. Apunta a las dos columnas juntas, porque la PK de SESION son dos columnas.<br><br>
+    <b>5. asistio vive en INSCRIPCION.</b> Es atributo del vínculo: no es un dato del socio ni de la sesión, sino del par. Mismo caso que orden_autoria.<br><br>
+    <b>El detalle fino:</b> ¿el cupo va en CLASE o en SESION? Como está el enunciado, en CLASE — "CLASE con código, nombre y cupo". Pero si el negocio dijera que el cupo depende de la sala de cada sesión, tendría que moverse a SESION. <b>Vuelve a ser la regla del negocio la que decide dónde vive el dato</b>, que es literalmente el título de la clase: ¿dónde debe vivir cada dato?`}
+  ]
+ }
+ ]
+}
+
 ]);

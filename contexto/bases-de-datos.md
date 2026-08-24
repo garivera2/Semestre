@@ -79,6 +79,10 @@ Están en `app/guias/bd.js`:
 2. Modelo Relacional (semana 3) — 5 ejercicios, incluye un caso completo tipo control
 3. Formas Normales (semana 3) — 5 ejercicios, incluye cierre de atributos y 3FN vs BCNF
 4. Álgebra Relacional (semana 4) — 4 ejercicios, incluye división y auto-join con rho
+5. Clase 03 · De planilla a 3FN (semana 3) — 7 secciones, 4 ejercicios. Cubre el PDF
+   `clase03-propuesta.pdf` del profe Díaz completo: el método identificar-conectar-separar-verificar,
+   el quiz de la planilla (diseño A vs B) y el ejercicio final de la editorial de revistas resuelto
+   paso a paso, con los cinco detalles que deciden el puntaje.
 
 ## Pendiente
 
@@ -88,7 +92,13 @@ Están en `app/guias/bd.js`:
 
 ## Estado actual
 
-Gabo ya rindió un control y dice que va bien. **No es prioridad** por ahora.
+Gabo ya rindió un control y dice que va bien.
+
+**Aviso del profe (lámina 21 de la clase 03):** comparó las tasas de perfectos de este semestre
+contra ocho semestres anteriores con test de Fisher y corrección Holm. FN-1 saltó de 10% a 65%,
+MR-1 de 38% a 89%. Su lectura textual: "es una señal para verificar comprensión, no una acusación
+individual". Traducción práctica: **la fase individual del C1 (3 de septiembre) va a apretar**,
+porque es donde se verifica comprensión sin tecnología. Estudiar los ejercicios a mano es lo que rinde.
 
 ## Cómo trabajar este ramo
 

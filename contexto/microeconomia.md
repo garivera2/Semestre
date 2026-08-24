@@ -64,8 +64,8 @@ Los presentó como requisito de entrada: definición de mercado, mercado competi
 Están en `app/guias/mi.js`:
 
 1. Introducción a la Economía — los 8 conceptos base
-2. Teoría del Consumidor — Unidades I.1 y I.2
-3. Funciones de Demanda — Unidad I.3 completa (semana 3), escrita desde el PPT real
+2. Teoría del Consumidor — Unidades I.1 y I.2, incluye los casos de esquina (lineal) y vértice (Leontief)
+3. Funciones de Demanda — Unidad I.3 completa (semana 3), escrita desde el PPT real. Incluye "Cómo leer las derivadas" y la construcción gráfica de la curva de demanda que el profe hizo en la pizarra
 
 ## Material en Canvas (curso 47456)
 
@@ -91,6 +91,9 @@ Se pueden leer sin descargarlas: abrir el archivo en Canvas con el navegador y e
 
 - **Logística:** él manda la ayudantía (o el enunciado que sea) por el chat y se resuelve ahí mismo, pimponeando pregunta por pregunta. No se escribe un archivo por cada ejercicio.
 - **En las guías:** cada guía de materia nueva cierra con 2 o 3 ejercicios **simples**, solo para fijar lo que esa guía explica.
+- **Gráficos en cada concepto.** Este ramo es visual: cada idea que tenga una curva asociada va con su gráfico. Se dibujan como **SVG inline** dentro del campo `h`, envueltos en un `<figure>` con `<figcaption>` que explica cómo leerlo. Usan las variables de color de la app (`var(--acc)`, `var(--tx2)`, `var(--tx3)`, `var(--panel2)`) para que funcionen en claro y oscuro, así que no hay que tocar el CSS de `index.html`.
+- **Siempre conectar la derivada con el gráfico.** El signo de la derivada es la pendiente de la curva; eso hay que decirlo explícito cada vez, porque es lo que evalúan.
+- Ojo con los subíndices: el subíndice **y** no existe en Unicode. En SVG usar `<tspan baseline-shift="sub" font-size="7.6">y</tspan>` y en el HTML de las guías `<sub>y</sub>`. El de x sí existe (`&#8339;`).
 - **No adelantar materia.** Nada de formas funcionales o métodos que el profe no haya pasado todavía (a la semana 2 no conocía Cobb-Douglas ni la descomposición sustitución/ingreso). Si no salió en clase o en la ayudantía, no va.
 - Puede mandar apuntes de clase si el PPT no alcanza.
 
