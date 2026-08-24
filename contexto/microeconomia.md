@@ -64,11 +64,24 @@ Los presentó como requisito de entrada: definición de mercado, mercado competi
 Están en `app/guias/mi.js`:
 
 1. Introducción a la Economía — los 8 conceptos base
-2. Teoría del Consumidor — Unidades I.1, I.2 y I.3
+2. Teoría del Consumidor — Unidades I.1 y I.2
+3. Funciones de Demanda — Unidad I.3 completa (semana 3), escrita desde el PPT real
+
+## Material en Canvas (curso 47456)
+
+Los PPT están en Módulos → Clases: `Unidad I.1`, `Unidad I.2`, `Unidad I.3`. Las ayudantías en Módulos → Ayudantías. Hay pruebas pasadas (`Prueba 1 (2026)`, `P1_202520`, `P1_202510`) y lecturas: Vial & Zurita caps. 1, 2 y 9, y Backhouse & Medema (2009).
+
+Se pueden leer sin descargarlas: abrir el archivo en Canvas con el navegador y extraer el texto con pdf.js desde la consola, usando la URL firmada que devuelve `/api/v1/files/<id>`.
+
+## Cosas que el profe dijo explícitamente
+
+- **La ecuación de Slutsky NO entra al curso.** No hay descomposición efecto sustitución / efecto ingreso. El signo de la demanda se justifica con la **Ley de la Demanda** y la clasificación normal / neutro / inferior.
+- Notación del profe: **p_x, p_y, I**. No usa p₁, p₂ ni m.
+- Clasifica los bienes en normal / **neutro** / inferior (el "neutro" es suyo; no habla de bienes de lujo).
+- El bienestar se mide con **variación compensatoria**, y el cambio en el excedente del consumidor es su aproximación.
 
 ## Pendiente
 
-- Resto de la Unidad I si aparece más material
 - Unidad II: Teoría del Productor
 - Unidad III: Mercados y Competencia
 

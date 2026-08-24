@@ -98,7 +98,24 @@ Están en `app/guias/me.js`:
 
 1. Repaso de probabilidad — Unidad 1 (semana 1)
 2. Proceso de Poisson — Unidad 2 (semana 2)
-3. **Repaso para el Control 1** — semana 3. Es la guía de repaso: qué entra, el criterio exponencial/Poisson, qué da el formulario, y el listado de ejercicios de Canvas con checklist por ejercicio. No trae ejercicios resueltos: solo indica cuáles hacer.
+3. **Descomposición, suma y condicionamiento** — semana 3. Segunda mitad del Capítulo 2 siguiendo el PPT de cátedra: thinning, superposición, mezcla, condicionamiento binomial con u/t, no homogéneo y la observación final con m(u)/m(t). Incluye los dos ejercicios que el profesor resolvió en clase (cinta transportadora y concesionario automotriz).
+Los **repasos de evaluaciones no van acá**: viven en `app/repasos/me.js` y se ven en la pestaña Guías → **Pruebas**. Las guías por semana son solo materia; los repasos son qué entra en cada control o prueba más el checklist de ejercicios para practicar.
+
+## Repasos cargados (app/repasos/me.js)
+
+- **`me-c1` · Control 1** (jue 27 ago) — 5 secciones de resumen y 27 ejercicios en 5 fuentes: controles y pruebas pasadas del Cap. 2, los dos ejercicios resueltos en el PPT, Guía Cap. 2, Guía Cap. 1 y las ayudantías.
+- **`me-p1` · Prueba 1** (mié 2 sep) — misma materia, enfocado en lo que un control corto no alcanza a preguntar: no homogéneo, enunciados encadenados, descomposición doble e interpretación.
+
+Estructura de cada repaso: `{id, ramo, eva, fecha, bajada, resumen:[{t,h}], ejercicios:[{fuente, items:[{x, por}]}]}`. Ojo: `x` y `por` se escapan como texto plano, no aceptan HTML.
+
+## Estructura del PPT del Capítulo 2
+
+Orden del apunte de cátedra (*Capitulo 2 - Proceso de Poisson - Alumnos.pdf*, 91 láminas): proceso de conteo y sus propiedades → proceso de Poisson → distribución del tiempo entre eventos → tiempo de ocurrencia del k-ésimo evento → distribución condicional de los tiempos de evento → **descomposición** → **suma** → consolidación de aprendizajes (ejercicio de la cinta transportadora, el mismo de la Prueba 1 de sept 2023) → **mezcla** → Poisson no homogéneo → **Repaso Prueba 1** (ejercicio del concesionario automotriz, con solución).
+
+Dos precisiones de vocabulario del profesor:
+
+- **Mezcla** en este curso NO es "tasa aleatoria". Es la suma mirada al revés: dado el total m de un proceso juntado, cuántos venían del proceso i, que es `Binomial(m, λᵢ/Σλⱼ)`.
+- La **observación final** del PPT generaliza el condicionamiento al caso no homogéneo: `N(u)|N(t)=n ~ Binomial(n, m(u)/m(t))`, y de ahí `P(Sₖ < u | N(t)=n) = P(N(u) ≥ k | N(t)=n)`.
 
 ## Estado del Control 1
 

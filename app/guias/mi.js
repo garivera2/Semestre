@@ -200,7 +200,7 @@ window.GUIAS = (window.GUIAS || []).concat([
 {
  id:'mi-u1', ramo:'mi', tag:'Semana 1-2', sem:2,
  titulo:'Teoría del Consumidor',
- bajada:'Unidades I.1, I.2 y I.3: preferencias, maximización de utilidad y funciones de demanda.',
+ bajada:'Unidades I.1 y I.2: preferencias, curvas de indiferencia y el problema de maximización de utilidad.',
  min:60,
  secciones:[
  {
@@ -254,31 +254,128 @@ window.GUIAS = (window.GUIAS || []).concat([
   <p><b>Soluciones de esquina:</b> si los bienes son sustitutos perfectos o las preferencias no son convexas, el óptimo puede estar en un extremo y ahí la tangencia no se cumple. Hay que revisarlo, no asumirlo.</p>`,
   ojo:'La función de utilidad indirecta V(p₁,p₂,m) es la utilidad máxima alcanzable dados precios e ingreso. O sea, tomas la solución del problema y la reemplazas de vuelta en U. Sirve para analizar bienestar sin volver a optimizar cada vez.'
  },
+
+ ]
+}
+,
+
+/* ---- MI · UNIDAD I.3 · FUNCIONES DE DEMANDA (semana 3) ---- */
+{
+ id:'mi-i3', ramo:'mi', tag:'Semana 3', sem:3,
+ titulo:'Funciones de Demanda',
+ bajada:'Unidad I.3 completa, siguiendo el PPT del profe: cambios en ingreso, en precio propio y cruzado, bienestar del consumidor y demanda de mercado.',
+ min:55,
+ secciones:[
  {
-  t:'I.3 · Funciones de demanda',
-  h:`<p>Al resolver el problema de optimización para <b>cualquier</b> combinación de precios e ingreso, obtienes las <b>funciones de demanda marshallianas</b>:</p>
-  <p class="fx">x₁* = x₁(p₁, p₂, m),   x₂* = x₂(p₁, p₂, m)</p>
-  <p>Y ahora la parte que evalúan: qué pasa cuando cambia cada variable.</p>
-  <p><b>Cambios en el ingreso</b> — curva de Engel</p>
+  t:'De dónde salen las funciones de demanda',
+  h:`<p>En I.2 resolviste el problema del consumidor para <b>un</b> conjunto de precios e ingreso. Si lo resuelves para <b>cualquier</b> combinación, lo que obtienes ya no es un número sino dos funciones:</p>
+  <p class="fx">x*(p<sub>x</sub>, p<sub>y</sub>, I)   ;   y*(p<sub>x</sub>, p<sub>y</sub>, I)</p>
+  <p>Esas son las <b>funciones de demanda</b>. Toda la unidad I.3 es una sola pregunta repetida tres veces: <i>¿qué le pasa a x* cuando muevo una de las tres variables?</i></p>
   <ul>
-  <li>Si la demanda <b>sube</b> con el ingreso → bien <b>normal</b></li>
-  <li>Si <b>baja</b> → bien <b>inferior</b></li>
-  <li>Si sube más que proporcionalmente → bien de <b>lujo</b></li>
+  <li>Muevo <b>I</b> → curva de Engel, bien normal / neutro / inferior</li>
+  <li>Muevo <b>p<sub>x</sub></b> → curva de demanda, Ley de la Demanda</li>
+  <li>Muevo <b>p<sub>y</sub></b> → sustitutos, complementos o independientes</li>
   </ul>
-  <p><b>Cambios en el precio propio</b> — de acá sale la curva de demanda. El efecto total se descompone en dos:</p>
+  <p>Y después dos temas que cierran la unidad: <b>bienestar del consumidor</b> y <b>demanda de mercado</b>.</p>`,
+  ojo:'Ojo con la notación del profe: usa p<sub>x</sub>, p<sub>y</sub> e <b>I</b> (ingreso). Nada de p₁, p₂ ni m. En la prueba conviene escribir igual que él.'
+ },
+ {
+  t:'Cambios en el ingreso · curva de Engel',
+  h:`<p>Un aumento de I <b>expande la restricción presupuestaria sin cambiar su pendiente</b>. La recta se corre paralela hacia afuera.</p>
+  <p>Como la razón de precios no cambió, <b>la TMS en el óptimo tampoco cambia</b>. Por eso no hay distorsión en la composición de la canasta: no es que el bien se haya vuelto relativamente más caro, simplemente puedes más.</p>
+  <p>La clasificación sale del signo de la derivada:</p>
+  <p class="fx">∂x*/∂I &gt; 0 → bien <b>normal</b><br>∂x*/∂I = 0 → bien <b>neutro</b><br>∂x*/∂I &lt; 0 → bien <b>inferior</b></p>
+  <p>La <b>curva de Engel</b> grafica esa relación: ingreso contra cantidad demandada, dejando precios y preferencias fijos. Es <b>creciente</b> para un bien normal, <b>vertical</b> para uno neutro y <b>decreciente</b> para uno inferior.</p>`,
+  ojo:'Frase textual del PPT: <b>"inferioridad no es una cualidad intrínseca"</b>. Un bien no es inferior por naturaleza — lo es para cierta persona, en cierto rango de ingreso. El mismo bien puede ser normal cuando ganas poco e inferior cuando ganas más. Si te preguntan "¿el transporte público es un bien inferior?", la respuesta parte por "depende de para quién y en qué tramo de ingreso".'
+ },
+ {
+  t:'Cambios en el precio propio · Ley de la Demanda',
+  h:`<p>Esta es la relación más importante, porque sistemáticamente se observa negativa:</p>
+  <p class="fx">∂x*(p<sub>x</sub>, p<sub>y</sub>, I) / ∂p<sub>x</sub> &lt; 0</p>
+  <p>La <b>curva de demanda</b> grafica precio propio contra cantidad óptima, manteniendo fijos I, los otros precios y las preferencias.</p>
+  <p><b>Ley de la Demanda</b> (el profe dijo explícitamente que se demuestra con la ecuación de Slutsky, <b>que no se ve en este curso</b>):</p>
   <ul>
-  <li><b>Efecto sustitución:</b> el bien se encareció respecto al otro, así que te cambias. <b>Siempre</b> es negativo — sube el precio, baja la cantidad.</li>
-  <li><b>Efecto ingreso:</b> tu poder adquisitivo cayó. El signo <b>depende</b>: negativo si es bien normal, positivo si es inferior.</li>
+  <li>Si el bien es <b>normal o neutro</b> en el ingreso → la demanda es <b>decreciente</b> en su propio precio. Siempre.</li>
+  <li>Si el bien es <b>inferior</b> → la demanda <b>podría</b>, en casos muy raros, ser creciente en su precio. Ese es el <b>bien Giffen</b>.</li>
   </ul>
-  <p>Cuando el bien es inferior y el efecto ingreso supera al de sustitución, aparece el <b>bien Giffen</b>: sube el precio y aumenta la cantidad demandada. Es raro en la práctica, pero es la excepción teórica que siempre preguntan.</p>
-  <p><b>Cambios en el precio cruzado</b></p>
+  <p>O sea: ser inferior es condición <b>necesaria pero no suficiente</b> para ser Giffen. Todo Giffen es inferior; casi ningún inferior es Giffen.</p>
+  <p><b>Movimientos vs desplazamientos.</b> Si cambia p<sub>x</sub>, te mueves <b>sobre</b> la curva. Si cambia cualquier otra cosa — I, p<sub>y</sub>, preferencias — la curva entera <b>se desplaza</b>.</p>`,
+  ojo:'No te compliques descomponiendo en efecto sustitución y efecto ingreso: el profe dijo que Slutsky no entra. Para justificar el signo de la demanda usa directamente la Ley de la Demanda y la clasificación normal/neutro/inferior.'
+ },
+ {
+  t:'Cambios en el precio cruzado',
+  h:`<p>Ahora movemos el precio del <b>otro</b> bien:</p>
+  <p class="fx">∂x*/∂p<sub>y</sub> &gt; 0 → x es <b>sustituto</b> de y<br>∂x*/∂p<sub>y</sub> &lt; 0 → x es <b>complemento</b> de y<br>∂x*/∂p<sub>y</sub> = 0 → x es <b>independiente</b> de y</p>
+  <p>La intuición: si sube el precio del té y compras más café, te cambiaste de uno a otro → sustitutos. Si sube el precio del café y compras menos azúcar, se consumían juntos → complementos.</p>`,
+  ojo:'Advertencia del PPT que vale puntos: <b>el efecto puede no ser simétrico</b>. Que x sea sustituto de y no obliga a que y sea sustituto de x. Con U = ln(x) + y pasa exactamente eso — lo compruebas en el ejercicio 1.'
+ },
+ {
+  t:'Análisis de bienestar del consumidor',
+  h:`<p>¿Para qué sirve? Para poder responder preguntas como:</p>
   <ul>
-  <li>Si sube p₂ y aumenta x₁ → <b>sustitutos</b></li>
-  <li>Si sube p₂ y disminuye x₁ → <b>complementarios</b></li>
+  <li>Cuánto <b>mejora</b> el bienestar cuando una mejora tecnológica baja el precio (o sube la calidad) de un bien</li>
+  <li>Cuánto <b>empeora</b> ante colusiones, monopolios o impuestos que suben el precio</li>
   </ul>
-  <p><b>Demanda de mercado.</b> Es la suma <b>horizontal</b> de las demandas individuales: para cada precio, sumas las cantidades que demanda cada consumidor. Horizontal, no vertical — ese detalle se equivoca seguido.</p>`
+  <p><b>El problema.</b> Lo intuitivo sería medir el cambio en la <b>función de utilidad indirecta</b> V(p<sub>x</sub>, p<sub>y</sub>, I). Pero la utilidad es <b>ordinal</b>: sirve para ordenar canastas de una misma persona, no para comparar entre individuos ni para decir "mejoró en 3 unidades". No se puede sumar el bienestar de dos personas midiendo utilidad.</p>
+  <p><b>La solución.</b> Se pasa a medidas en <b>pesos</b>:</p>
+  <ul>
+  <li><b>Variación compensatoria:</b> el cambio en ingreso que habría que darle (o quitarle) al consumidor para dejarlo en la <b>misma utilidad máxima</b> que tenía antes del cambio de precios. Se calcula desde V.</li>
+  <li><b>Cambio en el excedente del consumidor:</b> el área bajo la curva de demanda. Es una medida <b>aproximada</b> de la variación compensatoria, y es la que se usa en la práctica porque solo necesitas la curva de demanda.</li>
+  </ul>`,
+  ojo:'La cadena de razonamiento completa es lo que preguntan: utilidad indirecta → es ordinal → no comparable → por eso medimos en pesos → variación compensatoria → y el excedente del consumidor la aproxima. Si te preguntan "¿por qué no medimos el bienestar con la utilidad?", la respuesta es <b>ordinalidad</b>.'
+ },
+ {
+  t:'Demanda de mercado',
+  h:`<p>Con N individuos (n = 1,…,N) y M bienes (m = 1,…,M), la demanda de mercado del bien m es la <b>suma de las demandas individuales</b>:</p>
+  <p class="fx">Q<sub>Dm</sub>(p<sub>1</sub>,…,p<sub>M</sub>, I<sub>1</sub>,…,I<sub>N</sub>) = Σ<sub>n=1..N</sub> x<sub>n,m</sub>(p<sub>1</sub>,…,p<sub>M</sub>, I<sub>n</sub>)</p>
+  <p>Las tres observaciones del PPT:</p>
+  <ol>
+  <li>Todos los consumidores enfrentan <b>los mismos precios</b>.</li>
+  <li>Q<sub>Dm</sub> depende de los precios de <b>todos</b> los bienes, no solo del propio.</li>
+  <li>Q<sub>Dm</sub> depende del <b>ingreso total y de su distribución</b>. Dos sociedades con el mismo ingreso agregado pero repartido distinto tienen demandas de mercado distintas.</li>
+  </ol>
+  <p>La <b>curva</b> de demanda de mercado Q<sub>D</sub>(p) es esa función dejando todo lo demás constante (<i>ceteris paribus</i>). Se <b>desplaza</b> — y puede cambiar de forma — ante cambios en ingreso, precios de otros bienes, preferencias y <b>cantidad de consumidores</b>.</p>`,
+  ojo:'La suma es <b>horizontal</b>: para cada precio sumas las cantidades, no al revés. Y ojo con los tramos: si a cierto precio un consumidor ya no compra nada, desde ahí la demanda de mercado cambia de pendiente. Eso se cae en las pruebas.'
+ },
+ {
+  t:'Ejercicios',
+  ej:[
+   {q:'Con U(x,y) = ln(x) + y (la misma de la ayudantía 2), las demandas son x* = p<sub>y</sub>/p<sub>x</sub> e y* = I/p<sub>y</sub> − 1. Clasifica ambos bienes según el ingreso, y determina la relación de precio cruzado en las dos direcciones.',
+    a:`<b>Según el ingreso:</b><br>
+    ∂x*/∂I = <b>0</b> → x es un bien <b>neutro</b>. Su demanda no depende del ingreso: la curva de Engel es <b>vertical</b>.<br>
+    ∂y*/∂I = 1/p<sub>y</sub> &gt; 0 → y es un bien <b>normal</b>. Todo el ingreso extra se va al bien y.<br><br>
+    <b>Precio cruzado, ida:</b><br>
+    ∂x*/∂p<sub>y</sub> = 1/p<sub>x</sub> &gt; 0 → <b>x es sustituto de y</b>.<br><br>
+    <b>Precio cruzado, vuelta:</b><br>
+    y* = I/p<sub>y</sub> − 1 no contiene p<sub>x</sub>, así que ∂y*/∂p<sub>x</sub> = <b>0</b> → <b>y es independiente de x</b>.<br><br>
+    <b>Acá está el punto:</b> x es sustituto de y, pero y <b>no</b> es sustituto de x. Es justo la asimetría que advierte el PPT. Pasa porque la utilidad es <b>cuasilineal</b> en y: el bien y absorbe todo el efecto ingreso y el bien x queda "anclado" al precio relativo.<br><br>
+    <b>Bonus, Ley de la Demanda:</b> ∂x*/∂p<sub>x</sub> = −p<sub>y</sub>/p<sub>x</sub>² &lt; 0. Decreciente, como corresponde a un bien neutro.`},
+   {q:'Un bien tiene demanda x* = I/(2p<sub>x</sub>). Dibuja mentalmente su curva de Engel y su curva de demanda, y clasifícalo.',
+    a:`<b>Curva de Engel</b> (dejando p<sub>x</sub> fijo): x* = (1/2p<sub>x</sub>)·I es una <b>recta creciente que parte del origen</b>. Como ∂x*/∂I = 1/(2p<sub>x</sub>) &gt; 0, el bien es <b>normal</b>.<br><br>
+    <b>Curva de demanda</b> (dejando I fijo): x* = (I/2)·(1/p<sub>x</sub>) es una <b>hipérbola decreciente</b>. ∂x*/∂p<sub>x</sub> = −I/(2p<sub>x</sub>²) &lt; 0, o sea cumple la Ley de la Demanda — lo cual era esperable, porque el bien es normal.<br><br>
+    <b>Detalle que vale mencionar:</b> el gasto en este bien es p<sub>x</sub>·x* = I/2, <b>constante</b>. Gaste lo que gaste el precio, siempre se destina la mitad del ingreso a este bien.<br><br>
+    <b>Y no es Giffen:</b> ni podría serlo. Giffen exige que el bien sea inferior, y este es normal.`},
+   {q:'En un mercado hay solo dos consumidores: q<sub>A</sub> = 10 − p y q<sub>B</sub> = 6 − 2p. Encuentra la demanda de mercado.',
+    a:`Se suman <b>horizontalmente</b>: para cada precio, sumas cantidades. Pero primero hay que ver <b>hasta qué precio compra cada uno</b>.<br><br>
+    A deja de comprar cuando 10 − p = 0 → p = 10.<br>
+    B deja de comprar cuando 6 − 2p = 0 → p = <b>3</b>.<br><br>
+    Entonces la demanda de mercado tiene <b>dos tramos</b>:<br><br>
+    <b>Si p ≤ 3</b> (compran los dos):<br>
+    Q = (10 − p) + (6 − 2p) = <b>16 − 3p</b><br><br>
+    <b>Si 3 &lt; p ≤ 10</b> (solo compra A):<br>
+    Q = <b>10 − p</b><br><br>
+    <b>Si p &gt; 10:</b> Q = 0<br><br>
+    <b>Lo que se evalúa:</b> que la curva tiene un <b>quiebre en p = 3</b> y se vuelve más empinada cuando B sale del mercado. Sumar 16 − 3p para todo precio es el error clásico — daría cantidad negativa para B cuando p &gt; 3.<br><br>
+    Verifica en p = 3: Q = 16 − 9 = 7, y por el otro tramo Q = 10 − 3 = 7. Coinciden, así que el quiebre está bien puesto.`},
+   {q:'Sube el ingreso de los consumidores. ¿Qué le pasa a la curva de demanda de mercado de un bien inferior? ¿Y si en vez de eso sube el precio de ese mismo bien?',
+    a:`<b>Sube el ingreso:</b> como el bien es <b>inferior</b>, cada consumidor demanda <b>menos</b> a cualquier precio. La curva de demanda de mercado se <b>desplaza hacia la izquierda</b>. Es un desplazamiento, no un movimiento: lo que cambió no fue el precio del bien.<br><br>
+    <b>Sube el precio propio:</b> hay un <b>movimiento sobre</b> la curva, hacia arriba y a la izquierda. La curva no se mueve.<br><br>
+    <b>Cuidado con el "inferior":</b> ser inferior no significa que la demanda suba con el precio. Eso solo pasaría si además fuera <b>Giffen</b>, que es un caso raro. Salvo que el enunciado lo diga explícitamente, un bien inferior sigue teniendo demanda decreciente en su propio precio.<br><br>
+    Y recuerda la tercera observación del PPT: si el aumento de ingreso no fuera parejo sino concentrado en algunos consumidores, el efecto sería distinto — la demanda de mercado depende de la <b>distribución</b> del ingreso, no solo del total.`}
+  ]
  }
  ]
 }
+
 
 ]);
