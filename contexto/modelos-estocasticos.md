@@ -117,11 +117,34 @@ Dos precisiones de vocabulario del profesor:
 - **Mezcla** en este curso NO es "tasa aleatoria". Es la suma mirada al revés: dado el total m de un proceso juntado, cuántos venían del proceso i, que es `Binomial(m, λᵢ/Σλⱼ)`.
 - La **observación final** del PPT generaliza el condicionamiento al caso no homogéneo: `N(u)|N(t)=n ~ Binomial(n, m(u)/m(t))`, y de ahí `P(Sₖ < u | N(t)=n) = P(N(u) ≥ k | N(t)=n)`.
 
-## Estado del Control 1
+## Alcance del Control 1
 
-- Fecha: **jueves 27 de agosto**, durante la cátedra.
-- La Ayudantía 1 (semana 3) ya la hizo. Errores detectados en su desarrollo: P1 c) quedó sin cerrar (da 0,161), P1 d) da 0,00597 y no 0,00691, P4 e) da 0,528 y no 0,0527 (coma corrida), y en P4 anotó la tasa como 9 por minuto cuando es por hora. El resto correcto.
-- La prioridad para el control es el **Control 1 de agosto 2024** cronometrado y los problemas 1, 3 y 6 de la Guía del Capítulo 2.
+**El profesor lo dijo en clase: entra hasta descomposición.** Eso manda por sobre cualquier otra señal.
+
+**Entra:** Unidad 1 completa; proceso de conteo; Poisson (conteo, tiempo entre eventos, k-ésimo evento); distribución condicional de los tiempos (uniforme y binomial con u/t); **descomposición**, incluida la doble.
+
+**No entra:** suma o superposición, mezcla, y proceso de Poisson no homogéneo. Todo eso va en la Prueba 1.
+
+Matiz útil: el mínimo y la carrera de exponenciales ya aparecieron en la Ayudantía 1 (las tres pilas). Formalmente viven en la sección de suma, pero conviene tenerlos igual porque son baratos.
+
+Nota: la **Ayudantía 2** (26 ago) sí pasa por suma y mezcla — el ejercicio de los tres correctores. No es contradicción: la ayudantía también apunta a la Prueba 1, seis días después. Para el control, priorizar sus ejercicios 3 y 4 (descomposición) y el 1 (condicionamiento).
+
+Dato de contexto por si sirve más adelante: de los cuatro Controles 1 del archivo de Canvas, ninguno tiene no homogéneo; de las tres Pruebas 1, las tres lo tienen.
+
+## Logística del Control 1
+
+Del anuncio de Canvas del 25 de agosto (Catalina Ruhe):
+
+- Jueves 27, **10:30 a 11:20** — 50 minutos, no las tres horas de cátedra. Después 15 min de break y sigue la clase.
+- **Sin calculadora.** Las respuestas se dejan expresadas.
+- Hay que llevar **impreso** el "Prueba 1 - Formulario", doble cara, sin marcas ni anotaciones.
+- Distribución de salas: de *Ruiz de Gamboa* a *Wadhwani* rinden en **B-30**; el resto en C-213. Hay un PDF adjunto al anuncio.
+
+## Estado
+
+- La Ayudantía 1 (semana 3) ya la hizo. Errores en su desarrollo: P1 c) quedó sin cerrar (da 0,161), P1 d) da 0,00597 y no 0,00691, P4 e) da 0,528 y no 0,0527 (coma corrida), y en P4 anotó la tasa como 9 por minuto cuando es por hora. El resto correcto.
+- La **Ayudantía 2** (mié 26) es el material más cercano al control: farmacia (condicionamiento con u/t e intervalos traslapados), tres correctores (mínimo y carrera de exponenciales, mezcla, falta de memoria), sucursal bancaria (descomposición doble y reparto multinomial) y correos del profesor (descomposición en cuatro subprocesos).
+- En las pautas pasadas el puntaje está desglosado y hay puntos asignados a las justificaciones: "por incrementos independientes" 0,15; "por incrementos estacionarios" 0,15; "por complemento" 0,1.
 
 ## Pendiente
 

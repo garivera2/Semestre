@@ -161,7 +161,7 @@ window.GUIAS = (window.GUIAS || []).concat([
  secciones:[
  {
   t:'Sí, la descomposición entra — y es lo que más se pregunta',
-  h:`<p>Respuesta corta: <b>sí</b>. El Control 1 cubre las Unidades 1 y 2 completas, y la descomposición es una de las cuatro secciones grandes del Capítulo 2 en el PPT del profesor.</p>
+  h:`<p>Respuesta corta: <b>sí, y es justo el techo</b>. El profesor dijo en clase que el Control 1 entra <b>hasta descomposición</b>. O sea que de esta guía, las secciones de descomposición y todo lo anterior entran; suma, mezcla y no homogéneo quedan para la <b>Prueba 1</b> del 2 de septiembre. El detalle está en el repaso del Control 1, en la sección Pruebas.</p>
   <p>Respuesta larga: no solo entra, es <b>el tema que más aparece</b> en los controles pasados. Míralo en los enunciados reales del archivo de Canvas:</p>
   <ul>
   <li><b>Centro de salud (Control 1, marzo 2025):</b> pacientes tipo 1 y tipo 2, y además Isapre o Fonasa. Es descomposición <i>doble</i>.</li>
@@ -170,7 +170,7 @@ window.GUIAS = (window.GUIAS || []).concat([
   <li><b>El repaso de Prueba 1 del propio PPT:</b> solicitudes de crédito clasificadas por tipo de financiamiento <i>y</i> por resultado crediticio.</li>
   </ul>
   <p>La señal en el enunciado siempre es la misma: <b>"cada evento, de manera independiente, es de tipo A con probabilidad p"</b>. Cuando leas eso, ya sabes lo que viene.</p>`,
-  ojo:'El PPT del capítulo 2 tiene esta estructura: proceso de conteo → proceso de Poisson → tiempo entre eventos → tiempo del k-ésimo evento → distribución condicional de los tiempos → descomposición → suma → mezcla → no homogéneo → repaso de Prueba 1. Todo eso es Control 1.'
+  ojo:'El PPT del capítulo 2 tiene esta estructura: proceso de conteo → proceso de Poisson → tiempo entre eventos → tiempo del k-ésimo evento → distribución condicional de los tiempos → descomposición → suma → mezcla → no homogéneo → repaso de Prueba 1. Para el Control 1 entra hasta descomposición; suma, mezcla y no homogéneo entran recién en la Prueba 1.'
  },
  {
   t:'Descomposición (thinning)',
@@ -184,8 +184,8 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'La estructura del argumento es "condiciono en el total, uso binomial, sumo sobre todos los totales posibles". Ese esquema reaparece en la mezcla y en el condicionamiento del final. Si lo entiendes una vez, entiendes las tres.'
  },
  {
-  t:'Suma (superposición)',
-  h:`<p>Al revés: tienes N₁(t) y N₂(t) independientes con tasas λ₁ y λ₂, y los juntas en N(t) = N₁(t) + N₂(t). ¿Sigue siendo Poisson?</p>
+  t:'Suma (superposición) — para la Prueba 1',
+  h:`<p><i>Fuera del alcance del Control 1.</i> Al revés: tienes N₁(t) y N₂(t) independientes con tasas λ₁ y λ₂, y los juntas en N(t) = N₁(t) + N₂(t). ¿Sigue siendo Poisson?</p>
   <p><b>Sí</b>, y la demostración del PPT es corta y bonita. Mira el primer tiempo entre eventos del proceso juntado: es el que llegue primero, o sea el <b>mínimo</b>:</p>
   <p class="fx">T₁ = mín(X₁, Y₁)</p>
   <p class="fx">P(T₁ &gt; x) = P(X₁ &gt; x)·P(Y₁ &gt; x) = e<sup>−λ₁x</sup>·e<sup>−λ₂x</sup> = e<sup>−(λ₁+λ₂)x</sup></p>
@@ -196,8 +196,8 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'Fíjate que "el mínimo de exponenciales independientes es exponencial con la suma de las tasas" es el mismo resultado que usaste en la P5 de la Ayudantía 1 con las pilas. No es un truco aparte: es literalmente por qué la superposición funciona.'
  },
  {
-  t:'Mezcla: la suma mirada hacia atrás',
-  h:`<p>Acá hay que tener cuidado con el nombre, porque "mezcla" en este curso significa algo <b>muy específico</b>: juntaste k procesos, observaste el total, y ahora quieres saber <b>cuántos venían de cada uno</b>.</p>
+  t:'Mezcla: la suma mirada hacia atrás — para la Prueba 1',
+  h:`<p><i>Fuera del alcance del Control 1.</i> Acá hay que tener cuidado con el nombre, porque "mezcla" en este curso significa algo <b>muy específico</b>: juntaste k procesos, observaste el total, y ahora quieres saber <b>cuántos venían de cada uno</b>.</p>
   <p>Si X(t) = Y₁(t) + … + Y<sub>k</sub>(t) y sabes que en total ocurrieron m eventos:</p>
   <p class="fx">Y<sub>i</sub>(t) | X(t) = m  ~  Binomial( m , λ<sub>i</sub> / Σλ<sub>j</sub> )</p>
   <p><b>La demostración</b> (el PPT la hace para k = 2) es directa: escribes la conjunta, usas independencia, reemplazas las tres Poisson, y los λt se cancelan dejando solo el cociente de tasas.</p>
@@ -218,8 +218,9 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'Cuando el enunciado empieza con "sabiendo que llegaron n en tal periodo", la tasa λ deja de importar: se cancela. Si te ves reemplazando λ en un ejercicio de este tipo, algo se desvió.'
  },
  {
-  t:'No homogéneo, y la observación que cierra el capítulo',
-  h:`<p>Con λ(t) variable aparece la intensidad acumulada m(t) = ∫₀ᵗ λ(s) ds, y todo lo de conteo se mantiene reemplazando λt por m(t).</p>
+  t:'No homogéneo, y la observación que cierra el capítulo (esto es para la Prueba 1)',
+  h:`<p>Esta sección <b>no entra en el Control 1</b>. Léela igual, porque es la síntesis del capítulo, pero sin urgencia hasta el 2 de septiembre.</p>
+  <p>Con λ(t) variable aparece la intensidad acumulada m(t) = ∫₀ᵗ λ(s) ds, y todo lo de conteo se mantiene reemplazando λt por m(t).</p>
   <p>Pero el PPT termina con una <b>observación</b> que es la joya del capítulo y que generaliza la sección anterior. Para un proceso no homogéneo, condicionando en N(t) = n:</p>
   <p class="fx">P(N(u) = k | N(t) = n) = C(n,k) (m(u)/m(t))<sup>k</sup> (1 − m(u)/m(t))<sup>n−k</sup></p>
   <p>Y con eso se responde la pregunta por el k-ésimo evento:</p>
