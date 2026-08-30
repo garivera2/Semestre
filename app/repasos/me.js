@@ -157,60 +157,106 @@ window.REPASOS = (window.REPASOS || []).concat([
 
 {
  id:'me-p1', ramo:'me', eva:'Prueba 1', fecha:'2026-09-02',
- bajada:'20% · Unidades 1 y 2 completas, ahora sí con Poisson no homogéneo',
+ bajada:'20% · Unidad 1 y Capítulo 2 hasta SUMA · sin eximición',
  resumen:[
   {
-   t:'Qué cambia respecto del Control 1',
-   h:`<p>Acá entra <b>todo</b>. El Control 1 llegaba hasta descomposición; la Prueba 1 suma además <b>superposición, mezcla y proceso de Poisson no homogéneo</b>. Lo demás que cambia:</p>
+   t:'Qué entra y qué NO',
+   h:`<p><b>El techo es la suma de procesos de Poisson.</b> Ahí quedó la cátedra al cerrar la semana 4, incluido el ejercicio de consolidación que el profesor resolvió después de esa sección.</p>
+   <p><b>Entra:</b></p>
    <ul>
-   <li><b>Pesa 20%</b> contra el ~4% que aporta un control, y no hay eximición: este 20% se paga completo.</li>
-   <li><b>Los enunciados son largos.</b> En los controles hay 3 o 4 preguntas cortas; en las pruebas hay uno o dos escenarios con cinco o seis partes encadenadas.</li>
-   <li>Se evalúa explícitamente <b>modelación, desarrollo matemático e interpretación</b>.</li>
+   <li><b>Unidad 1</b> completa: condicional, Bayes, esperanza y varianza, distribuciones, falta de memoria.</li>
+   <li>Proceso de conteo; incrementos independientes y estacionarios.</li>
+   <li>Poisson: conteo, tiempo entre eventos, tiempo del k-ésimo evento.</li>
+   <li>Distribución condicional de los tiempos: uniforme, binomial con u/t, reparto en varios subintervalos.</li>
+   <li><b>Descomposición</b> (thinning), simple y doble.</li>
+   <li><b>Suma / superposición</b>, carrera de exponenciales y mínimo de exponenciales.</li>
    </ul>
-   <p><b>El dato duro:</b> de las tres Pruebas 1 que hay en el archivo de Canvas, <b>las tres traen no homogéneo</b>. No es opcional.</p>`
+   <p><b>No entra:</b> <b>mezcla</b> (dado el total, cuántos de cada proceso) y <b>Poisson no homogéneo</b>. Las dos se pasan en la semana 5, o sea <b>después</b> de la prueba. Están en la guía de la semana 5 y no hay que tocarlas ahora.</p>`,
+   ojo:'Esto importa mucho al hacer pruebas pasadas: las tres Pruebas 1 del archivo de Canvas traen no homogéneo en alguna parte. Cuando llegues a esa parte, sáltala — no es que no te salga, es que todavía no la pasan.'
   },
   {
-   t:'Lo nuevo: suma, mezcla y no homogéneo',
-   h:`<p><b>Suma (superposición).</b> Si juntas k procesos independientes, N(t) ~ Poisson((λ₁+…+λ<sub>k</sub>)t), y la probabilidad de que el próximo evento venga del proceso i es λ<sub>i</sub>/Σλ<sub>j</sub>. La demostración va por el mínimo: T₁ = mín(X₁,Y₁) es exponencial de tasa λ₁+λ₂.</p>
-   <p><b>Mezcla.</b> Es la suma mirada al revés: dado que en total ocurrieron m eventos, cuántos venían del proceso i.</p>
-   <p class="fx">Y<sub>i</sub>(t) | X(t) = m  ~  Binomial( m , λ<sub>i</sub>/Σλ<sub>j</sub> )</p>
-   <p><b>No homogéneo.</b> Se relaja la tasa constante: ahora λ(t) varía. Aparece la <b>intensidad acumulada</b>:</p>
-   <p class="fx">m(t) = ∫₀ᵗ λ(s) ds</p>
-   <p class="fx">N(t) ~ Poisson(m(t))     N(t) − N(s) ~ Poisson(m(t) − m(s))</p>
-   <p><b>Regla mecánica:</b> donde en el caso homogéneo escribías λt, ahora escribes m(t). Todo lo de conteo se mantiene igual.</p>
-   <p><b>Lo que se pierde:</b> los incrementos estacionarios. Los independientes se mantienen. Y los tiempos entre eventos dejan de ser exponenciales idénticamente distribuidos.</p>
-   <p><b>La observación que cierra el PPT</b>, y que es la que más se pregunta:</p>
-   <p class="fx">N(u) | N(t) = n  ~  Binomial(n, m(u)/m(t))</p>
-   <p class="fx">P(S<sub>k</sub> &lt; u | N(t) = n) = P(N(u) ≥ k | N(t) = n)</p>
-   <p>Donde en el caso homogéneo la probabilidad era la razón de <i>largos</i> (u/t), acá es la razón de <i>intensidades acumuladas</i>. El tiempo deja de medirse en minutos y pasa a medirse en eventos esperados.</p>`,
-   ojo:'Si en la prueba ves una λ que depende de t, lo primero que haces es integrar y dejar m(t) escrito. La mitad de los errores vienen de seguir arrastrando λ cuando ya debería haber desaparecido.'
-  },
-  {
-   t:'Dónde poner el peso los días entre el control y la prueba',
-   h:`<p>Si el Control 1 te salió bien, no repitas todo. Concentra los días en lo que un control corto no alcanza a preguntar:</p>
+   t:'Lo que tienes que saber, en una hoja',
+   h:`<p><b>1. El criterio del tiempo</b> — ¿desde dónde cuento?</p>
    <ul>
-   <li><b>No homogéneo</b>, que es materia nueva para la evaluación.</li>
-   <li><b>Enunciados encadenados</b>, donde la parte d) usa lo que calculaste en la b).</li>
-   <li><b>Interpretar el resultado</b>: practica escribir una frase que explique qué significa cada número.</li>
-   <li>Lo que hayas fallado el jueves 27.</li>
-   </ul>`
+   <li>Desde el evento anterior (o "el próximo") → <b>exponencial directa</b>, P(T &gt; t) = e<sup>−λt</sup></li>
+   <li>Desde el origen hasta el n-ésimo → <b>traduzco a conteo</b>: S<sub>n</sub> ≤ t ⟺ N(t) ≥ n</li>
+   <li>"Ya pasaron s minutos" → <b>falta de memoria</b>, borras lo transcurrido</li>
+   </ul>
+   <p><b>2. Las tres configuraciones de intervalos</b> — esto es lo que más se pregunta:</p>
+   <table class="tb"><tr><th>Cómo están</th><th>Qué usas</th></tr>
+   <tr><td>Separados, no se tocan</td><td>Incrementos independientes: borras el condicionamiento</td></tr>
+   <tr><td>Se pisan parcialmente</td><td>Cortas en bloques disjuntos y sumas sobre el compartido</td></tr>
+   <tr><td>Uno dentro del otro</td><td>Binomial(n, u/t) — λ se cancela</td></tr>
+   </table>
+   <p><b>3. Separar y juntar procesos</b></p>
+   <ul>
+   <li><b>Descomposición:</b> "cada evento es de tipo A con probabilidad p" → Poisson(λpt), independiente del complemento. Con dos clasificaciones a la vez, los cuatro subprocesos también son independientes.</li>
+   <li><b>Suma:</b> juntar k procesos da Poisson con la suma de las tasas. El primer evento del juntado es el mínimo de exponenciales, y viene del proceso i con probabilidad λ<sub>i</sub>/Σλ<sub>j</sub>.</li>
+   </ul>
+   <p><b>4. Las frases que dan puntos.</b> En las pautas hay puntaje asignado a escribir <i>"por incrementos independientes"</i>, <i>"por incrementos estacionarios"</i>, <i>"por complemento"</i> y <i>"por la propiedad de descomposición"</i>. Ponlas al lado de cada igualdad.</p>`
+  },
+  {
+   t:'Formulario para escribir a mano',
+   h:`<table class="tb"><tr><th>Qué necesito</th><th>Fórmula</th></tr>
+   <tr><td>n eventos en tiempo t</td><td>e<sup>−λt</sup>(λt)<sup>n</sup>/n!</td></tr>
+   <tr><td>Ningún evento hasta t / esperar más de t</td><td>e<sup>−λt</sup></td></tr>
+   <tr><td>Tiempo medio entre eventos / hasta el n-ésimo</td><td>1/λ  ·  n/λ</td></tr>
+   <tr><td>n-ésimo evento después de t</td><td>P(S<sub>n</sub> &gt; t) = P(N(t) ≤ n−1)</td></tr>
+   <tr><td>n-ésimo evento antes de t</td><td>P(S<sub>n</sub> ≤ t) = P(N(t) ≥ n)</td></tr>
+   <tr><td>Falta de memoria</td><td>P(T &gt; s+t | T &gt; s) = P(T &gt; t)</td></tr>
+   <tr><td>Separar por tipo (prob. p)</td><td>Poisson(λpt), independiente del complemento</td></tr>
+   <tr><td>Descomposición doble (p y w)</td><td>Poisson(λpwt), los cuatro subprocesos independientes</td></tr>
+   <tr><td>Juntar k procesos</td><td>Poisson((λ<sub>1</sub>+…+λ<sub>k</sub>)t)</td></tr>
+   <tr><td>¿De cuál viene el próximo?</td><td>λ<sub>i</sub>/Σλ<sub>j</sub></td></tr>
+   <tr><td>Mínimo de exponenciales</td><td>Exponencial(Σλ<sub>j</sub>)</td></tr>
+   <tr><td>Máximo de n exponenciales iguales</td><td>E[máx] = (1/λ)(1 + 1/2 + … + 1/n)</td></tr>
+   <tr><td>Dado N(t)=n, ¿cuántos en [0,u]?</td><td>Binomial(n, u/t)</td></tr>
+   <tr><td>Dado N(t)=n, repartir en varios subintervalos</td><td>Multinomial con las razones de largos</td></tr>
+   <tr><td>Un solo evento en [0,t]</td><td>Uniforme en [0,t]</td></tr>
+   </table>
+   <p><b>No pongas</b> mezcla ni m(t): no entran y solo te van a confundir mirando la hoja.</p>`,
+   ojo:'Escribe siempre λ CON SU UNIDAD al lado, y el tiempo convertido a esa misma unidad, antes de tocar cualquier fórmula. La mitad de los errores del semestre pasado fueron de unidades.'
+  },
+  {
+   t:'Plan de los tres días',
+   h:`<p>Hoy es domingo 30 y la prueba es el miércoles 2. La prueba es larga y encadenada, así que la prioridad es <b>hacer evaluaciones completas de corrido</b>, no leer.</p>
+   <table class="tb"><tr><th>Día</th><th>Qué</th></tr>
+   <tr><td><b>Dom 30</b></td><td>Escribir el <b>formulario a mano</b> (media hora, y es repaso). Después los <b>cuatro controles pasados</b> seguidos: son cortos y te calibran rápido. Corregir con la pauta y anotar dónde te trancaste.</td></tr>
+   <tr><td><b>Lun 31</b></td><td><b>Prueba 1 de los trabajos de menos de 1 hora</b> (partes a–f), cronometrada y de corrido. Es la más completa. Saltarse la parte del jefe de turno.</td></tr>
+   <tr><td><b>Mar 1</b></td><td><b>Prueba 1 del 1 de septiembre de 2023</b> (cinta transportadora) y el <b>concesionario</b> del PPT, partes 1 a 3. Después, leer la pauta con puntaje detallado de la Prueba N.º 1.</td></tr>
+   <tr><td><b>Mié 2</b></td><td>Prueba. Formulario impreso y a mano, y llegar temprano.</td></tr>
+   </table>
+   <p><b>Si el tiempo se acorta</b>, el orden de sacrificio es: primero sueltas la Guía del Capítulo 1, después los problemas de la Guía del Capítulo 2, y lo último que sueltas son los <b>controles y pruebas pasadas</b>. Esos son los que de verdad predicen la nota.</p>`
   }
  ],
  ejercicios:[
-  {fuente:'Pruebas 1 pasadas · Capítulo 2 (Canvas)', items:[
-   {x:'Prueba N.º 1 · 9 de abril de 2025 — correos del profesor, con pauta de puntaje detallada', por:'Descomposición y superposición, más un no homogéneo. Trae el puntaje desglosado línea por línea: es la mejor guía que existe de cómo redactar.'},
-   {x:'Prueba 1 · 1 de septiembre de 2023 — cinta transportadora y tienda de esquí', por:'Dos preguntas de 3 puntos, con no homogéneo. Compara tu desarrollo con el del PPT, que resuelve el mismo enunciado.'},
-   {x:'Prueba 1 · trabajos que se terminan en menos de 1 hora (partes a a f)', por:'Seis partes encadenadas y el jefe de turno con proceso no homogéneo. Hazla entera y de corrido, como si fuera la prueba real.'}
+  {fuente:'Controles pasados · Capítulo 2 (Canvas) — todos dentro del alcance', items:[
+   {x:'Control 1 · 23 de agosto de 2024 — procesadores y trabajos, 3 preguntas', por:'Dos procesos independientes y condicionamiento. Corto, empieza por acá para calibrar.'},
+   {x:'Control · jugador de fútbol, 1,5 goles por partido', por:'Descomposición por tipo de gol. El más directo de los cuatro.'},
+   {x:'Control 1 · farmacia de turno y bomba de bencina', por:'La farmacia es uniformidad condicional; la bomba es mínimo de exponenciales con operarios que salen de su puesto. Ahora las dos partes entran.'},
+   {x:'Control 1 · 31 de marzo de 2025 — centro de salud con 3 médicos', por:'El más completo de los controles: descomposición doble, carrera de exponenciales, tiempo hasta el 5.º evento y condicionamiento binomial.'}
   ]},
-  {fuente:'Del PPT de cátedra', items:[
-   {x:'Repaso Prueba 1 — el concesionario automotriz (5 partes)', por:'Es la prueba que el profesor mismo diseñó como repaso: superposición, descomposición doble, orden de llegadas, condicionamiento y un no homogéneo con lambda(t) = 2t² + t + 1. Lo más cercano que hay.'},
-   {x:'Rehacer las láminas de suma, mezcla, no homogéneo y la observación final', por:'Es todo lo que quedó fuera del Control 1: las cuatro secciones que cierran el capítulo.'},
-   {x:'Guía Cap. 2, problema 6 — dos líneas de transporte', por:'Superposición y carrera de exponenciales, que en el control no entraban.'},
-   {x:'Ayudantía 2, ejercicio 2 completo — los tres correctores', por:'Las siete partes: mínimo, carrera, orden de llegadas, mezcla y falta de memoria.'}
+  {fuente:'Pruebas 1 pasadas · Capítulo 2 (Canvas) — ojo con las partes fuera de alcance', items:[
+   {x:'Prueba 1 · trabajos que se terminan en menos de 1 hora (partes a a f)', por:'La más completa y la más parecida en formato. Descomposición, tiempo hasta el n-ésimo, condicionamiento y mínimo de exponenciales. SALTARSE la parte del jefe de turno, que es no homogéneo.'},
+   {x:'Prueba 1 · 1 de septiembre de 2023 — cinta transportadora y tienda de esquí', por:'Mismo enunciado que el ejercicio de consolidación del PPT, así que puedes comparar tu desarrollo con el del profesor. SALTARSE la parte de no homogéneo.'},
+   {x:'Prueba N.º 1 · 9 de abril de 2025 — correos del profesor', por:'Descomposición y superposición. Trae la pauta con el puntaje desglosado línea por línea: LEERLA aunque no la hagas entera, muestra cómo redactar. SALTARSE la parte de no homogéneo.'}
   ]},
-  {fuente:'Antes de la prueba', items:[
-   {x:'Rehacer el Control 1 con las preguntas que te salieron mal', por:'Lo que falles el 27 es exactamente lo que hay que arreglar antes del 2.'},
-   {x:'Revisar el formulario oficial con calma', por:'Es el mismo del control. Saber dónde está cada cosa te ahorra minutos.'}
+  {fuente:'Ejercicios resueltos por el profesor en el PPT', items:[
+   {x:'Consolidación de aprendizajes — la cinta transportadora (5 partes)', por:'Es el ejercicio con el que cerró la semana 4, justo después de suma. Entra completo y es el mejor predictor de lo que va a preguntar.'},
+   {x:'Repaso Prueba 1 — el concesionario automotriz, partes 1 a 3', por:'Superposición y descomposición doble. Las partes 4 y 5 usan condicionamiento avanzado y no homogéneo: déjalas para la semana 5.'}
+  ]},
+  {fuente:'Guía Capítulo 2 — Proceso de Poisson (Canvas)', items:[
+   {x:'Problema 3 — centro comercial, clientes clasificados por tipo', por:'Descomposición pura.'},
+   {x:'Problema 6 — dos líneas de transporte a Ciudad Empresarial', por:'Superposición y carrera de exponenciales. Ahora sí entra.'},
+   {x:'Problema 1 — distribución y esperanza condicionales de N(t)', por:'Incrementos independientes. Rápido.'},
+   {x:'Problema 7 — fondo de inversión con N tipos de oportunidades', por:'Descomposición múltiple. El más difícil de los siete.'},
+   {x:'Problema 5 — tubo fluorescente', por:'Tiempos entre eventos y falta de memoria.'},
+   {x:'Problemas 2 y 4 — vacaciones y estudiantes inscritos', por:'Condicionamiento. Los últimos en la fila si falta tiempo.'}
+  ]},
+  {fuente:'Guía Capítulo 1 — solo si sobra tiempo', items:[
+   {x:'Ejercicios 14 y 15 — cajas con plumones y el test del virus', por:'Bayes clásico. Los dos que más rinden del capítulo 1.'},
+   {x:'Ejercicios 20 a 23 — densidades continuas, esperanza y varianza', por:'El 22 (ampolletas del semáforo) es exponencial disfrazada.'},
+   {x:'Ejercicios 17, 18 y 19 — binomial y Poisson aplicadas', por:'Refuerzo de distribuciones.'}
   ]}
  ]
 }

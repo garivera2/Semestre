@@ -101,6 +101,18 @@ Están en `app/guias/mn.js`:
 5. Laboratorio 1 · Serie de Taylor (semana 2)
 6. Programación con Python (semana 3)
 
+## Rutina semanal de estudio (acordada)
+
+- **Viernes, después de cátedra:** Gabo manda las fotos de sus apuntes. Se transcriben a
+  `contexto/apuntes-mn.md` y se le dice qué entra en el laboratorio del miércoles.
+- **Martes en la noche (~1 hora):** formulario del tema a mano + ping-pong de ejercicios
+  en el chat.
+- **Fin de semana:** libre, no se ocupa en este ramo.
+
+El principio: estudiar **antes** del lab, no después. Los labs son calificados y el
+reglamento permite formulario físico y apuntes manuscritos — por eso el formulario a mano
+es la pieza central de la preparación.
+
 ## Apuntes y material acumulado
 
 `contexto/apuntes-mn.md` guarda los apuntes de clase transcritos semana a semana, el

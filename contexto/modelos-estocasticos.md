@@ -117,21 +117,21 @@ Dos precisiones de vocabulario del profesor:
 - **Mezcla** en este curso NO es "tasa aleatoria". Es la suma mirada al revés: dado el total m de un proceso juntado, cuántos venían del proceso i, que es `Binomial(m, λᵢ/Σλⱼ)`.
 - La **observación final** del PPT generaliza el condicionamiento al caso no homogéneo: `N(u)|N(t)=n ~ Binomial(n, m(u)/m(t))`, y de ahí `P(Sₖ < u | N(t)=n) = P(N(u) ≥ k | N(t)=n)`.
 
-## Alcance del Control 1
+## Avance real de la cátedra
 
-**El profesor lo dijo en clase: entra hasta descomposición.** Eso manda por sobre cualquier otra señal.
+- **Semana 2:** proceso de conteo, proceso de Poisson, tiempo entre eventos, distribución condicional de los tiempos.
+- **Semana 3:** descomposición.
+- **Semana 4:** suma (superposición) y el ejercicio de consolidación del PPT (la cinta transportadora), que va justo después de esa sección. **Ahí quedó la cátedra.**
+- **Semana 5:** mezcla y Poisson no homogéneo — se ven *después* de la Prueba 1.
 
-**Entra:** Unidad 1 completa; proceso de conteo; Poisson (conteo, tiempo entre eventos, k-ésimo evento); distribución condicional de los tiempos (uniforme y binomial con u/t); **descomposición**, incluida la doble.
+## Alcance de las evaluaciones
 
-**No entra:** suma o superposición, mezcla, y proceso de Poisson no homogéneo. Todo eso va en la Prueba 1.
+- **Control 1 (jue 27 ago):** Unidad 1 + Capítulo 2 **hasta descomposición**. Así lo dijo el profesor en clase.
+- **Prueba 1 (mié 2 sep):** Unidad 1 + Capítulo 2 **hasta suma**. No entran mezcla ni no homogéneo.
 
-Matiz útil: el mínimo y la carrera de exponenciales ya aparecieron en la Ayudantía 1 (las tres pilas). Formalmente viven en la sección de suma, pero conviene tenerlos igual porque son baratos.
+Ojo al usar las pruebas pasadas: las tres Pruebas 1 del archivo de Canvas traen no homogéneo en alguna parte, y esas partes hay que saltarlas.
 
-Nota: la **Ayudantía 2** (26 ago) sí pasa por suma y mezcla — el ejercicio de los tres correctores. No es contradicción: la ayudantía también apunta a la Prueba 1, seis días después. Para el control, priorizar sus ejercicios 3 y 4 (descomposición) y el 1 (condicionamiento).
-
-Dato de contexto por si sirve más adelante: de los cuatro Controles 1 del archivo de Canvas, ninguno tiene no homogéneo; de las tres Pruebas 1, las tres lo tienen.
-
-## Logística del Control 1
+## Logística del Control 1 (referencia para la Prueba 1)
 
 Del anuncio de Canvas del 25 de agosto (Catalina Ruhe):
 

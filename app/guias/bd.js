@@ -709,4 +709,344 @@ window.GUIAS = (window.GUIAS || []).concat([
  ]
 }
 
+,
+
+/* ---- BD · SIMULACROS DE C1 ---- */
+{
+ id:'bd-c1-sim', ramo:'bd', tag:'C1 · 3 sep', sem:5,
+ titulo:'Simulacros de C1',
+ bajada:'Cuatro ensayos completos con el formato real del control: dos fases individuales de 45 min y dos grupales de 120 min, con solución.',
+ min:90,
+ secciones:[
+ {
+  t:'Cómo usar esto para que sirva',
+  h:`<p>Estos simulacros valen <b>solo si los haces bajo condiciones de control</b>. Leer la solución no enseña nada; equivocarte y entender por qué, sí.</p>
+  <p><b>Las reglas:</b></p>
+  <ol>
+  <li><b>Papel y lápiz.</b> Nada de computador. Es como va a ser.</li>
+  <li><b>Cronómetro.</b> 45 minutos las individuales, 120 las grupales. Si se acaba el tiempo, entregas lo que tengas.</li>
+  <li><b>Cero material.</b> Ni la app, ni apuntes. Si no te acuerdas de algo, anótalo al margen y sigue — después revisas justo eso.</li>
+  <li><b>Solución después.</b> Recién cuando entregaste tu versión.</li>
+  </ol>
+  <p><b>El orden que conviene:</b> Simulacro 1 individual → corriges → Simulacro 1 grupal → corriges → Simulacro 2 individual (acá deberías notar la diferencia) → Simulacro 2 grupal.</p>
+  <p>Si te alcanza solo para dos, haz las <b>dos individuales</b>. Es la fase donde no te cubre el equipo, y donde el profe dijo que iba a verificar comprensión.</p>`,
+  ojo:'Antes de dibujar nada, dedica 5 minutos a subrayar el enunciado buscando "identificado por", "puede", "debe", "como máximo", "una sola vez", "varios". Cada una de esas frases es una decisión de diseño ya tomada, esperando que la traduzcas. Los enunciados de abajo están escritos con la misma densidad que los del profe: nada sobra.'
+ },
+ {
+  t:'Simulacro 1 · Fase individual (45 min)',
+  ej:[
+   {q:'<b>VETERINARIA.</b> Una clínica veterinaria quiere ordenar su registro.<br><br>Cada dueño se identifica por RUT y tiene nombre, dirección (calle, número y comuna) y puede registrar varios teléfonos de contacto.<br><br>Cada mascota tiene un número de chip único, nombre, especie, fecha de nacimiento y edad. Una mascota pertenece a un solo dueño; un dueño puede tener varias mascotas.<br><br>Cada mascota tiene exactamente una ficha clínica, y toda ficha corresponde a una mascota. Dentro de cada ficha se registran atenciones, numeradas 1, 2, 3 dentro de esa ficha, con fecha, motivo y diagnóstico. Cada atención la realiza un veterinario, identificado por RUT, con nombre y especialidad.<br><br>Diseñe el modelo relacional en 3FN indicando PK y FK. Justifique las decisiones no obvias.',
+    a:`<b>El modelo:</b><br><br>
+    <span class="fx-i">DUENO(<u>rut_dueno</u>, nombre, calle, numero, comuna)</span><br>
+    <span class="fx-i">TELEFONO_DUENO(<u>rut_dueno</u>, <u>telefono</u>)</span> — FK rut_dueno → DUENO<br>
+    <span class="fx-i">MASCOTA(<u>chip</u>, nombre, especie, fecha_nac, rut_dueno)</span> — FK → DUENO<br>
+    <span class="fx-i">FICHA(<u>nro_ficha</u>, chip UNIQUE NOT NULL)</span> — FK → MASCOTA<br>
+    <span class="fx-i">VETERINARIO(<u>rut_vet</u>, nombre, especialidad)</span><br>
+    <span class="fx-i">ATENCION(<u>nro_ficha</u>, <u>nro_atencion</u>, fecha, motivo, diagnostico, rut_vet)</span> — FK nro_ficha → FICHA, FK rut_vet → VETERINARIO<br><br>
+
+    <b>Las siete decisiones:</b><br><br>
+    <b>1. Teléfonos → tabla propia.</b> "Varios teléfonos" es multivaluado. PK compuesta por los dos atributos: el dueño puede tener varios, y un número podría repetirse entre dueños.<br><br>
+    <b>2. Dirección se descompone.</b> Compuesto: calle, numero y comuna son columnas sueltas de DUENO. No hay tabla.<br><br>
+    <b>3. La edad NO aparece.</b> Derivada de fecha_nac. Guardarla sería guardar un dato que se desactualiza solo. <i>Este es el punto que más se pierde.</i><br><br>
+    <b>4. Dueño–Mascota es 1:N</b> → FK en el lado N, que es MASCOTA.<br><br>
+    <b>5. Mascota–Ficha es 1:1</b>, con participación total del lado FICHA (toda ficha tiene mascota; podría haber mascota sin ficha aún). Por eso la FK va en FICHA, con UNIQUE (la hace 1:1 y no 1:N) y NOT NULL (fuerza la participación total).<br><br>
+    <i>Variante también correcta:</i> usar <span class="fx-i">FICHA(<u>chip</u>, ...)</span>, o sea que el chip sea directamente la PK de FICHA. Es más limpio y expresa el 1:1 sin necesidad de UNIQUE. Si la eliges, dilo explícitamente.<br><br>
+    <b>6. ATENCION es entidad débil de FICHA.</b> La pista: "numeradas 1, 2, 3 <b>dentro de esa ficha</b>". El número por sí solo no identifica nada. PK = clave de la fuerte + identificador parcial.<br><br>
+    <b>7. Veterinario–Atención es 1:N</b> → FK en ATENCION. Sin tabla nueva.<br><br>
+
+    <b>Verificación 3FN:</b> ningún atributo descriptivo determina a otro. La especialidad vive junto a rut_vet, que es su determinante; el nombre del dueño junto a rut_dueno. Si hubieras puesto nombre_veterinario dentro de ATENCION, tendrías una transitiva.<br><br>
+    <b>Autoevaluación:</b> 7 decisiones. Cuenta cuántas acertaste. Menos de 5 → repasa las reglas de traducción antes del siguiente simulacro.`}
+  ]
+ },
+ {
+  t:'Simulacro 1 · Fase grupal (120 min)',
+  ej:[
+   {q:'<b>AEROLÍNEA REGIONAL.</b> Una aerolínea necesita rediseñar su sistema.<br><br>Cada aeropuerto se identifica por su código IATA de tres letras, con nombre y ciudad.<br><br>Una ruta tiene un código propio, un aeropuerto de origen, uno de destino y una duración estimada.<br><br>Los vuelos se identifican por el código de la ruta más la fecha de salida. Cada vuelo se opera con un avión, identificado por su matrícula, con modelo y capacidad.<br><br>Algunos vuelos son de conexión: un vuelo puede tener un vuelo siguiente al que los pasajeros conectan. Ese dato puede no existir, y cuando existe debe referenciar un vuelo real.<br><br>Los pasajeros se identifican por número de pasaporte, con nombre, nacionalidad y varios correos de contacto. Un pasajero reserva muchos vuelos y un vuelo tiene muchos pasajeros; de cada reserva se guarda fecha de reserva, clase y número de asiento. Un pasajero no puede reservar dos veces el mismo vuelo.<br><br>La tripulación se identifica por número de empleado, con nombre y rol base. Un vuelo lleva varios tripulantes y un tripulante vuela muchos vuelos; se registra la función que cumplió en ese vuelo en particular.<br><br>Diseñe el modelo relacional en 3FN indicando PK y FK.',
+    a:`<b>El modelo:</b><br><br>
+    <span class="fx-i">AEROPUERTO(<u>iata</u>, nombre, ciudad)</span><br><br>
+    <span class="fx-i">RUTA(<u>cod_ruta</u>, iata_origen, iata_destino, duracion)</span><br>
+    &nbsp;&nbsp;FK iata_origen → AEROPUERTO, FK iata_destino → AEROPUERTO<br><br>
+    <span class="fx-i">AVION(<u>matricula</u>, modelo, capacidad)</span><br><br>
+    <span class="fx-i">VUELO(<u>cod_ruta</u>, <u>fecha_salida</u>, matricula, cod_ruta_conex, fecha_conex)</span><br>
+    &nbsp;&nbsp;FK cod_ruta → RUTA · FK matricula → AVION<br>
+    &nbsp;&nbsp;FK (cod_ruta_conex, fecha_conex) → VUELO &nbsp;<i>compuesta, nullable, auto-referente</i><br><br>
+    <span class="fx-i">PASAJERO(<u>pasaporte</u>, nombre, nacionalidad)</span><br>
+    <span class="fx-i">CORREO_PASAJERO(<u>pasaporte</u>, <u>correo</u>)</span> — FK → PASAJERO<br><br>
+    <span class="fx-i">RESERVA(<u>pasaporte</u>, <u>cod_ruta</u>, <u>fecha_salida</u>, fecha_reserva, clase, asiento)</span><br>
+    &nbsp;&nbsp;FK pasaporte → PASAJERO · FK (cod_ruta, fecha_salida) → VUELO<br><br>
+    <span class="fx-i">TRIPULANTE(<u>nro_empleado</u>, nombre, rol_base)</span><br><br>
+    <span class="fx-i">ASIGNACION(<u>nro_empleado</u>, <u>cod_ruta</u>, <u>fecha_salida</u>, funcion)</span><br>
+    &nbsp;&nbsp;FK nro_empleado → TRIPULANTE · FK (cod_ruta, fecha_salida) → VUELO<br><br>
+
+    <b>Los cinco puntos donde se decide la nota:</b><br><br>
+    <b>1. RUTA tiene DOS FK a la misma tabla.</b> Origen y destino son ambos aeropuertos. Es perfectamente válido y hay que nombrarlas distinto (iata_origen, iata_destino) porque una tabla no puede tener dos columnas con el mismo nombre. Lo que hace distintas a las dos referencias no es la tabla de destino sino <b>el rol</b> que cumple cada una.<br><br>
+    <b>2. VUELO tiene PK compuesta</b> {cod_ruta, fecha_salida}, porque el enunciado lo dice: "se identifican por el código de la ruta más la fecha de salida". Es entidad débil de RUTA — la fecha sola no identifica nada.<br><br>
+    <b>3. La conexión es una FK compuesta de VUELO hacia sí misma, y nullable.</b> Este es el punto difícil:<br>
+    • Es <b>auto-referente</b>: un vuelo apunta a otro vuelo.<br>
+    • Es <b>compuesta</b>, porque la PK de VUELO son dos columnas.<br>
+    • Es <b>opcional</b> ("puede no existir"), así que las dos columnas van nulas juntas, nunca una sí y otra no.<br>
+    • "Cuando existe debe referenciar un vuelo real" es el enunciado pidiéndote explícitamente la integridad referencial.<br><br>
+    <b>4. Dos N:M distintas sobre VUELO</b>, y cada una con su atributo propio. RESERVA lleva fecha_reserva, clase y asiento; ASIGNACION lleva funcion. No se pueden fusionar en una sola tabla con un campo "tipo": los atributos son completamente distintos.<br><br>
+    <b>5. Las PK de RESERVA y ASIGNACION son de TRES columnas</b>, porque el lado VUELO ya aporta dos. La regla no cambia — sigue siendo "las claves de ambos lados" — pero el lado vuelo trae una clave compuesta.<br><br>
+    "Un pasajero no puede reservar dos veces el mismo vuelo" es lo que <b>confirma</b> que {pasaporte, cod_ruta, fecha_salida} basta como PK. Si pudiera, necesitarías algo más.<br><br>
+
+    <b>Trampas evitadas:</b><br>
+    • <i>rol_base</i> en TRIPULANTE y <i>funcion</i> en ASIGNACION son cosas distintas: el rol es de la persona, la función es de ese vuelo. Meter la función en TRIPULANTE sería un error de diseño grave.<br>
+    • La capacidad del avión vive en AVION, no en VUELO. Si la pusieras en VUELO tendrías <span class="fx-i">matricula → capacidad</span>, transitiva, y falla 3FN.<br><br>
+    <b>Autoevaluación:</b> 9 tablas. Si te salieron 7 u 8, probablemente fusionaste RESERVA con ASIGNACION o te comiste la tabla de correos.`}
+  ]
+ },
+ {
+  t:'Simulacro 2 · Fase individual (45 min)',
+  ej:[
+   {q:'<b>TORNEO DEPORTIVO.</b> Un club organiza torneos y quiere sistematizar el registro.<br><br>Cada torneo tiene un código, nombre, año y la cantidad de equipos participantes.<br><br>Cada equipo tiene código, nombre, ciudad y varios colores oficiales.<br><br>Un equipo participa en varios torneos y un torneo tiene varios equipos. De cada participación se guarda la fecha de inscripción y el grupo asignado.<br><br>Los partidos se numeran dentro de cada torneo (partido 1, 2, 3…) y registran fecha, equipo local, equipo visitante y el marcador de cada lado. Cada partido lo dirige un árbitro, identificado por RUT, con nombre y categoría.<br><br>Diseñe el modelo relacional en 3FN indicando PK y FK.',
+    a:`<b>El modelo:</b><br><br>
+    <span class="fx-i">TORNEO(<u>cod_torneo</u>, nombre, anio)</span><br>
+    <span class="fx-i">EQUIPO(<u>cod_equipo</u>, nombre, ciudad)</span><br>
+    <span class="fx-i">COLOR_EQUIPO(<u>cod_equipo</u>, <u>color</u>)</span> — FK → EQUIPO<br>
+    <span class="fx-i">PARTICIPACION(<u>cod_torneo</u>, <u>cod_equipo</u>, fecha_inscripcion, grupo)</span> — FK a ambas<br>
+    <span class="fx-i">ARBITRO(<u>rut_arbitro</u>, nombre, categoria)</span><br>
+    <span class="fx-i">PARTIDO(<u>cod_torneo</u>, <u>nro_partido</u>, fecha, cod_local, cod_visita, goles_local, goles_visita, rut_arbitro)</span><br>
+    &nbsp;&nbsp;FK cod_torneo → TORNEO · FK cod_local → EQUIPO · FK cod_visita → EQUIPO · FK rut_arbitro → ARBITRO<br><br>
+
+    <b>Las decisiones:</b><br><br>
+    <b>1. La cantidad de equipos NO se guarda.</b> Es derivada: se cuenta desde PARTICIPACION. Mismo caso que la edad en la veterinaria — si la guardaras, quedaría desincronizada apenas se inscriba o retire un equipo. <i>Aquí está el atributo derivado escondido de este enunciado.</i><br><br>
+    <b>2. Colores → tabla propia.</b> "Varios colores oficiales" es multivaluado.<br><br>
+    <b>3. PARTICIPACION es N:M con atributos.</b> fecha_inscripcion y grupo no son del equipo ni del torneo: son del par. Un equipo puede estar en el grupo A de un torneo y en el grupo C de otro.<br><br>
+    <b>4. PARTIDO es entidad débil de TORNEO.</b> "Se numeran dentro de cada torneo" — el número se reinicia, así que solo no identifica. PK = {cod_torneo, nro_partido}.<br><br>
+    <b>5. Local y visita son dos FK a EQUIPO</b>, con nombres distintos. Igual que origen y destino en la aerolínea: dos referencias a la misma tabla, distinguidas por el rol.<br><br>
+    <b>6. El marcador son dos columnas</b>, goles_local y goles_visita. Si lo guardaras como texto "2-1" violarías la 1FN: dos valores en una celda.<br><br>
+    <b>7. La categoría del árbitro vive en ARBITRO.</b> Ponerla en PARTIDO daría <span class="fx-i">rut_arbitro → categoria</span>, transitiva, y rompe 3FN.<br><br>
+
+    <b>Comparación con el simulacro 1:</b> es el mismo repertorio — derivado, multivaluado, N:M con atributos, entidad débil, doble FK — con distinto disfraz. Si este te costó menos que la veterinaria, el método ya está funcionando. Si te costó lo mismo, el problema no es la práctica sino que todavía estás resolviendo por intuición en vez de aplicar los cuatro pasos en orden.`}
+  ]
+ },
+ {
+  t:'Simulacro 2 · Fase grupal (120 min)',
+  ej:[
+   {q:'<b>CADENA DE FARMACIAS.</b> Una cadena registra sus ventas con receta en una sola planilla:<br><br><span class="fx-i">VENTA(<u>nro_venta</u>, <u>cod_producto</u>, fecha, rut_cliente, nombre_cliente, prevision, cod_local, direccion_local, comuna_local, nombre_producto, precio_unitario, laboratorio, cantidad, nro_receta, rut_medico, nombre_medico, especialidad_medico)</span><br><br>Reglas del negocio: una venta ocurre en un local y la hace un cliente. Una venta incluye varios productos, y de cada uno se registra la cantidad. Cada producto lo fabrica un laboratorio y tiene un precio de lista. Una venta con receta referencia una receta, emitida por un médico. Un médico tiene una especialidad. Una receta puede amparar varias ventas.<br><br><b>(a)</b> Escriba las dependencias funcionales.<br><b>(b)</b> Diagnostique la forma normal y nombre las dependencias que la rompen.<br><b>(c)</b> Normalice hasta 3FN indicando PK y FK.<br><b>(d)</b> Requisito nuevo: ahora una misma venta puede incluir el mismo producto con dos precios distintos, porque parte va con cobertura de convenio y parte sin. ¿Qué cambia?',
+    a:`<b>(a) Las dependencias funcionales</b><br><br>
+    <span class="fx-i">nro_venta → fecha, rut_cliente, cod_local, nro_receta</span><br>
+    <span class="fx-i">rut_cliente → nombre_cliente, prevision</span><br>
+    <span class="fx-i">cod_local → direccion_local, comuna_local</span><br>
+    <span class="fx-i">cod_producto → nombre_producto, precio_unitario, laboratorio</span><br>
+    <span class="fx-i">nro_receta → rut_medico</span><br>
+    <span class="fx-i">rut_medico → nombre_medico, especialidad_medico</span><br>
+    <span class="fx-i">{nro_venta, cod_producto} → cantidad</span><br><br>
+
+    <b>(b) Diagnóstico</b><br><br>
+    Está en <b>1FN</b> (los valores son atómicos) y <b>falla 2FN</b>.<br><br>
+    <b>Dependencias parciales</b> — dependen solo de nro_venta, que es una parte de la PK {nro_venta, cod_producto}: fecha, rut_cliente, cod_local, nro_receta.<br>
+    Y solo de cod_producto: nombre_producto, precio_unitario, laboratorio.<br><br>
+    <b>Dependencias transitivas</b> — un no-clave determinando a otro no-clave: rut_cliente → nombre_cliente y prevision · cod_local → direccion y comuna · nro_receta → rut_medico · rut_medico → nombre y especialidad.<br><br>
+    El único atributo bien puesto es <b>cantidad</b>, que sí depende de la clave completa.<br><br>
+
+    <b>(c) Normalizado a 3FN</b><br><br>
+    <span class="fx-i">CLIENTE(<u>rut_cliente</u>, nombre_cliente, prevision)</span><br>
+    <span class="fx-i">LOCAL(<u>cod_local</u>, direccion_local, comuna_local)</span><br>
+    <span class="fx-i">LABORATORIO(<u>laboratorio</u>)</span> <i>— opcional, ver nota</i><br>
+    <span class="fx-i">PRODUCTO(<u>cod_producto</u>, nombre_producto, precio_unitario, laboratorio)</span><br>
+    <span class="fx-i">MEDICO(<u>rut_medico</u>, nombre_medico, especialidad_medico)</span><br>
+    <span class="fx-i">RECETA(<u>nro_receta</u>, rut_medico)</span> — FK → MEDICO<br>
+    <span class="fx-i">VENTA(<u>nro_venta</u>, fecha, rut_cliente, cod_local, nro_receta)</span> — FK a CLIENTE, LOCAL y RECETA; nro_receta <b>nullable</b><br>
+    <span class="fx-i">DETALLE(<u>nro_venta</u>, <u>cod_producto</u>, cantidad)</span> — FK a VENTA y PRODUCTO<br><br>
+    <b>Notas de criterio:</b><br>
+    • <i>nro_receta es nullable</i> porque no toda venta lleva receta ("una venta <b>con receta</b> referencia una receta"). Participación opcional.<br>
+    • <i>LABORATORIO como tabla propia</i> solo se justifica si hubiera atributos del laboratorio que guardar. Con el enunciado tal cual, dejar el nombre como columna de PRODUCTO está bien y la separación sería sobre-normalizar — exactamente lo que el profe advierte con "no se trata de crear más tablas".<br>
+    • "Una receta puede amparar varias ventas" confirma que RECETA es tabla aparte con relación 1:N hacia VENTA, y no un atributo de la venta.<br><br>
+
+    <b>(d) El requisito nuevo</b><br><br>
+    Ahora el mismo producto puede aparecer dos veces en una venta, con distinto precio según haya convenio. Con la PK actual {nro_venta, cod_producto} esas dos filas <b>colisionan</b>.<br><br>
+    <span class="fx-i">DETALLE(<u>nro_venta</u>, <u>cod_producto</u>, <u>con_convenio</u>, cantidad, precio_cobrado)</span><br><br>
+    Dos cambios, y los dos hay que justificarlos:<br><br>
+    <b>1. con_convenio entra a la PK.</b> Es lo que distingue las dos líneas. Misma lógica que el id_taller del ejercicio del profe: cuando un requisito dice "el mismo X puede repetirse según Y", Y entra a la clave.<br><br>
+    <b>2. Aparece precio_cobrado en DETALLE</b>, distinto del precio_unitario de PRODUCTO. Esto <b>no</b> es una violación de 3FN aunque lo parezca: son dos hechos diferentes. <i>precio_unitario</i> es el precio de lista vigente del producto; <i>precio_cobrado</i> es lo que efectivamente se cobró en esa línea. Depende de la clave completa nueva.<br><br>
+    Es el mismo criterio de la boleta histórica: guardar el precio al momento de la venta es <b>desnormalización deliberada y justificada</b>, porque los precios de lista cambian y el documento histórico no debe alterarse. Distinto de no saber normalizar — y conviene decirlo así en la justificación, porque demuestra que distingues los dos casos.`}
+  ]
+ },
+ {
+  t:'Pauta de autocorrección',
+  h:`<p>Después de cada simulacro, córrete con esta pauta antes de leer la solución completa. Puntúa sobre 12, como el profe.</p>
+  <table class="tb"><tr><th>Criterio</th><th>Puntos</th><th>Se pierde cuando…</th></tr>
+  <tr><td>Identificó todas las entidades</td><td>2</td><td>faltó alguna, o creó una que no existe</td></tr>
+  <tr><td>PK correctas, incluidas las compuestas</td><td>3</td><td>usó clave simple donde el enunciado da compuesta, o no vio la entidad débil</td></tr>
+  <tr><td>FK correctas y bien ubicadas</td><td>3</td><td>FK en el lado 1 de un 1:N, o FK compuesta partida en varias</td></tr>
+  <tr><td>Atributos en la tabla correcta</td><td>2</td><td>guardó un derivado, o dejó un atributo de vínculo en un lado</td></tr>
+  <tr><td>Está efectivamente en 3FN</td><td>2</td><td>quedó una transitiva sin separar</td></tr></table>
+  <p><b>Lectura del puntaje:</b></p>
+  <ul>
+  <li><b>10-12</b> — estás listo. Repite un simulacro más para consolidar la velocidad.</li>
+  <li><b>7-9</b> — el método lo tienes, fallas en detalles. Vuelve a la sección de errores frecuentes del repaso y haz el otro simulacro.</li>
+  <li><b>menos de 7</b> — vuelve a las guías de Modelo Relacional y Formas Normales antes de seguir simulando. Simular sin base solo repite el error.</li>
+  </ul>
+  <p><b>Lo que casi nadie hace y vale la pena:</b> anota <i>por qué</i> te equivocaste, no solo <i>en qué</i>. "Se me pasó el derivado" y "no entendí que era entidad débil" se arreglan de maneras distintas: lo primero con un checklist de salida, lo segundo volviendo a la teoría.</p>`
+ }
+ ]
+}
+
+,
+
+/* ---- BD · SQL2 · SELECT ---- */
+{
+ id:'bd-sql2', ramo:'bd', tag:'Semana 6', sem:6,
+ titulo:'SQL2 · SELECT',
+ bajada:'Consultar datos: WHERE, ORDER BY, agregación y GROUP BY. Para el quiz online BD-SQL2-1 del 9 de septiembre.',
+ min:50,
+ secciones:[
+ {
+  t:'Dónde estamos parados',
+  h:`<p>SQL1 fue <b>estructura y datos</b>: crear tablas, meter filas, modificarlas. SQL2 es <b>preguntar</b>.</p>
+  <table class="tb"><tr><th></th><th>Qué hace</th><th>Comandos</th></tr>
+  <tr><td><b>DDL</b></td><td>define la estructura</td><td>CREATE, ALTER, DROP</td></tr>
+  <tr><td><b>DML</b></td><td>mueve los datos</td><td>INSERT, UPDATE, DELETE</td></tr>
+  <tr><td><b>DQL</b></td><td><b>consulta</b> los datos</td><td><b>SELECT</b> ← acá estamos</td></tr></table>
+  <p>Y ojo con el alcance del temario: <b>SQL2 es SELECT sobre una tabla</b> más agregación. Los SELECT anidados son SQL3 y los JOIN son SQL4, con entregas el 23 de septiembre. Si en el quiz aparece un JOIN, es de arrastre, no el foco.</p>
+  <p>Todos los ejemplos usan estas tablas:</p>
+  <table class="tb"><tr><th>ALUMNO</th><th>INSCRIPCION</th></tr>
+  <tr><td>rut, nombre, carrera, ingreso</td><td>rut, cod, nota, semestre</td></tr></table>`,
+  ojo:'SELECT es el único comando que NO modifica nada. Puedes equivocarte todas las veces que quieras sin romper la base — al revés de UPDATE y DELETE. Eso lo hace el lugar seguro para experimentar, y explica por qué es donde más se pregunta.'
+ },
+ {
+  t:'La estructura completa, en orden',
+  h:`<p>Un SELECT tiene seis cláusulas y <b>el orden en que se escriben es obligatorio</b>:</p>
+  <div class="fx">SELECT&nbsp;&nbsp;&nbsp;columnas<br>
+  FROM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabla<br>
+  WHERE&nbsp;&nbsp;&nbsp;&nbsp;condición de filas<br>
+  GROUP BY&nbsp;columnas de agrupación<br>
+  HAVING&nbsp;&nbsp;&nbsp;condición de grupos<br>
+  ORDER BY&nbsp;columnas de orden</div>
+  <p>Pero <b>el motor las ejecuta en otro orden</b>, y entender esto resuelve la mitad de las preguntas del quiz:</p>
+  <p class="fx">FROM → WHERE → GROUP BY → HAVING → <b>SELECT</b> → ORDER BY</p>
+  <p>Fíjate dónde queda SELECT: <b>casi al final</b>. De ahí salen dos consecuencias que se preguntan siempre:</p>
+  <ul>
+  <li>En <b>WHERE no puedes usar un alias</b> definido en el SELECT — cuando WHERE corre, el SELECT todavía no se ejecutó y el alias no existe.</li>
+  <li>En <b>ORDER BY sí puedes</b>, porque va después.</li>
+  </ul>`,
+  ojo:'Esa diferencia parece un capricho hasta que miras el orden de ejecución. No la memorices como regla suelta: memoriza la secuencia FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY y todas las reglas de este tipo se deducen solas.'
+ },
+ {
+  t:'SELECT y WHERE',
+  h:`<p><b>Lo básico:</b></p>
+  <div class="fx">SELECT nombre, carrera FROM Alumno;<br>
+  SELECT * FROM Alumno;&nbsp;&nbsp;<i>— todas las columnas</i><br>
+  SELECT DISTINCT carrera FROM Alumno;&nbsp;&nbsp;<i>— sin repetir</i></div>
+  <p><b>DISTINCT</b> es importante: a diferencia del álgebra relacional, donde π elimina duplicados <b>sola</b>, en SQL los duplicados <b>se quedan</b> salvo que pidas DISTINCT. Es la diferencia entre trabajar con conjuntos y con multiconjuntos, y es pregunta segura.</p>
+  <p><b>Los operadores del WHERE:</b></p>
+  <table class="tb"><tr><th>Operador</th><th>Ejemplo</th><th>Qué hace</th></tr>
+  <tr><td>= ≠ &lt; &gt; &lt;= &gt;=</td><td>nota &gt;= 4</td><td>comparación (en SQL el "distinto" es &lt;&gt; o !=)</td></tr>
+  <tr><td><b>BETWEEN</b></td><td>nota BETWEEN 4 AND 5</td><td>rango, <b>incluye ambos extremos</b></td></tr>
+  <tr><td><b>IN</b></td><td>carrera IN ('Industrial','Civil')</td><td>pertenece a la lista</td></tr>
+  <tr><td><b>LIKE</b></td><td>nombre LIKE 'A%'</td><td>patrón de texto</td></tr>
+  <tr><td><b>IS NULL</b></td><td>nota IS NULL</td><td>el único modo de preguntar por nulo</td></tr>
+  <tr><td>AND OR NOT</td><td>a &gt; 1 AND b &lt; 2</td><td>combinan condiciones</td></tr></table>
+  <p><b>Los comodines de LIKE:</b> <code>%</code> es "cualquier cantidad de caracteres, incluso ninguno" y <code>_</code> es "exactamente un carácter".</p>
+  <div class="fx">'A%' → empieza con A &nbsp;·&nbsp; '%z' → termina en z<br>'%ana%' → contiene ana &nbsp;·&nbsp; '_a%' → la segunda letra es a</div>`,
+  ojo:'BETWEEN incluye los dos extremos: nota BETWEEN 4 AND 5 sí toma el 4,0 y el 5,0. Si en el quiz piden "mayor que 4", BETWEEN 4 AND 5 está mal — ahí va nota > 4 AND nota <= 5. Es un error de un solo carácter que cuesta la pregunta completa.'
+ },
+ {
+  t:'Alias y ORDER BY',
+  h:`<p><b>Alias con AS</b> — le cambia el nombre a una columna en el resultado:</p>
+  <div class="fx">SELECT nombre AS estudiante, nota * 10 AS puntaje<br>FROM Inscripcion;</div>
+  <p>Sirve sobre todo para nombrar columnas calculadas, que sin alias salen con un nombre feo o vacío.</p>
+  <p><b>ORDER BY</b> — ordena el resultado:</p>
+  <div class="fx">SELECT nombre, nota FROM Inscripcion<br>ORDER BY nota DESC, nombre ASC;</div>
+  <ul>
+  <li><b>ASC</b> ascendente (es el valor por defecto, se puede omitir)</li>
+  <li><b>DESC</b> descendente</li>
+  <li>Con varias columnas, ordena por la primera y usa la segunda para desempatar</li>
+  </ul>
+  <p><b>LIMIT</b> corta el resultado, y se usa casi siempre pegado a ORDER BY:</p>
+  <div class="fx">SELECT nombre, nota FROM Inscripcion<br>ORDER BY nota DESC<br>LIMIT 3;&nbsp;&nbsp;<i>— las tres mejores notas</i></div>
+  <p>Sin ORDER BY, LIMIT te da tres filas cualesquiera: en una tabla el orden no está garantizado.</p>`
+ },
+ {
+  t:'Funciones de agregación',
+  h:`<p>Colapsan muchas filas en <b>un solo valor</b>.</p>
+  <table class="tb"><tr><th>Función</th><th>Qué devuelve</th></tr>
+  <tr><td><b>COUNT</b></td><td>cuántas filas</td></tr>
+  <tr><td><b>SUM</b></td><td>la suma</td></tr>
+  <tr><td><b>AVG</b></td><td>el promedio</td></tr>
+  <tr><td><b>MIN</b> / <b>MAX</b></td><td>el menor / el mayor</td></tr></table>
+  <div class="fx">SELECT COUNT(*) AS total,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AVG(nota) AS promedio,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX(nota) AS mejor<br>FROM Inscripcion;</div>
+  <p><b>La distinción que más cae en el quiz:</b></p>
+  <table class="tb"><tr><th>Forma</th><th>Cuenta</th></tr>
+  <tr><td><b>COUNT(*)</b></td><td><b>todas</b> las filas, nulos incluidos</td></tr>
+  <tr><td><b>COUNT(nota)</b></td><td>solo las filas donde nota <b>NO es nula</b></td></tr>
+  <tr><td><b>COUNT(DISTINCT cod)</b></td><td>cuántos valores <b>distintos</b> de cod hay</td></tr></table>
+  <p><b>Ejemplo concreto.</b> Si hay 10 inscripciones y 3 tienen la nota en NULL:</p>
+  <div class="fx">COUNT(*) → 10 &nbsp;·&nbsp; COUNT(nota) → 7</div>
+  <p>Y lo mismo con las demás: <b>AVG, SUM, MIN y MAX ignoran los nulos</b>. Por eso AVG(nota) del ejemplo divide por 7, no por 10 — que casi nunca es lo que la gente asume.</p>`,
+  ojo:'No puedes mezclar una columna suelta con una función de agregación sin GROUP BY. "SELECT nombre, COUNT(*) FROM Alumno;" es un error: COUNT(*) devuelve un valor y nombre devuelve muchos, así que no calzan. O agrupas, o pides solo agregados.'
+ },
+ {
+  t:'GROUP BY y HAVING',
+  h:`<p><b>GROUP BY</b> parte la tabla en grupos y aplica la agregación <b>a cada grupo por separado</b>.</p>
+  <div class="fx">SELECT carrera, COUNT(*) AS cuantos<br>FROM Alumno<br>GROUP BY carrera;</div>
+  <p>En vez de un número total, te da un número <b>por carrera</b>.</p>
+  <p><b>La regla de oro:</b> todo lo que aparece en el SELECT y no está dentro de una función de agregación <b>tiene que estar en el GROUP BY</b>.</p>
+  <div class="fx">✓ SELECT carrera, COUNT(*) … GROUP BY carrera<br>
+  ✗ SELECT carrera, nombre, COUNT(*) … GROUP BY carrera</div>
+  <p>El segundo falla porque dentro de un grupo hay muchos nombres y el motor no sabe cuál mostrar.</p>
+  <p><b>HAVING</b> filtra <b>grupos</b>, igual que WHERE filtra filas:</p>
+  <div class="fx">SELECT carrera, COUNT(*) AS cuantos<br>FROM Alumno<br>GROUP BY carrera<br>HAVING COUNT(*) &gt;= 10;</div>
+  <p><b>WHERE vs HAVING</b> — la pregunta clásica del quiz:</p>
+  <table class="tb"><tr><th></th><th>Filtra</th><th>Cuándo corre</th><th>¿Puede usar COUNT/AVG?</th></tr>
+  <tr><td><b>WHERE</b></td><td>filas</td><td><b>antes</b> de agrupar</td><td><b>no</b></td></tr>
+  <tr><td><b>HAVING</b></td><td>grupos</td><td><b>después</b> de agrupar</td><td><b>sí</b></td></tr></table>
+  <p><b>Las dos juntas en una consulta:</b></p>
+  <div class="fx">SELECT cod, AVG(nota) AS promedio<br>
+  FROM Inscripcion<br>
+  WHERE semestre = '2026-2'&nbsp;&nbsp;<i>— filtra filas primero</i><br>
+  GROUP BY cod<br>
+  HAVING AVG(nota) &lt; 4&nbsp;&nbsp;<i>— filtra grupos después</i><br>
+  ORDER BY promedio ASC;</div>
+  <p>Se lee así: de las inscripciones de este semestre, agrupadas por ramo, muéstrame los ramos cuyo promedio es rojo, del peor hacia arriba.</p>`,
+  ojo:'Si la condición se puede poner en WHERE, ponla en WHERE. Filtrar antes de agrupar es más barato: el motor arma menos grupos. HAVING es solo para lo que no se puede saber hasta después de agrupar, o sea, condiciones sobre COUNT, SUM, AVG, MIN o MAX.'
+ },
+ {
+  t:'Ejercicios',
+  ej:[
+   {q:'Escribe: nombre y carrera de los alumnos que ingresaron entre 2022 y 2024, ordenados por carrera y dentro de cada carrera por nombre.',
+    a:`<div class="fx">SELECT nombre, carrera<br>FROM Alumno<br>WHERE ingreso BETWEEN 2022 AND 2024<br>ORDER BY carrera, nombre;</div>
+    <b>Los detalles:</b><br>
+    • BETWEEN <b>incluye</b> 2022 y 2024. Si el enunciado dijera "después de 2022", habría que usar ingreso > 2022.<br>
+    • En ORDER BY, la segunda columna desempata dentro de la primera. Ese es exactamente el "dentro de cada carrera".<br>
+    • ASC es el default, así que no hace falta escribirlo.`},
+   {q:'¿Cuál es la diferencia de resultado entre estas dos consultas, si la tabla tiene 20 inscripciones y 5 tienen nota nula?<br><br>SELECT COUNT(*) FROM Inscripcion;<br>SELECT COUNT(nota) FROM Inscripcion;',
+    a:`<b>La primera devuelve 20. La segunda devuelve 15.</b><br><br>
+    <b>COUNT(*)</b> cuenta filas, sin mirar el contenido. Las 20 existen, así que cuenta 20.<br><br>
+    <b>COUNT(nota)</b> cuenta <b>valores no nulos</b> de esa columna. Los 5 nulos no son valores — son "no se sabe" — así que no entran.<br><br>
+    <b>La consecuencia que casi nadie ve:</b> lo mismo pasa con AVG. <span class="fx-i">AVG(nota)</span> suma las 15 notas conocidas y divide <b>por 15</b>, no por 20. Si tú esperabas el promedio "sobre el total", el resultado te va a parecer alto y no vas a saber por qué.<br><br>
+    Si quisieras tratar los nulos como cero tendrías que decirlo explícitamente con COALESCE(nota, 0), pero eso ya es otra cosa — y normalmente es un error conceptual: una nota que no existe no es un cero.`},
+   {q:'Escribe: los ramos que tienen más de 30 inscritos este semestre, mostrando el código y la cantidad, del más masivo al menos masivo.',
+    a:`<div class="fx">SELECT cod, COUNT(*) AS inscritos<br>
+    FROM Inscripcion<br>
+    WHERE semestre = '2026-2'<br>
+    GROUP BY cod<br>
+    HAVING COUNT(*) &gt; 30<br>
+    ORDER BY inscritos DESC;</div>
+    <b>Por qué cada cláusula está donde está:</b><br><br>
+    <b>WHERE semestre</b> — es una condición sobre <b>filas</b> individuales y se puede evaluar antes de agrupar. Va en WHERE, que es más barato.<br><br>
+    <b>HAVING COUNT(*) > 30</b> — "más de 30 inscritos" es una propiedad del <b>grupo</b>. Es imposible saberlo antes de agrupar, así que no puede ir en WHERE.<br><br>
+    <b>ORDER BY inscritos</b> — acá sí se puede usar el alias, porque ORDER BY se ejecuta <b>después</b> del SELECT. Si intentaras <span class="fx-i">WHERE inscritos > 30</span> daría error: cuando WHERE corre, ese alias todavía no existe.<br><br>
+    <b>Si te lo preguntan al revés:</b> "los ramos con menos de 5 inscritos" es el mismo esquema con HAVING COUNT(*) < 5. Lo que nunca cambia es que la condición sobre el conteo va en HAVING.`},
+   {q:'Esta consulta da error. ¿Por qué, y cómo se arregla?<br><br>SELECT carrera, nombre, AVG(ingreso)<br>FROM Alumno<br>GROUP BY carrera;',
+    a:`<b>El error:</b> <i>nombre</i> está en el SELECT pero no está en el GROUP BY ni dentro de una función de agregación.<br><br>
+    <b>Por qué es un error de verdad y no una manía del motor.</b> Al agrupar por carrera, cada grupo junta muchos alumnos. Para ese grupo, AVG(ingreso) tiene un valor único — el promedio. Pero <i>nombre</i> tiene <b>doscientos valores distintos</b>, uno por alumno. ¿Cuál debería mostrar? No hay respuesta, así que el motor rechaza la consulta.<br><br>
+    <b>Las tres formas de arreglarlo, según lo que quisieras:</b><br><br>
+    <b>1. Si querías el promedio por carrera</b> — saca el nombre:<br>
+    <span class="fx-i">SELECT carrera, AVG(ingreso) FROM Alumno GROUP BY carrera;</span><br><br>
+    <b>2. Si querías el promedio por alumno dentro de la carrera</b> — agrega el nombre al GROUP BY:<br>
+    <span class="fx-i">SELECT carrera, nombre, AVG(ingreso) FROM Alumno GROUP BY carrera, nombre;</span><br>
+    (aunque acá el promedio de un solo alumno es su propio año de ingreso, así que probablemente no era eso)<br><br>
+    <b>3. Si querías un nombre cualquiera del grupo</b> — envuélvelo en una agregación:<br>
+    <span class="fx-i">SELECT carrera, MIN(nombre), AVG(ingreso) FROM Alumno GROUP BY carrera;</span><br><br>
+    <b>La regla para el quiz, en una línea:</b> todo lo del SELECT o está en el GROUP BY, o está dentro de una función de agregación. Sin excepciones.`}
+  ]
+ }
+ ]
+}
+
 ]);

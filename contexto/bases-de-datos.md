@@ -83,16 +83,48 @@ Están en `app/guias/bd.js`:
    `clase03-propuesta.pdf` del profe Díaz completo: el método identificar-conectar-separar-verificar,
    el quiz de la planilla (diseño A vs B) y el ejercicio final de la editorial de revistas resuelto
    paso a paso, con los cinco detalles que deciden el puntaje.
+6. Simulacros de C1 (semana 5) — 4 ensayos con el formato real: fase individual de 45 min
+   (Veterinaria, Torneo deportivo) y fase grupal de 120 min (Aerolínea regional, Cadena de
+   farmacias), con solución y pauta de autocorrección sobre 12 puntos.
+7. SQL2 · SELECT (semana 6) — 7 secciones, 4 ejercicios. WHERE, ORDER BY, agregación,
+   GROUP BY vs HAVING y el orden de ejecución.
+
+## Repasos en la sección Pruebas del dashboard
+
+Van en `app/repasos/bd.js` (estructura distinta a las guías, documentada en el encabezado del archivo).
+
+- **bd-c1** · C1 Modelación, 3 de septiembre. Siete secciones de resumen (qué entra, formato,
+  método del profe, formulario ER→MR, formulario de formas normales, los siete errores caros,
+  qué hacer los últimos 10 min) más un checklist de 11 ejercicios.
+
+## Notación del profe (del cheatsheet de la clase 04)
+
+Importa porque difiere del estándar y conviene escribir como él:
+
+- Álgebra relacional: **solo cuatro operadores** — σ selección, π proyección, ⋈ reunión
+  condicional y ⋈ reunión natural. No usa división, diferencia, unión ni producto cartesiano.
+- SQL: `INT` (no INTEGER), `DECIMAL(10,2)` (no NUMERIC), **FK inline** con `REFERENCES`
+  en la columna en vez de `FOREIGN KEY (...)` al final, tablas en `PascalCase` y columnas
+  en `camelCase`. PK compuesta sí va como línea aparte al final.
+- El cheatsheet está en Canvas, carpeta Cheatsheet: hay de las clases 02, 03, 04, 06, 07 y 09.
+  El de la 04 se bajó (`clase04_cheatsheet.pdf`); los de 06 y 07 todavía no.
 
 ## Pendiente
 
-- SQL1 a SQL4
+- SQL2 a SQL4 (la guía de SQL2 ya está escrita; falta SQL3 y SQL4)
 - Vistas, procedimientos almacenados, triggers
 - Conexión por Python y gráficos
 
 ## Estado actual
 
-Gabo ya rindió un control y dice que va bien.
+**Al 28 de agosto:** rindió los tres quizzes del 26 (BD-AR-1, BD-AR-2, BD-SQL1-1) y le fue bien.
+El control individual y el grupal de esa semana también salieron bien; dice que entendió todo.
+
+**Lo que viene ahora: C1 Modelación, jueves 3 de septiembre.** Es de ER + MR + FN, NO de
+Álgebra Relacional ni SQL. Formato: 45 min individual (cada uno propone su propio modelo) +
+120 min grupal, todo en papel. Después viene SQL2 (SELECT) con entrega BD-SQL2-1 el 9 de septiembre.
+
+Gabo ya rindió un control anterior y dice que va bien.
 
 **Aviso del profe (lámina 21 de la clase 03):** comparó las tasas de perfectos de este semestre
 contra ocho semestres anteriores con test de Fisher y corrección Holm. FN-1 saltó de 10% a 65%,

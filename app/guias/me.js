@@ -70,7 +70,7 @@ window.GUIAS = (window.GUIAS || []).concat([
 {
  id:'me-u2', ramo:'me', tag:'Semana 2', sem:2,
  titulo:'Proceso de Poisson',
- bajada:'Capítulo 2, la materia que acabas de ver. Conteo, tiempos entre eventos, descomposición, suma y caso no homogéneo.',
+ bajada:'Primera parte del Capítulo 2: qué es un proceso de conteo, las dos caras del proceso de Poisson y la distribución condicional de los tiempos.',
  min:55,
  secciones:[
  {
@@ -101,35 +101,11 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'La regla para saber qué usar: si la pregunta empieza con "cuántos" y menciona un periodo, es Poisson. Si empieza con "cuánto tiempo" o "cuál es la probabilidad de que pase más de X minutos", es exponencial. Y si dice "hasta el tercer cliente", es Gamma.'
  },
  {
-  t:'Descomposición, suma y mezcla',
-  h:`<p>Tres operaciones que aparecen en casi toda prueba.</p>
-  <p><b>Descomposición (thinning).</b> Si cada evento de un Poisson(λ) se clasifica como tipo A con probabilidad p, y tipo B con probabilidad 1−p, entonces:</p>
-  <p class="fx">N<sub>A</sub>(t) ~ Poisson(λp)  y  N<sub>B</sub>(t) ~ Poisson(λ(1−p))</p>
-  <p>Y lo notable: <b>son independientes entre sí</b>. Eso es lo que sorprende, porque vienen del mismo proceso original.</p>
-  <p><b>Suma (superposición).</b> Si juntas dos procesos independientes:</p>
-  <p class="fx">N₁ ~ Poisson(λ₁),  N₂ ~ Poisson(λ₂)  ⟹  N₁ + N₂ ~ Poisson(λ₁ + λ₂)</p>
-  <p>Y la probabilidad de que el próximo evento venga del proceso 1 es λ₁/(λ₁+λ₂).</p>
-  <p><b>Mezcla.</b> Es la suma mirada al revés: si juntaste k procesos y sabes que en total ocurrieron m eventos, ¿cuántos venían del proceso i? La respuesta es binomial. Está desarrollada en la guía de la semana 3.</p>`,
-  ojo:'Descomposición y suma son la razón de que Poisson sea tan usado: puedes separar y juntar procesos libremente sin salirte de la familia. Ninguna otra distribución de conteo se comporta tan bien, y por eso se modela con Poisson aunque la realidad sea más sucia.'
- },
- {
   t:'Distribución condicional de los tiempos',
   h:`<p>Un resultado que se ve raro pero es de los más elegantes del capítulo.</p>
   <p><b>Si sabes que ocurrió exactamente un evento en (0, t)</b>, entonces el instante en que ocurrió se distribuye <b>uniforme</b> en ese intervalo. No hay preferencia por ningún momento.</p>
   <p>Generalizando: dado que ocurrieron n eventos en (0, t), los instantes se distribuyen como n puntos uniformes independientes ordenados de menor a mayor (estadísticos de orden).</p>
   <p><b>Qué significa:</b> el proceso de Poisson reparte los eventos "sin memoria y sin preferencia". Es la formalización de que las llegadas son completamente aleatorias.</p>`
- },
- {
-  t:'Proceso de Poisson no homogéneo',
-  h:`<p>Se relaja el supuesto de tasa constante: ahora λ(t) varía con el tiempo. Modela cosas reales, como que a un local llegue más gente al mediodía que a las 4 de la tarde.</p>
-  <p>Aparece la <b>función de intensidad acumulada</b>:</p>
-  <p class="fx">m(t) = ∫₀ᵗ λ(u) du</p>
-  <p>Y el conteo pasa a ser:</p>
-  <p class="fx">N(t) ~ Poisson( m(t) )</p>
-  <p class="fx">N(t) − N(s) ~ Poisson( m(t) − m(s) )</p>
-  <p><b>Lo que se pierde:</b> los incrementos estacionarios. Ya no da lo mismo dónde empieza el intervalo, solo su largo. Los incrementos <b>independientes</b> sí se mantienen.</p>
-  <p><b>Y ojo con los tiempos entre eventos:</b> dejan de ser exponenciales idénticamente distribuidos. Esa es la diferencia práctica más grande con el caso homogéneo.</p>`,
-  ojo:'Regla mecánica para resolver: donde en el caso homogéneo escribías λt, en el no homogéneo escribes m(t) = ∫λ(u)du. Todo lo demás de las fórmulas de conteo se mantiene igual. Con eso resuelves la mayoría de los ejercicios.'
  },
  {
   t:'Formulario',
@@ -154,14 +130,14 @@ window.GUIAS = (window.GUIAS || []).concat([
 
 /* ---- ME · U2 (2.ª parte) DESCOMPOSICIÓN, SUMA Y CONDICIONAMIENTO ---- */
 {
- id:'me-u2b', ramo:'me', tag:'Semana 3', sem:3,
- titulo:'Descomposición, suma y condicionamiento',
- bajada:'La segunda mitad del Capítulo 2, siguiendo el PPT de cátedra. Separar procesos, juntarlos, volver atrás y condicionar en el total. Todo esto entra en el Control 1.',
+ id:'me-u2b', ramo:'me', tag:'Semanas 3 y 4', sem:3,
+ titulo:'Descomposición, condicionamiento y suma',
+ bajada:'Lo que se pasó en las semanas 3 y 4: separar procesos, condicionar en el total y juntarlos. Este es exactamente el alcance de la Prueba 1.',
  min:45,
  secciones:[
  {
   t:'Sí, la descomposición entra — y es lo que más se pregunta',
-  h:`<p>Respuesta corta: <b>sí, y es justo el techo</b>. El profesor dijo en clase que el Control 1 entra <b>hasta descomposición</b>. O sea que de esta guía, las secciones de descomposición y todo lo anterior entran; suma, mezcla y no homogéneo quedan para la <b>Prueba 1</b> del 2 de septiembre. El detalle está en el repaso del Control 1, en la sección Pruebas.</p>
+  h:`<p>Sí. En el Control 1 el techo fue descomposición; para la <b>Prueba 1</b> el techo es <b>suma</b>, que es donde quedó la cátedra al cerrar la semana 4. Mezcla y no homogéneo se ven en la semana 5, o sea <b>después</b> de la prueba: están en la guía de esa semana y no hay que estudiarlos ahora.</p>
   <p>Respuesta larga: no solo entra, es <b>el tema que más aparece</b> en los controles pasados. Míralo en los enunciados reales del archivo de Canvas:</p>
   <ul>
   <li><b>Centro de salud (Control 1, marzo 2025):</b> pacientes tipo 1 y tipo 2, y además Isapre o Fonasa. Es descomposición <i>doble</i>.</li>
@@ -170,7 +146,7 @@ window.GUIAS = (window.GUIAS || []).concat([
   <li><b>El repaso de Prueba 1 del propio PPT:</b> solicitudes de crédito clasificadas por tipo de financiamiento <i>y</i> por resultado crediticio.</li>
   </ul>
   <p>La señal en el enunciado siempre es la misma: <b>"cada evento, de manera independiente, es de tipo A con probabilidad p"</b>. Cuando leas eso, ya sabes lo que viene.</p>`,
-  ojo:'El PPT del capítulo 2 tiene esta estructura: proceso de conteo → proceso de Poisson → tiempo entre eventos → tiempo del k-ésimo evento → distribución condicional de los tiempos → descomposición → suma → mezcla → no homogéneo → repaso de Prueba 1. Para el Control 1 entra hasta descomposición; suma, mezcla y no homogéneo entran recién en la Prueba 1.'
+  ojo:'El PPT del capítulo 2 tiene esta estructura: proceso de conteo → proceso de Poisson → tiempo entre eventos → tiempo del k-ésimo evento → distribución condicional de los tiempos → descomposición → suma → mezcla → no homogéneo → repaso de Prueba 1. Para la Prueba 1 entra hasta suma. Mezcla y no homogéneo vienen en la semana 5, después de la prueba.'
  },
  {
   t:'Descomposición (thinning)',
@@ -184,8 +160,8 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'La estructura del argumento es "condiciono en el total, uso binomial, sumo sobre todos los totales posibles". Ese esquema reaparece en la mezcla y en el condicionamiento del final. Si lo entiendes una vez, entiendes las tres.'
  },
  {
-  t:'Suma (superposición) — para la Prueba 1',
-  h:`<p><i>Fuera del alcance del Control 1.</i> Al revés: tienes N₁(t) y N₂(t) independientes con tasas λ₁ y λ₂, y los juntas en N(t) = N₁(t) + N₂(t). ¿Sigue siendo Poisson?</p>
+  t:'Suma (superposición) — cierre de la semana 4',
+  h:`<p>Al revés: tienes N₁(t) y N₂(t) independientes con tasas λ₁ y λ₂, y los juntas en N(t) = N₁(t) + N₂(t). ¿Sigue siendo Poisson?</p>
   <p><b>Sí</b>, y la demostración del PPT es corta y bonita. Mira el primer tiempo entre eventos del proceso juntado: es el que llegue primero, o sea el <b>mínimo</b>:</p>
   <p class="fx">T₁ = mín(X₁, Y₁)</p>
   <p class="fx">P(T₁ &gt; x) = P(X₁ &gt; x)·P(Y₁ &gt; x) = e<sup>−λ₁x</sup>·e<sup>−λ₂x</sup> = e<sup>−(λ₁+λ₂)x</sup></p>
@@ -194,16 +170,6 @@ window.GUIAS = (window.GUIAS || []).concat([
   <p>Generalizando a k procesos, la tasa es la suma de las tasas. Y la probabilidad de que el próximo evento venga del proceso i:</p>
   <p class="fx">λ<sub>i</sub> / (λ₁ + … + λ<sub>k</sub>)</p>`,
   ojo:'Fíjate que "el mínimo de exponenciales independientes es exponencial con la suma de las tasas" es el mismo resultado que usaste en la P5 de la Ayudantía 1 con las pilas. No es un truco aparte: es literalmente por qué la superposición funciona.'
- },
- {
-  t:'Mezcla: la suma mirada hacia atrás — para la Prueba 1',
-  h:`<p><i>Fuera del alcance del Control 1.</i> Acá hay que tener cuidado con el nombre, porque "mezcla" en este curso significa algo <b>muy específico</b>: juntaste k procesos, observaste el total, y ahora quieres saber <b>cuántos venían de cada uno</b>.</p>
-  <p>Si X(t) = Y₁(t) + … + Y<sub>k</sub>(t) y sabes que en total ocurrieron m eventos:</p>
-  <p class="fx">Y<sub>i</sub>(t) | X(t) = m  ~  Binomial( m , λ<sub>i</sub> / Σλ<sub>j</sub> )</p>
-  <p><b>La demostración</b> (el PPT la hace para k = 2) es directa: escribes la conjunta, usas independencia, reemplazas las tres Poisson, y los λt se cancelan dejando solo el cociente de tasas.</p>
-  <p class="fx">P(X₁ = k | X = m) = [P(X₁ = k)·P(X₂ = m−k)] / P(X = m) = C(m,k) (λ₁/(λ₁+λ₂))<sup>k</sup> (λ₂/(λ₁+λ₂))<sup>m−k</sup></p>
-  <p><b>Cómo reconocerla en el enunciado:</b> "si en 5 minutos pasaron 10 productos, ¿cuál es la probabilidad de que al menos 2 fueran lápices?". Te dan el total mezclado y preguntan por la composición.</p>`,
-  ojo:'Descomposición y mezcla son la misma moneda. En la descomposición el enunciado te da la probabilidad p de clasificación. En la mezcla te da dos tasas y la p sale sola como λᵢ/Σλ. Si te confundes, pregúntate: ¿me dieron un porcentaje o me dieron dos tasas?'
  },
  {
   t:'Condicionar en el total: la binomial con u/t',
@@ -218,18 +184,7 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'Cuando el enunciado empieza con "sabiendo que llegaron n en tal periodo", la tasa λ deja de importar: se cancela. Si te ves reemplazando λ en un ejercicio de este tipo, algo se desvió.'
  },
  {
-  t:'No homogéneo, y la observación que cierra el capítulo (esto es para la Prueba 1)',
-  h:`<p>Esta sección <b>no entra en el Control 1</b>. Léela igual, porque es la síntesis del capítulo, pero sin urgencia hasta el 2 de septiembre.</p>
-  <p>Con λ(t) variable aparece la intensidad acumulada m(t) = ∫₀ᵗ λ(s) ds, y todo lo de conteo se mantiene reemplazando λt por m(t).</p>
-  <p>Pero el PPT termina con una <b>observación</b> que es la joya del capítulo y que generaliza la sección anterior. Para un proceso no homogéneo, condicionando en N(t) = n:</p>
-  <p class="fx">P(N(u) = k | N(t) = n) = C(n,k) (m(u)/m(t))<sup>k</sup> (1 − m(u)/m(t))<sup>n−k</sup></p>
-  <p>Y con eso se responde la pregunta por el k-ésimo evento:</p>
-  <p class="fx">P(S<sub>k</sub> &lt; u | N(t) = n) = P(N(u) ≥ k | N(t) = n) = Σ<sub>j≥k</sub> C(n,j) (m(u)/m(t))<sup>j</sup> (1 − m(u)/m(t))<sup>n−j</sup></p>
-  <p><b>Qué te dice:</b> en el caso homogéneo la probabilidad era la razón de <i>largos</i>, u/t. En el no homogéneo es la razón de <i>intensidades acumuladas</i>, m(u)/m(t). El tiempo deja de medirse en minutos y pasa a medirse en "eventos esperados".</p>`,
-  ojo:'Fíjate que acá vuelven a aparecer juntas las dos ideas del curso: la equivalencia S_k < u ⟺ N(u) ≥ k, y el condicionamiento binomial. Es la síntesis del capítulo, y por eso el profesor la dejó al final del PPT justo antes del repaso de Prueba 1.'
- },
- {
-  t:'Los dos ejercicios que el profesor resolvió en clase',
+  t:'El ejercicio que el profesor resolvió en clase',
   h:`<p>El PPT trae dos ejercicios largos <b>con solución</b>. Son lo más cercano a lo que va a preguntar, porque los eligió él.</p>
   <p><b>1. Consolidación de aprendizajes — la cinta transportadora.</b> Bolígrafos a 5 por minuto y lápices a 130 por hora (ojo con las unidades). Cinco partes:</p>
   <label class="chk"><input type="checkbox" data-c="me.u2b.cinta.1"><span>En 3 minutos, probabilidad de que pasen <b>menos lápices que bolígrafos</b>.</span></label>
@@ -237,8 +192,8 @@ window.GUIAS = (window.GUIAS || []).concat([
   <label class="chk"><input type="checkbox" data-c="me.u2b.cinta.3"><span>Si en 5 minutos pasaron 10 productos, probabilidad de que al menos 2 fueran lápices. <i>(Mezcla.)</i></span></label>
   <label class="chk"><input type="checkbox" data-c="me.u2b.cinta.4"><span>Probabilidad de que pasen menos de 6 productos para obtener el <b>tercer bolígrafo</b>.</span></label>
   <label class="chk"><input type="checkbox" data-c="me.u2b.cinta.5"><span>Probabilidad de que el primer bolígrafo llegue entre el segundo 20 y el segundo 40.</span></label>
-  <p style="margin-top:14px">Este mismo enunciado apareció en la <b>Prueba 1 del 1 de septiembre de 2023</b>. No es casualidad.</p>
-  <p><b>2. Repaso Prueba 1 — el concesionario automotriz.</b> Dos canales de solicitudes (presencial y digital) como Poisson independientes, y cada solicitud clasificada por tipo de financiamiento <i>y</i> por resultado crediticio. Cinco partes:</p>
+  <p style="margin-top:14px">Este mismo enunciado apareció en la <b>Prueba 1 del 1 de septiembre de 2023</b>. No es casualidad: es el ejercicio que cierra el alcance de tu prueba.</p>
+  <p><b>2. Repaso Prueba 1 — el concesionario automotriz.</b> <i>(Ojo: sus partes 4 y 5 usan condicionamiento avanzado y no homogéneo, que se ven en la semana 5. Haz solo las partes 1, 2 y 3.)</i> Dos canales de solicitudes (presencial y digital) como Poisson independientes, y cada solicitud clasificada por tipo de financiamiento <i>y</i> por resultado crediticio. Cinco partes:</p>
   <label class="chk"><input type="checkbox" data-c="me.u2b.conc.1"><span>Probabilidad de exactamente k solicitudes aprobadas en un mes. <i>(Suma, luego descomposición.)</i></span></label>
   <label class="chk"><input type="checkbox" data-c="me.u2b.conc.2"><span>Con 2 solicitudes presenciales en un día, probabilidad de al menos una leasing <b>y</b> al menos una aprobada.</span></label>
   <label class="chk"><input type="checkbox" data-c="me.u2b.conc.3"><span>Probabilidad de que las tres primeras solicitudes del día sean, <b>en ese orden</b>, tres combinaciones dadas de canal, tipo y resultado.</span></label>
@@ -261,6 +216,44 @@ window.GUIAS = (window.GUIAS || []).concat([
   <tr><td>k-ésimo evento antes de u, dado n</td><td>Σ<sub>j≥k</sub> C(n,j)(m(u)/m(t))<sup>j</sup>(1−m(u)/m(t))<sup>n−j</sup></td></tr>
   </table>
   <p>Junta esta tabla con la de la guía de la semana 2 y tienes el formulario manuscrito completo para el Control 1.</p>`
+ }
+ ]
+}
+,
+
+/* ---- ME · U2 (cierre) MEZCLA Y NO HOMOGÉNEO ---- */
+{
+ id:'me-u2c', ramo:'me', tag:'Semana 5', sem:5,
+ titulo:'Mezcla y Poisson no homogéneo',
+ bajada:'El cierre del Capítulo 2. Se ve DESPUÉS de la Prueba 1, así que no es materia de esa evaluación — pero sí de la Prueba 2 y del examen.',
+ min:30,
+ secciones:[
+ {
+  t:'Dónde encaja esto',
+  h:`<p>Estas dos secciones cierran el Capítulo 2 y se pasan en la <b>semana 5</b>, después de la Prueba 1. O sea: <b>no entran en la Prueba 1</b>, que llega hasta suma.</p>
+  <p>Vale la pena leerlas igual cuando las pasen, porque la observación final es la síntesis de todo el capítulo y reaparece más adelante.</p>`,
+  ojo:'Si estás repasando para la Prueba 1, sáltate esta guía completa. Es de la semana siguiente.'
+ },
+ {
+  t:'Mezcla: la suma mirada hacia atrás',
+  h:`<p>Acá hay que tener cuidado con el nombre, porque "mezcla" en este curso significa algo <b>muy específico</b>: juntaste k procesos, observaste el total, y ahora quieres saber <b>cuántos venían de cada uno</b>.</p>
+  <p>Si X(t) = Y₁(t) + … + Y<sub>k</sub>(t) y sabes que en total ocurrieron m eventos:</p>
+  <p class="fx">Y<sub>i</sub>(t) | X(t) = m  ~  Binomial( m , λ<sub>i</sub> / Σλ<sub>j</sub> )</p>
+  <p><b>La demostración</b> (el PPT la hace para k = 2) es directa: escribes la conjunta, usas independencia, reemplazas las tres Poisson, y los λt se cancelan dejando solo el cociente de tasas.</p>
+  <p class="fx">P(X₁ = k | X = m) = [P(X₁ = k)·P(X₂ = m−k)] / P(X = m) = C(m,k) (λ₁/(λ₁+λ₂))<sup>k</sup> (λ₂/(λ₁+λ₂))<sup>m−k</sup></p>
+  <p><b>Cómo reconocerla en el enunciado:</b> "si en 5 minutos pasaron 10 productos, ¿cuál es la probabilidad de que al menos 2 fueran lápices?". Te dan el total mezclado y preguntan por la composición.</p>`,
+  ojo:'Descomposición y mezcla son la misma moneda. En la descomposición el enunciado te da la probabilidad p de clasificación. En la mezcla te da dos tasas y la p sale sola como λᵢ/Σλ. Si te confundes, pregúntate: ¿me dieron un porcentaje o me dieron dos tasas?'
+ },
+ {
+  t:'Poisson no homogéneo, y la observación que cierra el capítulo',
+  h:`
+  <p>Con λ(t) variable aparece la intensidad acumulada m(t) = ∫₀ᵗ λ(s) ds, y todo lo de conteo se mantiene reemplazando λt por m(t).</p>
+  <p>Pero el PPT termina con una <b>observación</b> que es la joya del capítulo y que generaliza la sección anterior. Para un proceso no homogéneo, condicionando en N(t) = n:</p>
+  <p class="fx">P(N(u) = k | N(t) = n) = C(n,k) (m(u)/m(t))<sup>k</sup> (1 − m(u)/m(t))<sup>n−k</sup></p>
+  <p>Y con eso se responde la pregunta por el k-ésimo evento:</p>
+  <p class="fx">P(S<sub>k</sub> &lt; u | N(t) = n) = P(N(u) ≥ k | N(t) = n) = Σ<sub>j≥k</sub> C(n,j) (m(u)/m(t))<sup>j</sup> (1 − m(u)/m(t))<sup>n−j</sup></p>
+  <p><b>Qué te dice:</b> en el caso homogéneo la probabilidad era la razón de <i>largos</i>, u/t. En el no homogéneo es la razón de <i>intensidades acumuladas</i>, m(u)/m(t). El tiempo deja de medirse en minutos y pasa a medirse en "eventos esperados".</p>`,
+  ojo:'Fíjate que acá vuelven a aparecer juntas las dos ideas del curso: la equivalencia S_k < u ⟺ N(u) ≥ k, y el condicionamiento binomial. Es la síntesis del capítulo, y por eso el profesor la dejó al final del PPT justo antes del repaso de Prueba 1.'
  }
  ]
 }
