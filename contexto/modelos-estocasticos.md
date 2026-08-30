@@ -94,11 +94,18 @@ La duda que más le costó a Gabo y que conviene reforzar siempre: **cuándo se 
 
 ## Guías ya escritas
 
-Están en `app/guias/me.js`:
+Una por semana, en `app/guias/me.js`, siguiendo el avance real de la cátedra:
 
-1. Repaso de probabilidad — Unidad 1 (semana 1)
-2. Proceso de Poisson — Unidad 2 (semana 2)
-3. **Descomposición, suma y condicionamiento** — semana 3. Segunda mitad del Capítulo 2 siguiendo el PPT de cátedra: thinning, superposición, mezcla, condicionamiento binomial con u/t, no homogéneo y la observación final con m(u)/m(t). Incluye los dos ejercicios que el profesor resolvió en clase (cinta transportadora y concesionario automotriz).
+| Guía | Semana | Contenido |
+|---|---|---|
+| `me-u1` | 1 | Repaso de probabilidad |
+| `me-u2` | 2 | Proceso de conteo, las dos caras del proceso, distribución condicional de los tiempos |
+| `me-u2b` | 3 | Descomposición, condicionamiento en el total, las tres configuraciones de intervalos |
+| `me-u2d` | 4 | Suma o superposición, carrera y mínimo de exponenciales, el ejercicio de consolidación del PPT |
+| `me-u2c` | 5 | Mezcla y Poisson no homogéneo — posterior a la Prueba 1 |
+
+Cada guía cierra con su propio formulario; las tres primeras juntas son el formulario completo de la Prueba 1.
+
 Los **repasos de evaluaciones no van acá**: viven en `app/repasos/me.js` y se ven en la pestaña Guías → **Pruebas**. Las guías por semana son solo materia; los repasos son qué entra en cada control o prueba más el checklist de ejercicios para practicar.
 
 ## Repasos cargados (app/repasos/me.js)

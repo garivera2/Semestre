@@ -117,36 +117,36 @@ window.GUIAS = (window.GUIAS || []).concat([
   <tr><td>Tiempo medio entre eventos</td><td>1/λ</td></tr>
   <tr><td>Tiempo medio hasta el n-ésimo</td><td>n/λ</td></tr>
   <tr><td>Eventos esperados en t</td><td>λt</td></tr>
-  <tr><td>Separar por tipo (prob. p)</td><td>Poisson(λp), independiente del resto</td></tr>
-  <tr><td>Juntar dos procesos</td><td>Poisson(λ₁+λ₂)</td></tr>
-  <tr><td>¿De cuál viene el próximo?</td><td>λ₁/(λ₁+λ₂)</td></tr>
-  <tr><td>Tasa variable</td><td>reemplaza λt por ∫₀ᵗλ(u)du</td></tr></table>
-  <p>Esta tabla es básicamente lo que querrías tener en tu formulario manuscrito para el Control 1 y la Prueba 1.</p>`
+  <tr><td>n-ésimo evento después de t</td><td>P(S<sub>n</sub> &gt; t) = P(N(t) ≤ n−1)</td></tr>
+  <tr><td>n-ésimo evento antes de t</td><td>P(S<sub>n</sub> ≤ t) = P(N(t) ≥ n)</td></tr>
+  <tr><td>Falta de memoria</td><td>P(T &gt; s+t | T &gt; s) = P(T &gt; t)</td></tr></table>
+  <p>Esta es la base del formulario manuscrito. Las semanas 3 y 4 le agregan descomposición, condicionamiento y suma, y con las tres tablas juntas tienes todo lo de la Prueba 1.</p>`
  }
  ]
 }
 
 ,
 
-/* ---- ME · U2 (2.ª parte) DESCOMPOSICIÓN, SUMA Y CONDICIONAMIENTO ---- */
+/* ---- ME · U2 SEMANA 3: DESCOMPOSICIÓN Y CONDICIONAMIENTO ---- */
 {
- id:'me-u2b', ramo:'me', tag:'Semanas 3 y 4', sem:3,
- titulo:'Descomposición, condicionamiento y suma',
- bajada:'Lo que se pasó en las semanas 3 y 4: separar procesos, condicionar en el total y juntarlos. Este es exactamente el alcance de la Prueba 1.',
- min:45,
+ id:'me-u2b', ramo:'me', tag:'Semana 3', sem:3,
+ titulo:'Descomposición y condicionamiento',
+ bajada:'Lo de la semana 3: separar un proceso por tipo de evento, y qué pasa cuando te dan el total de un periodo y preguntan por un pedazo.',
+ min:35,
  secciones:[
  {
-  t:'Sí, la descomposición entra — y es lo que más se pregunta',
-  h:`<p>Sí. En el Control 1 el techo fue descomposición; para la <b>Prueba 1</b> el techo es <b>suma</b>, que es donde quedó la cátedra al cerrar la semana 4. Mezcla y no homogéneo se ven en la semana 5, o sea <b>después</b> de la prueba: están en la guía de esa semana y no hay que estudiarlos ahora.</p>
-  <p>Respuesta larga: no solo entra, es <b>el tema que más aparece</b> en los controles pasados. Míralo en los enunciados reales del archivo de Canvas:</p>
+  t:'Las dos herramientas de la semana',
+  h:`<p>Semana 3 agrega dos movimientos al Capítulo 2, y los dos aparecen en casi toda evaluación:</p>
   <ul>
-  <li><b>Centro de salud (Control 1, marzo 2025):</b> pacientes tipo 1 y tipo 2, y además Isapre o Fonasa. Es descomposición <i>doble</i>.</li>
-  <li><b>Jugador de fútbol:</b> goles a tasa 1,5 por partido, clasificados por tipo.</li>
-  <li><b>Prueba 1 de los trabajos:</b> "los trabajos que se terminan en menos de 1 hora" — eso es descomposición disfrazada de enunciado.</li>
-  <li><b>El repaso de Prueba 1 del propio PPT:</b> solicitudes de crédito clasificadas por tipo de financiamiento <i>y</i> por resultado crediticio.</li>
+  <li><b>Descomposición.</b> El enunciado clasifica los eventos: "cada cliente es de tipo A con probabilidad p". El proceso se parte en subprocesos que siguen siendo Poisson y además son independientes entre sí.</li>
+  <li><b>Condicionamiento en el total.</b> El enunciado te da cuántos eventos hubo en un periodo y pregunta por un subintervalo. Ahí la tasa deja de importar y aparece una binomial.</li>
   </ul>
-  <p>La señal en el enunciado siempre es la misma: <b>"cada evento, de manera independiente, es de tipo A con probabilidad p"</b>. Cuando leas eso, ya sabes lo que viene.</p>`,
-  ojo:'El PPT del capítulo 2 tiene esta estructura: proceso de conteo → proceso de Poisson → tiempo entre eventos → tiempo del k-ésimo evento → distribución condicional de los tiempos → descomposición → suma → mezcla → no homogéneo → repaso de Prueba 1. Para la Prueba 1 entra hasta suma. Mezcla y no homogéneo vienen en la semana 5, después de la prueba.'
+  <p>La señal de cada una en el enunciado:</p>
+  <table class="tb"><tr><th>Si lees…</th><th>Es…</th></tr>
+  <tr><td>"cada evento, de manera independiente, es de tipo A con probabilidad p"</td><td>Descomposición</td></tr>
+  <tr><td>"sabiendo que en [periodo] llegaron n…"</td><td>Condicionamiento, binomial con u/t</td></tr>
+  </table>`,
+  ojo:'Estas dos se combinan todo el tiempo: primero descompones por tipo, y después condicionas dentro del subproceso. El centro de salud del Control 1 de marzo 2025 es exactamente eso.'
  },
  {
   t:'Descomposición (thinning)',
@@ -160,18 +160,6 @@ window.GUIAS = (window.GUIAS || []).concat([
   ojo:'La estructura del argumento es "condiciono en el total, uso binomial, sumo sobre todos los totales posibles". Ese esquema reaparece en la mezcla y en el condicionamiento del final. Si lo entiendes una vez, entiendes las tres.'
  },
  {
-  t:'Suma (superposición) — cierre de la semana 4',
-  h:`<p>Al revés: tienes N₁(t) y N₂(t) independientes con tasas λ₁ y λ₂, y los juntas en N(t) = N₁(t) + N₂(t). ¿Sigue siendo Poisson?</p>
-  <p><b>Sí</b>, y la demostración del PPT es corta y bonita. Mira el primer tiempo entre eventos del proceso juntado: es el que llegue primero, o sea el <b>mínimo</b>:</p>
-  <p class="fx">T₁ = mín(X₁, Y₁)</p>
-  <p class="fx">P(T₁ &gt; x) = P(X₁ &gt; x)·P(Y₁ &gt; x) = e<sup>−λ₁x</sup>·e<sup>−λ₂x</sup> = e<sup>−(λ₁+λ₂)x</sup></p>
-  <p>O sea T₁ es exponencial de tasa λ₁+λ₂. Lo mismo vale para T₂ y son independientes, así que el proceso juntado es Poisson:</p>
-  <p class="fx">N(t) ~ Poisson((λ₁ + λ₂)t)</p>
-  <p>Generalizando a k procesos, la tasa es la suma de las tasas. Y la probabilidad de que el próximo evento venga del proceso i:</p>
-  <p class="fx">λ<sub>i</sub> / (λ₁ + … + λ<sub>k</sub>)</p>`,
-  ojo:'Fíjate que "el mínimo de exponenciales independientes es exponencial con la suma de las tasas" es el mismo resultado que usaste en la P5 de la Ayudantía 1 con las pilas. No es un truco aparte: es literalmente por qué la superposición funciona.'
- },
- {
   t:'Condicionar en el total: la binomial con u/t',
   h:`<p>Este es el resultado que más se usa sin darse cuenta, y el PPT lo construye en dos pasos.</p>
   <p><b>Paso 1 — un solo evento.</b> Si sabes que en [0,t] ocurrió exactamente uno, el instante en que ocurrió es <b>uniforme</b>:</p>
@@ -182,6 +170,58 @@ window.GUIAS = (window.GUIAS || []).concat([
   <p><b>Nota del profesor:</b> vale para cualquier intervalo de largo t y cualquier subintervalo de largo u contenido en él — no tiene que empezar en cero.</p>
   <p>Esto es exactamente lo que usaste en la Ayudantía 1: P1 b) con p = (2/3)/2 = 1/3, y P2 b) con p = 0,5/1 = 1/2. La razón de las duraciones <b>es</b> la probabilidad.</p>`,
   ojo:'Cuando el enunciado empieza con "sabiendo que llegaron n en tal periodo", la tasa λ deja de importar: se cancela. Si te ves reemplazando λ en un ejercicio de este tipo, algo se desvió.'
+ },
+ {
+  t:'Las tres configuraciones de intervalos',
+  h:`<p>Cuando hay un dato y una pregunta sobre intervalos, todo se decide mirando <b>cómo están puestos uno respecto del otro</b>. Solo hay tres casos:</p>
+  <table class="tb"><tr><th>Cómo están</th><th>Qué usas</th></tr>
+  <tr><td><b>Separados</b>, no se tocan</td><td>Incrementos independientes: borras el condicionamiento</td></tr>
+  <tr><td><b>Se pisan</b> parcialmente</td><td>Cortas en bloques disjuntos y sumas sobre el bloque compartido</td></tr>
+  <tr><td><b>Uno dentro del otro</b></td><td>Binomial(n, u/t) — λ se cancela</td></tr>
+  </table>
+  <p><b>Cómo se corta cuando se pisan:</b> marcas en la línea de tiempo todos los instantes que aparecen en el enunciado. Los tramos entre marca y marca son variables independientes. Reescribes cada dato como suma de tramos, y sumas sobre el tramo que comparten.</p>
+  <p><b>Y si el intervalo de la pregunta queda a caballo</b> sobre el borde del dato: la mitad de adentro va por binomial, la mitad de afuera va por Poisson normal, y sumas sobre las formas de repartir el total pedido.</p>`,
+  ojo:'La señal de que estás en el tercer caso es que el resultado no depende de λ. Si te ves arrastrando la tasa en un ejercicio de "dado que llegaron n", te desviaste.'
+ },
+ {
+  t:'Formulario de la semana',
+  h:`<table class="tb"><tr><th>Situación</th><th>Resultado</th></tr>
+  <tr><td>Separar por tipo (prob. p)</td><td>Poisson(λpt), independiente del complemento</td></tr>
+  <tr><td>Descomposición doble (p y w)</td><td>Poisson(λpwt), los cuatro subprocesos independientes</td></tr>
+  <tr><td>Un solo evento en [0,t]</td><td>Uniforme en [0,t]</td></tr>
+  <tr><td>Dado N(t)=n, ¿cuántos en [0,u]?</td><td>Binomial(n, u/t)</td></tr>
+  <tr><td>Dado N(t)=n, repartir en varios subintervalos</td><td>Multinomial con las razones de largos</td></tr>
+  <tr><td>Intervalos separados</td><td>Se borra el condicionamiento</td></tr>
+  <tr><td>Intervalos traslapados</td><td>Cortar en disjuntos y sumar sobre el compartido</td></tr>
+  </table>`
+ }
+ ]
+},
+
+/* ---- ME · U2 SEMANA 4: SUMA DE PROCESOS ---- */
+{
+ id:'me-u2d', ramo:'me', tag:'Semana 4', sem:4,
+ titulo:'Suma de procesos de Poisson',
+ bajada:'Lo de la semana 4: juntar procesos independientes, la carrera de exponenciales, y el ejercicio con el que el profesor cerró la materia de la Prueba 1.',
+ min:30,
+ secciones:[
+ {
+  t:'Qué se vio esta semana',
+  h:`<p>La semana 3 separó un proceso en pedazos. La semana 4 hace lo contrario: <b>juntar varios procesos en uno</b>. Y como el profesor cerró con un ejercicio de consolidación justo después, <b>acá termina el alcance de la Prueba 1</b>.</p>
+  <p>La señal en el enunciado: hay <b>dos o más fuentes distintas</b> de eventos, cada una con su tasa. "Llegan bolígrafos a 5 por minuto y lápices a 130 por hora." "Llegan solicitudes por canal presencial y por canal digital."</p>`,
+  ojo:'Lo que viene después de esto —mezcla y no homogéneo— es materia de la semana 5, o sea posterior a la Prueba 1. Está en la guía de esa semana.'
+ },
+ {
+  t:'Suma o superposición de procesos',
+  h:`<p>Al revés: tienes N₁(t) y N₂(t) independientes con tasas λ₁ y λ₂, y los juntas en N(t) = N₁(t) + N₂(t). ¿Sigue siendo Poisson?</p>
+  <p><b>Sí</b>, y la demostración del PPT es corta y bonita. Mira el primer tiempo entre eventos del proceso juntado: es el que llegue primero, o sea el <b>mínimo</b>:</p>
+  <p class="fx">T₁ = mín(X₁, Y₁)</p>
+  <p class="fx">P(T₁ &gt; x) = P(X₁ &gt; x)·P(Y₁ &gt; x) = e<sup>−λ₁x</sup>·e<sup>−λ₂x</sup> = e<sup>−(λ₁+λ₂)x</sup></p>
+  <p>O sea T₁ es exponencial de tasa λ₁+λ₂. Lo mismo vale para T₂ y son independientes, así que el proceso juntado es Poisson:</p>
+  <p class="fx">N(t) ~ Poisson((λ₁ + λ₂)t)</p>
+  <p>Generalizando a k procesos, la tasa es la suma de las tasas. Y la probabilidad de que el próximo evento venga del proceso i:</p>
+  <p class="fx">λ<sub>i</sub> / (λ₁ + … + λ<sub>k</sub>)</p>`,
+  ojo:'Fíjate que "el mínimo de exponenciales independientes es exponencial con la suma de las tasas" es el mismo resultado que usaste en la P5 de la Ayudantía 1 con las pilas. No es un truco aparte: es literalmente por qué la superposición funciona.'
  },
  {
   t:'El ejercicio que el profesor resolvió en clase',
@@ -204,22 +244,16 @@ window.GUIAS = (window.GUIAS || []).concat([
  {
   t:'Formulario de la semana',
   h:`<table class="tb"><tr><th>Situación</th><th>Resultado</th></tr>
-  <tr><td>Separar por tipo (prob. p)</td><td>Poisson(λpt), independiente del complemento</td></tr>
-  <tr><td>Juntar k procesos</td><td>Poisson((λ₁+…+λ<sub>k</sub>)t)</td></tr>
-  <tr><td>¿De cuál viene el próximo?</td><td>λ<sub>i</sub> / Σλ<sub>j</sub></td></tr>
-  <tr><td>Mínimo de exponenciales</td><td>Exponencial(Σλ<sub>j</sub>)</td></tr>
-  <tr><td>Dado el total m, ¿cuántos del proceso i?</td><td>Binomial(m, λ<sub>i</sub>/Σλ<sub>j</sub>)</td></tr>
-  <tr><td>Dado N(t)=n, ¿cuántos en [0,u]?</td><td>Binomial(n, u/t)</td></tr>
-  <tr><td>Un solo evento en [0,t]</td><td>Uniforme en [0,t]</td></tr>
-  <tr><td>Tasa variable</td><td>m(t) = ∫₀ᵗλ(s)ds; reemplaza λt por m(t)</td></tr>
-  <tr><td>No homogéneo, dado N(t)=n</td><td>Binomial(n, m(u)/m(t))</td></tr>
-  <tr><td>k-ésimo evento antes de u, dado n</td><td>Σ<sub>j≥k</sub> C(n,j)(m(u)/m(t))<sup>j</sup>(1−m(u)/m(t))<sup>n−j</sup></td></tr>
+  <tr><td>Juntar k procesos independientes</td><td>Poisson((λ<sub>1</sub>+…+λ<sub>k</sub>)t)</td></tr>
+  <tr><td>¿De cuál viene el próximo evento?</td><td>λ<sub>i</sub>/Σλ<sub>j</sub></td></tr>
+  <tr><td>Mínimo de exponenciales independientes</td><td>Exponencial(Σλ<sub>j</sub>)</td></tr>
+  <tr><td>Máximo de n exponenciales iguales</td><td>E[máx] = (1/λ)(1 + 1/2 + … + 1/n)</td></tr>
+  <tr><td>Los k primeros vienen todos del proceso i</td><td>(λ<sub>i</sub>/Σλ<sub>j</sub>)<sup>k</sup></td></tr>
   </table>
-  <p>Junta esta tabla con la de la guía de la semana 2 y tienes el formulario manuscrito completo para el Control 1.</p>`
+  <p>Junta esta tabla con la de la semana 3 y con la de la semana 2 y tienes el formulario completo de la Prueba 1.</p>`
  }
  ]
-}
-,
+},
 
 /* ---- ME · U2 (cierre) MEZCLA Y NO HOMOGÉNEO ---- */
 {
