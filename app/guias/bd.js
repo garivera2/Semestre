@@ -1049,4 +1049,176 @@ window.GUIAS = (window.GUIAS || []).concat([
  ]
 }
 
+,
+
+/* ---- BD · PREGUNTA 1 DE LOS EXÁMENES ---- */
+{
+ id:'bd-exam', ramo:'bd', tag:'C1 · práctica', sem:5,
+ titulo:'Pregunta 1 de los exámenes',
+ bajada:'Los ocho enunciados reales del compilado del profe, con su pauta oficial. Es lo que él mismo recomendó practicar para el C1.',
+ min:120,
+ secciones:[
+ {
+  t:'Cómo se responde: el formato exacto',
+  h:`<p>La Pregunta 1 vale <b>30%</b> y siempre pide lo mismo. La respuesta <b>no es un diagrama</b>: es una lista de relaciones.</p>
+  <div class="fx">Cliente(<u>rut</u>, nombre, email, telefono)<br>
+  Sede(<u>id</u>, nombre, comuna)<br>
+  Sala(<u>id</u>, nombre, capacidad, <i>sede_id</i>)<br>
+  Reserva(<u>id</u>, fecha, hora_inicio, hora_fin, estado, <i>cliente_rut</i>, <i>sala_id</i>)<br>
+  ReservaEjecutivo(<u><i>reserva_id</i></u>, <u><i>ejecutivo_rut</i></u>)</div>
+  <p><b>Subrayado = PK · cursiva = FK.</b> Y conviene cerrar con la nota que el profe pone en sus propias pautas:</p>
+  <p class="fx">"Los atributos subrayados son claves primarias y los que están<br>en cursiva son claves foráneas."</p>
+  <p>Escribir esa línea te cuesta 10 segundos y elimina cualquier ambigüedad al corregir.</p>
+  <p><b>Cómo se corrige</b> (pauta textual del examen 2022, se parte con 6 puntos):</p>
+  <table class="tb"><tr><th>Situación</th><th>Descuento</th></tr>
+  <tr><td>Falta una relación</td><td><b>−1</b></td></tr>
+  <tr><td>Falta un atributo</td><td>−0,5</td></tr>
+  <tr><td><b>Sobra un atributo que tiene sentido</b></td><td><b>no descuenta</b></td></tr>
+  <tr><td>No está en 3NF</td><td>−1</td></tr></table>
+  <p>Nota final de la pregunta = <b>1 + puntaje</b>. Seis puntos limpios es un 7.</p>`,
+  ojo:'La asimetría de la pauta define la táctica: un atributo de más que tiene sentido cuesta CERO, uno de menos cuesta 0,5, y una tabla de menos cuesta 1. Ante la duda, incluye. Ante la duda entre separar o no separar, separa.'
+ },
+ {
+  t:'El párrafo de verificación 3NF que el profe acepta',
+  h:`<p>Gabo, esto responde tu duda exacta. En la pauta del examen del coworking, el profe escribe él mismo la verificación. Es la redacción modelo:</p>
+  <p class="fx">"Cada atributo no clave depende únicamente de la PK completa de su tabla.<br>
+  No hay dependencias parciales (las tablas con PK simple no pueden tenerlas).<br>
+  No hay dependencias transitivas (ningún atributo no clave<br>depende de otro atributo no clave)."</p>
+  <p><b>Tu versión estaba bien encaminada.</b> Dijiste que los atributos dependen de la clave primaria y no entre sí — eso es exactamente el corazón del asunto. Lo que faltaba es separarlo en las dos mitades, porque son dos condiciones distintas:</p>
+  <table class="tb"><tr><th></th><th>Qué prohíbe</th><th>Se llama</th></tr>
+  <tr><td><b>2FN</b></td><td>depender de un <b>pedazo</b> de la PK</td><td>dependencia parcial</td></tr>
+  <tr><td><b>3FN</b></td><td>depender de <b>otro atributo no clave</b></td><td>dependencia transitiva</td></tr></table>
+  <p><b>Y el atajo que el profe usa en su propia pauta:</b> "las tablas con PK simple no pueden tener dependencias parciales". Si tu tabla tiene clave de un solo atributo, la 2FN está garantizada — no puedes depender de un pedazo de algo que no tiene pedazos.</p>
+  <p><b>Cómo usarlo en el control:</b> al final de tu modelo, escribe dos o tres líneas con esa misma estructura. Recorre tus tablas y di: las de PK simple no pueden tener parciales; las de PK compuesta las revisé una por una; y ningún atributo descriptivo determina a otro. Eso protege el punto que se descuenta por "no está en 3NF".</p>`,
+  ojo:'No basta con que tu modelo ESTÉ en 3NF: conviene decir que lo está y por qué. El profe descuenta 1 punto por no estar en 3NF, y una verificación escrita de tres líneas es la evidencia más barata de que sí revisaste.'
+ },
+ {
+  t:'Los ocho enunciados reales',
+  h:`<p>Están ordenados de más simple a más complejo. <b>Resuélvelos en papel antes de abrir la solución.</b> Cada uno debería tomarte entre 20 y 35 minutos.</p>
+  <p>Si tienes poco tiempo, haz el <b>4 (bibliotecas)</b> y el <b>8 (coworking)</b>: el primero tiene la jerarquía libro→copia que es la trampa más elegante, y el segundo es el más reciente y trae la verificación 3NF completa.</p>`,
+  ej:[
+   {q:'<b>EXAMEN 2022 · QUIZZES ONLINE.</b> Modele los quizzes que deben hacer los alumnos. Los quizzes se completan por un sitio web, quedando disponibles en una fecha y hora determinada, y se cierran en otra fecha y hora definida previamente. Cada quiz está formado por una serie de preguntas, y cada una tiene un conjunto de alternativas, únicas para cada pregunta. Tanto preguntas como alternativas son solo de texto, y cada pregunta tiene sólo una alternativa correcta. Los alumnos se identifican con rut, nombre y apellido, y contestan el quiz una sola vez eligiendo una alternativa para cada pregunta.',
+    a:`<b>Solución oficial (alternativa 1):</b><br>
+    <span class="fx-i">Alumno(<u>rut</u>, nombre, apellido)</span><br>
+    <span class="fx-i">Quiz(<u>nombre</u>, fecha_inicio, fecha_fin)</span><br>
+    <span class="fx-i">Pregunta(<u>id</u>, <i>quiz</i>, texto)</span><br>
+    <span class="fx-i">Alternativa(<u>id</u>, <i>pregunta</i>, texto, correcta)</span><br>
+    <span class="fx-i">Respuesta(<u><i>rut</i></u>, <u><i>alternativa</i></u>)</span><br><br>
+    <b>Alternativa 2, también aceptada:</b> poner <i>alternativa_correcta</i> como FK dentro de Pregunta, y dejar Alternativa sin el booleano.<br><br>
+    <b>Que existan DOS soluciones oficiales es el dato más importante de todo el compilado.</b> No tienes que adivinar el modelo exacto del profe: tienes que ser coherente y representar los hechos.<br><br>
+    <b>La cadena jerárquica:</b> Quiz → Pregunta → Alternativa. Cada nivel lleva la FK del anterior. Es el mismo patrón de Sede→Sala y Libro→Copia en otros exámenes.<br><br>
+    <b>Respuesta es la N:M</b> entre Alumno y Alternativa. Fíjate que basta {rut, alternativa} como PK porque "contestan el quiz una sola vez" — si pudieran responder varias veces, harían falta más atributos en la clave.`},
+
+   {q:'<b>CLÍNICA DENTAL.</b> Modele la gestión de citas. Las citas se programan por un sitio web y están disponibles en una fecha y hora específica. Cada cita tiene un dentista asignado y un conjunto de tratamientos a realizarse, que pueden ser de distintos tipos (limpieza, empaste, extracción). Pacientes y dentistas se identifican con rut, nombre y apellido. Los tratamientos tienen identificador, descripción y valor. El valor de la cita se calcula como el valor de la consulta (tratamiento básico) más los tratamientos realizados.',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Paciente(<u>rut</u>, nombre, apellido)</span><br>
+    <span class="fx-i">Dentista(<u>rut</u>, nombre, apellido)</span><br>
+    <span class="fx-i">Tratamiento(<u>id</u>, descripcion, valor)</span><br>
+    <span class="fx-i">Cita(<u>id</u>, <i>rut_paciente</i>, <i>rut_dentista</i>, fecha, hora, valor_total)</span><br>
+    <span class="fx-i">CitaTratamiento(<u><i>id_cita</i></u>, <u><i>id_tratamiento</i></u>)</span><br><br>
+    <b>Dos tablas separadas para Paciente y Dentista</b>, aunque tengan los mismos atributos. Acá el enunciado no dice que una persona pueda ser ambas cosas, así que separarlas está bien. <i>Ojo con el contraste:</i> en el ejercicio de la editorial de la clase 03, el enunciado sí decía "almacene cada académico una sola vez" — ahí habría sido un error separar. <b>Lee siempre esa frase.</b><br><br>
+    <b>El detalle discutible:</b> valor_total en Cita es un <b>atributo derivado</b> — el enunciado dice que "se calcula como". En rigor no debería almacenarse. Pero la pauta lo acepta, y además es defendible: es el valor cobrado en ese momento, que no debe cambiar si mañana suben los precios. Es el mismo criterio de la boleta histórica.<br><br>
+    Si lo omites, tampoco pierdes: recuerda que un atributo que falta cuesta 0,5 y uno que sobra con sentido cuesta 0. <b>Ponlo.</b>`},
+
+   {q:'<b>TIENDA DE VIDEOJUEGOS.</b> Una empresa requiere organizar su catálogo en línea. Cada videojuego se identifica por un código único y tiene título, género y precio. Se mantienen datos de los clientes: identificación única, nombre y correo. Se desea registrar las compras realizadas, cada una con identificador único, fecha y el cliente que la efectuó. Los clientes pueden generar múltiples compras y cada compra puede incluir varios videojuegos. Se desea además rastrear las compañías desarrolladoras, identificadas por ID único, nombre y país de origen.',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Cliente(<u>id</u>, nombre, email)</span><br>
+    <span class="fx-i">Videojuego(<u>codigo</u>, titulo, genero, precio, <i>desarrollador_id</i>)</span><br>
+    <span class="fx-i">Desarrolladora(<u>id</u>, nombre, pais)</span><br>
+    <span class="fx-i">Compra(<u>id</u>, fecha, <i>cliente_id</i>)</span><br>
+    <span class="fx-i">DetalleCompra(<u><i>compra_id</i></u>, <u><i>videojuego_codigo</i></u>)</span><br><br>
+    <b>Este es el esqueleto puro del patrón:</b> actor (Cliente) + recurso (Videojuego) + transacción (Compra) + tabla intermedia (DetalleCompra). Si te aprendes este de memoria, reconoces el 70% de los enunciados.<br><br>
+    <b>Desarrolladora es 1:N hacia Videojuego</b> → FK en el lado N. Un error frecuente es meter nombre_desarrolladora y pais dentro de Videojuego: eso daría <span class="fx-i">desarrollador_id → pais</span>, transitiva, y falla 3NF.<br><br>
+    <b>Nota:</b> DetalleCompra no tiene atributos propios acá. En un caso real llevaría cantidad y precio_al_momento. Si los agregas no te descuentan — tienen sentido.`},
+
+   {q:'<b>RED DE BIBLIOTECAS.</b> Cada libro del catálogo tiene ISBN único, título, año de publicación y está asociado a uno o varios autores. Cada autor tiene ID único, nombre y nacionalidad. Los usuarios tienen ID único, nombre y correo. Se requiere registrar los préstamos: cada uno con identificador único, fecha de préstamo, fecha de devolución, el libro (copia) prestado y el usuario que lo realizó. Un libro puede tener múltiples copias, cada una con número de serie único y su estado (disponible, prestado, en mantenimiento). <b>Es importante registrar qué copia específica del libro fue prestada en cada préstamo.</b>',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Libro(<u>ISBN</u>, titulo, anio_publicacion)</span><br>
+    <span class="fx-i">Autor(<u>id</u>, nombre, nacionalidad)</span><br>
+    <span class="fx-i">LibroAutor(<u><i>libro_ISBN</i></u>, <u><i>autor_id</i></u>)</span><br>
+    <span class="fx-i">Usuario(<u>id</u>, nombre, email)</span><br>
+    <span class="fx-i">Copia(<u>numero_serie</u>, estado, <i>libro_ISBN</i>)</span><br>
+    <span class="fx-i">Prestamo(<u>id</u>, fecha_prestamo, fecha_devolucion, <i>copia_numero_serie</i>, <i>usuario_id</i>)</span><br><br>
+    <b>La distinción Libro vs Copia es el corazón del ejercicio</b>, y el enunciado la subraya: "es importante registrar qué copia específica fue prestada".<br><br>
+    <b>Libro</b> es la obra: el ISBN, el título, el año. <b>Copia</b> es el objeto físico en el estante, con su número de serie y su estado.<br><br>
+    <b>Por qué importa:</b> si el préstamo apuntara al ISBN, no sabrías cuál de los cinco ejemplares se llevó el usuario, ni podrías marcar uno como "en mantenimiento" sin marcarlos todos. El estado es de la copia, no de la obra.<br><br>
+    <b>Es el mismo patrón que Sede→Sala o Quiz→Pregunta:</b> una entidad "tipo" y una entidad "instancia". Cuando el enunciado hable de "ejemplares", "unidades", "instancias" o dé un atributo que solo tiene sentido para el objeto físico (estado, ubicación), separa.<br><br>
+    <b>LibroAutor</b> es la N:M: "asociado a uno o varios autores" y un autor escribe varios libros.`},
+
+   {q:'<b>ALQUILER DE VEHÍCULOS.</b> Cada vehículo posee número de registro único, marca, modelo, año de fabricación, tipo (sedán, SUV, camión), precio por día y estado (disponible, alquilado, en mantenimiento). Los clientes tienen ID único, nombre, dirección y teléfono. Cada alquiler debe incluir fecha de inicio, fecha de fin, el vehículo alquilado y el cliente. <b>Un cliente no puede arrendar el mismo vehículo más de una vez en la misma fecha.</b> La empresa ofrece accesorios (sillas de auto, seguros, GPS) cada uno con su precio diario y descripción. Un alquiler puede incluir múltiples accesorios y es esencial registrar qué accesorios fueron alquilados con cada vehículo.',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Vehiculo(<u>numero_registro</u>, marca, modelo, anio_fabricacion, tipo, precio)</span><br>
+    <span class="fx-i">Cliente(<u>id</u>, nombre, direccion, telefono)</span><br>
+    <span class="fx-i">Alquiler(<u>fecha_inicio</u>, fecha_fin, <u><i>vehiculo_numero_registro</i></u>, <u><i>cliente_id</i></u>)</span><br>
+    <span class="fx-i">EstadoVehiculo(<u><i>vehiculo_numero_registro</i></u>, estado)</span><br>
+    <span class="fx-i">Accesorio(<u>id</u>, nombre, descripcion, precio)</span><br>
+    <span class="fx-i">AlquilerAccesorio(<u><i>alquiler_id</i></u>, <u><i>accesorio_id</i></u>)</span><br><br>
+    <b>La frase que define la PK:</b> "un cliente no puede arrendar el mismo vehículo más de una vez en la misma fecha". Eso es el enunciado dictándote la clave primaria compuesta: <b>{fecha_inicio, vehiculo, cliente}</b>. Sin esa frase habrías puesto un id simple.<br><br>
+    <b>Esta es la habilidad que más vale entrenar:</b> reconocer que una frase en castellano sobre lo que "no puede" pasar es una restricción de unicidad, y por lo tanto una clave.<br><br>
+    <b>EstadoVehiculo separado</b> es una decisión discutible del profe — con un solo estado actual podría ir como columna de Vehiculo. Se justifica si quieres historial. <b>Cualquiera de las dos te la aceptan</b>, pero es un buen ejemplo de que el profe premia separar antes que juntar.<br><br>
+    <b>Ojo con el desajuste:</b> la solución oficial usa <i>alquiler_id</i> en AlquilerAccesorio aunque Alquiler no tiene id simple. Es una inconsistencia del propio profe. Si te pasa algo así, lo coherente sería arrastrar las tres columnas — pero no te compliques: esto confirma que la corrección es por sentido, no al milímetro.`},
+
+   {q:'<b>CLÍNICA DE SALUD INTEGRAL.</b> Los pacientes tienen rut, nombre, fecha de nacimiento, dirección y teléfono, y pueden asistir a múltiples consultas. Los médicos tienen rut, nombre y teléfono, y <b>pueden ejercer en una o varias áreas de especialización</b>; cada área puede incluir a distintos médicos. Las consultas se programan en fechas y horas específicas, están asociadas a un paciente, y <b>una misma consulta puede ser atendida por más de un médico</b>. Durante cada consulta se realizan procedimientos (exámenes, radiografías) con descripción y costo; hay que identificar cuáles se efectuaron en cada consulta para calcular el costo total. Diseñe un modelo relacional en 3NF.',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Paciente(<u>rut</u>, nombre, fecha_nacimiento, direccion, telefono)</span><br>
+    <span class="fx-i">Medico(<u>rut</u>, nombre, telefono)</span><br>
+    <span class="fx-i">Especialidad(<u>id</u>, nombre)</span><br>
+    <span class="fx-i">MedicoEspecialidad(<u><i>medico_id</i></u>, <u><i>especialidad_id</i></u>)</span><br>
+    <span class="fx-i">Consulta(<u>id</u>, fecha, hora, <i>paciente_id</i>)</span><br>
+    <span class="fx-i">ConsultaMedico(<u><i>consulta_id</i></u>, <u><i>medico_id</i></u>)</span><br>
+    <span class="fx-i">Procedimiento(<u>codigo</u>, descripcion, costo)</span><br>
+    <span class="fx-i">ConsultaProcedimiento(<u><i>consulta_id</i></u>, <u><i>procedimiento_codigo</i></u>)</span><br><br>
+    <b>Ocho tablas, TRES de ellas intermedias.</b> Este es el examen con más N:M y es donde más se pierde por tablas faltantes — a −1 cada una.<br><br>
+    <b>Las tres frases que delatan cada N:M:</b><br>
+    • "pueden ejercer en <b>una o varias</b> áreas" + "cada área puede incluir a <b>distintos</b> médicos" → MedicoEspecialidad<br>
+    • "una misma consulta puede ser atendida por <b>más de un</b> médico" → ConsultaMedico<br>
+    • "identificar cuáles procedimientos se efectuaron en <b>cada</b> consulta" → ConsultaProcedimiento<br><br>
+    <b>La técnica para no perder ninguna:</b> antes de escribir, subraya todas las frases con "varios", "múltiples", "más de un", "uno o varias". <b>Cada una es una tabla.</b> Cuéntalas y verifica que tu modelo tenga esa cantidad de intermedias.<br><br>
+    <b>El costo total NO se guarda.</b> El enunciado dice "para calcular el costo total" — es derivado, se suma desde ConsultaProcedimiento.`},
+
+   {q:'<b>AEROLÍNEA ANDESAIR.</b> Se requiere identificar cada pasajero por su RUT, con nombre, correo y teléfono, y consultar cuántas veces ha volado. Registrar cada avión con identificador interno, modelo y capacidad total de asientos. Los vuelos se identifican por un código (como "AA123"), asociados a una fecha, hora de salida, un par de aeropuertos de origen y destino, y un avión específico. Cada vuelo cuenta con tripulación asignada (piloto, copiloto, jefe de cabina, tripulantes) de los que se quiere conocer identificador, nombre y rol; un vuelo tiene varios tripulantes y los tripulantes participan en varios vuelos. Los pasajeros realizan reservas: código o id, a qué pasajero corresponde, en qué vuelo viaja, cuándo se realizó, el asiento asignado ("12A") y el estado (PENDIENTE, CONFIRMADA, CANCELADA). Diseñe un modelo relacional en 3NF.',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Pasajero(<u>rut</u>, nombre, email, telefono)</span><br>
+    <span class="fx-i">Avion(<u>id</u>, modelo, capacidad_total)</span><br>
+    <span class="fx-i">Vuelo(<u>codigo</u>, fecha, hora_salida, origen, destino, <i>avion_id</i>)</span><br>
+    <span class="fx-i">Tripulante(<u>rut</u>, nombre, telefono, rol)</span><br>
+    <span class="fx-i">VueloTripulante(<u><i>vuelo_codigo</i></u>, <u><i>tripulante_id</i></u>)</span><br>
+    <span class="fx-i">Reserva(<u>id</u>, fecha_reserva, estado, asiento, <i>pasajero_rut</i>, <i>vuelo_codigo</i>)</span><br><br>
+    <b>"Consultar cuántas veces ha volado" es un derivado</b> — se cuenta desde Reserva. No va como columna de Pasajero. El enunciado lo camufla como si fuera un dato a guardar; es una consulta.<br><br>
+    <b>Origen y destino como columnas simples.</b> El profe no creó tabla Aeropuerto acá, aunque sería más correcto. Si tú la creas y pones dos FK, <b>no te descuentan</b> — es una tabla de más que tiene sentido, y es mejor diseño. Es exactamente el caso donde la pauta te protege.<br><br>
+    <b>El código de vuelo como PK</b> es discutible: "AA123" se repite todos los días. En rigor la PK debería ser {codigo, fecha}, como lo modelamos en el simulacro de la aerolínea. La solución del profe usa solo el código. <b>Ambas se aceptan</b>, pero si pones la compuesta, justifícala en una línea: "AA123 se repite cada día, así que el código solo no identifica un vuelo".<br><br>
+    <b>Compara con nuestro simulacro grupal de aerolínea:</b> el nuestro era más estricto (aeropuertos como tabla, PK compuesta, FK de conexión). Si resolviste aquel, este te sale solo.`},
+
+   {q:'<b>COWORKING NODOCOWORK.</b> Registrar cada cliente por su RUT, con nombre completo, correo y teléfono. Las sedes se identifican por un código numérico, con nombre comercial y comuna. Dentro de cada sede hay varias salas; cada sala tiene identificador propio, nombre descriptivo y capacidad máxima. Una sala pertenece a una sola sede y cada sede tiene muchas salas. Cuando un cliente desea usar una sala se genera una reserva con identificador único, fecha, hora de inicio, hora de término y estado (PENDIENTE, CONFIRMADA, FINALIZADA, CANCELADA). Cada reserva corresponde a un único cliente y a una única sala. Los ejecutivos de atención acompañan las reservas. Diseñe un modelo relacional en 3NF.',
+    a:`<b>Solución oficial:</b><br>
+    <span class="fx-i">Cliente(<u>rut</u>, nombre, email, telefono)</span><br>
+    <span class="fx-i">Sede(<u>id</u>, nombre, comuna)</span><br>
+    <span class="fx-i">Sala(<u>id</u>, nombre, capacidad, <i>sede_id</i>)</span><br>
+    <span class="fx-i">Ejecutivo(<u>rut</u>, nombre, telefono)</span><br>
+    <span class="fx-i">Reserva(<u>id</u>, fecha_reserva, hora_inicio, hora_fin, estado, <i>cliente_rut</i>, <i>sala_id</i>)</span><br>
+    <span class="fx-i">ReservaEjecutivo(<u><i>reserva_id</i></u>, <u><i>ejecutivo_rut</i></u>)</span><br><br>
+    <b>Y la verificación 3NF, textual del profe:</b><br>
+    <i>"Cada atributo no clave depende únicamente de la PK completa de su tabla. No hay dependencias parciales (las tablas con PK simple no pueden tenerlas; ReservaEjecutivo no tiene atributos no clave). No hay dependencias transitivas (ningún atributo no clave depende de otro atributo no clave)."</i><br><br>
+    <b>Copia esa estructura de párrafo en el control.</b> Tres frases: parciales, por qué no las hay, transitivas. Te cubre el punto que se descuenta por 3NF.<br><br>
+    <b>Sede→Sala es 1:N</b>, no N:M. El enunciado lo dice explícito: "una sala pertenece a una sola sede". FK en Sala, sin tabla intermedia. <b>No todo lo que suena a jerarquía es N:M</b> — hay que leer la dirección.<br><br>
+    <b>La trampa que evita el enunciado:</b> "atiende tanto a freelancers como a equipos de empresas, pero <b>para efectos del sistema todos se registran como clientes individuales</b>". Eso te está diciendo que NO hagas dos tablas. Es la misma clase de frase que "almacene cada académico una sola vez".`}
+  ]
+ },
+ {
+  t:'Checklist de 60 segundos antes de entregar',
+  h:`<p>Recorre esto con tu hoja al lado. Cada punto corresponde a un descuento real de la pauta.</p>
+  <ol>
+  <li><b>¿Marqué PK y FK?</b> Subrayado y cursiva, más la nota que lo explica. Es gratis y evita ambigüedad.</li>
+  <li><b>¿Conté las frases con "varios", "múltiples", "más de un"?</b> Cada una debería tener su tabla intermedia. Si el enunciado tiene tres y tu modelo tiene dos, falta una — y eso vale −1.</li>
+  <li><b>¿Hay algún atributo derivado colado?</b> "Se calcula como", "cuántas veces", "el total de". Esos no se guardan… salvo que sea un valor histórico congelado, y entonces lo dejas y lo justificas.</li>
+  <li><b>¿Cada FK apunta a una tabla que existe</b> y ahí ese campo es PK?</li>
+  <li><b>¿Alguna frase dice qué NO puede pasar?</b> ("no puede arrendar dos veces el mismo…", "una sola vez", "como máximo uno"). Eso define una PK compuesta.</li>
+  <li><b>¿Escribí las tres líneas de verificación 3NF?</b></li>
+  <li><b>¿Algún atributo descriptivo repetido en dos tablas?</b> Si el nombre del cliente aparece en Cliente y en Reserva, sobra en Reserva.</li>
+  </ol>
+  <p class="fx">Prioridad si te queda poco tiempo:<br><b>que estén todas las tablas</b> (−1 c/u) → PK y FK → 3NF (−1 una sola vez)</p>`
+ }
+ ]
+}
+
 ]);

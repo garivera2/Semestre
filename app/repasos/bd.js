@@ -93,6 +93,23 @@ window.REPASOS = (window.REPASOS || []).concat([
   <p>Superclave = identifica una fila, <i>aunque le sobren atributos</i>. Candidata = superclave <b>mínima</b>, no le sobra nada. Agregar columnas nunca rompe una superclave: si con {rut, cod} ya sabías de qué fila hablo, con {rut, cod, nota} sigues sabiendo.</p>
   <p><b>BCNF</b> es más estricta que la 3FN: exige que <b>todo</b> determinante sea superclave, sin la excepción de los atributos primos. Solo se distinguen cuando hay claves candidatas que se superponen.</p>`},
 
+ {t:'★ Las 3FN en una frase (y cómo escribirlo en el control)',
+  h:`<p><b>La definición corta, que es la que hay que tener a mano:</b></p>
+  <p class="fx">Todo atributo no clave depende de <b>la PK completa</b><br>y de <b>nada más</b>.</p>
+  <p>Esa frase contiene las dos condiciones. Separadas:</p>
+  <table class="tb"><tr><th></th><th>Prohíbe que un atributo dependa de…</th><th>Nombre</th><th>Solo falla si…</th></tr>
+  <tr><td><b>2FN</b></td><td>un <b>pedazo</b> de la PK</td><td>parcial</td><td>la PK es <b>compuesta</b></td></tr>
+  <tr><td><b>3FN</b></td><td><b>otro atributo no clave</b></td><td>transitiva</td><td>hay descriptivos encadenados</td></tr></table>
+  <p>Y antes de las dos va la <b>1FN</b>: una celda, un valor. Sin listas metidas adentro.</p>
+  <p><b>El párrafo que escribe el propio profe en su pauta</b> (examen del coworking) — cópialo tal cual al final de tu modelo:</p>
+  <p class="fx">"Cada atributo no clave depende únicamente de la PK completa de su tabla.<br>
+  No hay dependencias parciales (las tablas con PK simple no pueden tenerlas).<br>
+  No hay dependencias transitivas (ningún atributo no clave<br>depende de otro atributo no clave)."</p>
+  <p><b>El atajo que él mismo usa:</b> las tablas con <b>PK simple no pueden tener dependencias parciales</b>. Así que al verificar, separa tus tablas en dos montones: las de PK simple pasan la 2FN automáticamente, y solo revisas una por una las de PK compuesta.</p>
+  <p><b>Por qué conviene escribirlo:</b> la pauta descuenta <b>1 punto</b> por "no está en 3NF". Tres líneas de verificación son la evidencia más barata de que sí revisaste, y te ordenan a ti mismo la revisión.</p>`,
+  ojo:'Cuidado con una confusión frecuente: la 3FN NO dice que cada atributo sea su propia clave, ni que las tablas no se relacionen entre sí. Las tablas se relacionan todo lo que haga falta — de eso se tratan las FK. Lo que no puede pasar es que DENTRO de una misma tabla un atributo descriptivo determine a otro.'
+ },
+
  {t:'Los siete errores que más cuestan puntos',
   h:`<ol>
   <li><b>Guardar el atributo derivado.</b> Si el enunciado da fecha de nacimiento <i>y</i> edad, la edad no va. Es el detalle que más se cae.</li>
@@ -175,6 +192,16 @@ window.REPASOS = (window.REPASOS || []).concat([
    {x:'Editorial de revistas académicas', por:'Es el que él mismo puso como cierre: su idea de nivel C1'},
    {x:'Planilla de solicitudes — diseño A vs B', por:'La evaluación breve de 15 min, con su pauta'},
    {x:'Variación: agregar los talleres', por:'Cómo un requisito nuevo cambia la PK'}
+  ]},
+  {fuente:'Pregunta 1 de los exámenes (guía en la app)', items:[
+   {x:'1 · Quizzes online (2022)', por:'El único con DOS soluciones oficiales aceptadas'},
+   {x:'2 · Clínica dental', por:'Dos entidades con los mismos atributos, y un derivado discutible'},
+   {x:'3 · Tienda de videojuegos', por:'El esqueleto puro del patrón: actor + recurso + transacción'},
+   {x:'4 · Red de bibliotecas ★', por:'La jerarquía Libro→Copia, la trampa más elegante'},
+   {x:'5 · Alquiler de vehículos', por:'Una frase del enunciado define la PK compuesta'},
+   {x:'6 · Clínica de salud integral', por:'TRES tablas intermedias: donde más se pierde'},
+   {x:'7 · Aerolínea AndesAir', por:'Derivado camuflado y PK discutible'},
+   {x:'8 · Coworking NodoCowork ★', por:'El más reciente, con la verificación 3NF del profe'}
   ]},
   {fuente:'Guías de la app', items:[
    {x:'Entidad-Relación — los 3 ejercicios', por:'Base del diagrama'},
