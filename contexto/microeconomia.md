@@ -64,8 +64,9 @@ Los presentó como requisito de entrada: definición de mercado, mercado competi
 Están en `app/guias/mi.js`:
 
 1. Introducción a la Economía — los 8 conceptos base
-2. Teoría del Consumidor — Unidades I.1 y I.2, incluye los casos de esquina (lineal) y vértice (Leontief)
-3. Funciones de Demanda — Unidad I.3 completa (semana 3), escrita desde el PPT real. Incluye "Cómo leer las derivadas" y la construcción gráfica de la curva de demanda que el profe hizo en la pizarra
+2. Teoría del Consumidor — Unidades I.1 y I.2 **desde los PPT reales**. I.1 cubre los 4 axiomas y los 2 supuestos, bien/mal/neutro, transformaciones monótonas, propiedades de las curvas con el axioma que justifica cada una, y las 3 funciones de utilidad del profe. I.2 cubre presupuesto, optimización y los casos de esquina y vértice
+3. Funciones de Demanda — Unidad I.3 completa (semana 3), escrita desde el PPT real. Incluye "Cómo leer las derivadas", la construcción gráfica de la curva de demanda que el profe hizo en la pizarra, la sección de **efecto sustitución e ingreso** y las 5 preguntas del **Control 1** resueltas y explicadas
+4. Tecnologías de Producción — Unidad II.1 (semana 5): función de producción, PMg, rendimientos marginales decrecientes, isocuantas, TTS y retornos a escala
 
 ## Material en Canvas (curso 47456)
 
@@ -75,15 +76,30 @@ Se pueden leer sin descargarlas: abrir el archivo en Canvas con el navegador y e
 
 ## Cosas que el profe dijo explícitamente
 
-- **La ecuación de Slutsky NO entra al curso.** No hay descomposición efecto sustitución / efecto ingreso. El signo de la demanda se justifica con la **Ley de la Demanda** y la clasificación normal / neutro / inferior.
+- **Son 4 axiomas, no 6.** Completitud, reflexividad, transitividad y continuidad. **No saciedad** y **convexidad estricta** son **supuestos adicionales** (numerados 5 y 6), no axiomas — el profe los separa explícitamente. Una Leontief cumple los 4 axiomas y no cumple ninguno de los 2 supuestos.
+- Las **3 funciones de utilidad** que nombra el PPT de I.1: Cobb-Douglas (con α+β=1), Lineal y Leontief. Avisa que "otras funciones aparecerán en ayudantías y evaluaciones".
+- La lectura de la TMS que usa el profe: "cuánto más de y necesito si tengo que renunciar a 1 unidad de x manteniendo la misma utilidad".
+
+- **Slutsky: matiz importante.** El PPT de I.3 dice que la ecuación de Slutsky no se deriva en el curso — y es cierto, no se pide el álgebra. Pero el **razonamiento de efecto sustitución y efecto ingreso SÍ entra y SÍ se evalúa**: dos de las cinco preguntas del Control 1 (31 ago) eran exactamente eso. No confiar en la frase del PPT.
 - Notación del profe: **p_x, p_y, I**. No usa p₁, p₂ ni m.
 - Clasifica los bienes en normal / **neutro** / inferior (el "neutro" es suyo; no habla de bienes de lujo).
 - El bienestar se mide con **variación compensatoria**, y el cambio en el excedente del consumidor es su aproximación.
 
+## Controles rendidos
+
+- **Control 1 — lunes 31 ago, online, 5 preguntas, 5 minutos.** Gabo sacó **2/5**. Falló: interpretación de un aumento de ingreso sobre la TMS (P2), efecto sustitución vs ingreso con bien normal (P3) y confundir curva de Engel con curva de demanda (P4). Acertó: interpretación de λ (P1) y el caso Giffen (P5). Las cinco están resueltas y explicadas al final de la guía de Funciones de Demanda.
+
+## Estado de las guías vs los PPT
+
+Los 4 PPT publicados (I.1, I.2, I.3, II.1) están cubiertos desde el archivo real, con gráficos y ejercicios.
+
+**Pendiente de la app, no de la materia:** la guía de Introducción a la Economía (los 8 conceptos base) **no tiene ningún gráfico**, siendo la más gráfica del ramo — faltan equilibrio y estática comparativa, elasticidad, excedentes, precio máximo/mínimo e incidencia de impuestos.
+
 ## Pendiente
 
-- Unidad II: Teoría del Productor
+- Resto de la Unidad II: costos de producción, decisiones de la empresa y función de oferta
 - Unidad III: Mercados y Competencia
+- Ayudantía 3 (jue 27 ago): sustitutos perfectos con u = 3x + 2y, y cuasilineal U = 12·ln(x) + y. Sin resolver todavía
 
 ## Cómo Gabo estudia este ramo
 

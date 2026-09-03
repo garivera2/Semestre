@@ -104,6 +104,56 @@ window.REPASOS = (window.REPASOS || []).concat([
   <li><b>Justificar sin nombrar la dependencia.</b> "No está en 2FN" vale la mitad que "no está en 2FN porque id_sol → correo es parcial respecto de la PK {id_sol, cod_material}".</li>
   </ol>`},
 
+ {t:'★ La Pregunta 1 del examen · el patrón real',
+  h:`<p>El profe recomendó resolver la <b>Pregunta 1 de los exámenes anteriores</b>. Están en Canvas → Compilados → <i>examenes_compilado.pdf</i>. Revisé los ocho y el patrón no varía nunca.</p>
+  <p><b>Siempre vale 30%</b> — es la pregunta más pesada del examen. Y siempre pide lo mismo:</p>
+  <p class="fx">"Diseñe un modelo relacional en 3NF. Exprese el modelo en formato de<br>relaciones marcando claramente las claves primarias y foráneas."</p>
+  <p><b>El formato de entrega NO es un diagrama ER.</b> Es una lista de relaciones:</p>
+  <div class="fx">Cliente(<u>id</u>, nombre, email)<br>
+  Videojuego(<u>codigo</u>, titulo, genero, precio, <i>desarrollador_id</i>)<br>
+  Compra(<u>id</u>, fecha, <i>cliente_id</i>)<br>
+  DetalleCompra(<u><i>compra_id</i></u>, <u><i>videojuego_codigo</i></u>)</div>
+  <p>Subrayado = PK · cursiva = FK. Eso es todo. <b>No pierdas tiempo dibujando cajitas.</b></p>
+  <p><b>Los ocho casos que han caído:</b> quizzes online · clínica dental · tienda de videojuegos · red de bibliotecas · alquiler de vehículos · clínica de salud integral · aerolínea AndesAir · coworking NodoCowork.</p>
+  <p><b>La estructura es siempre la misma, con distinto disfraz:</b></p>
+  <table class="tb"><tr><th>Pieza</th><th>Ejemplos</th></tr>
+  <tr><td>Un <b>actor</b> con id propio</td><td>cliente, paciente, alumno, pasajero, usuario</td></tr>
+  <tr><td>Un <b>recurso</b> con id propio</td><td>videojuego, sala, vehículo, avión, libro, quiz</td></tr>
+  <tr><td>Una <b>transacción</b> que los une</td><td>compra, reserva, alquiler, préstamo, cita, respuesta</td></tr>
+  <tr><td>Una o dos <b>N:M</b> con tabla intermedia</td><td>DetalleCompra, LibroAutor, CitaTratamiento, AlquilerAccesorio, VueloTripulante</td></tr>
+  <tr><td>A veces una <b>jerarquía</b></td><td>sede→sala, libro→copia, quiz→pregunta→alternativa</td></tr></table>
+  <p>Si identificas esas cinco piezas en el enunciado, ya tienes el modelo.</p>`,
+  ojo:'La pieza que más se olvida es la tabla intermedia del N:M. Aparece en los OCHO exámenes sin excepción. Cuando leas "una compra puede incluir varios X", "un libro tiene varios autores", "un vuelo tiene varios tripulantes" — ahí va tabla nueva, siempre.'
+ },
+
+ {t:'★ La pauta de corrección, y la táctica que se deduce',
+  h:`<p>El examen 2022 trae la pauta textual. Esto vale oro porque te dice <b>exactamente</b> dónde se pierde:</p>
+  <table class="tb"><tr><th>Situación</th><th>Descuento</th></tr>
+  <tr><td>Falta una relación</td><td><b>−1 punto</b></td></tr>
+  <tr><td>Falta un atributo</td><td>−0,5</td></tr>
+  <tr><td>Sobra un atributo <b>que tiene sentido</b></td><td><b>no se descuenta</b></td></tr>
+  <tr><td>Sobra un atributo sin sentido</td><td>−0,5</td></tr>
+  <tr><td>No está en 3NF</td><td>−1 punto</td></tr></table>
+  <p>Se parte con 6 puntos y la nota es <b>1 + puntaje</b>. O sea: 6 puntos limpios = un 7.</p>
+  <p><b>Las tres consecuencias tácticas, que son lo importante:</b></p>
+  <ol>
+  <li><b>Ante la duda con un atributo, PONLO.</b> La pauta dice explícito que un atributo que sobra pero tiene sentido <b>no descuenta</b>. Omitirlo cuesta 0,5; incluirlo cuesta 0. La asimetría está a tu favor.</li>
+  <li><b>Una tabla que falta cuesta el doble que un atributo.</b> Si dudas entre separar o no separar, <b>separa</b>. Una tabla de más que tiene sentido es mucho menos grave que una de menos.</li>
+  <li><b>No estar en 3NF cuesta 1 punto, una sola vez.</b> No es la muerte. Prefiere entregar el modelo completo con una transitiva antes que un modelo perfecto al que le faltan dos tablas — eso costaría 2.</li>
+  </ol>
+  <p><b>El orden en que conviene gastar el tiempo:</b> primero que estén <b>todas las tablas</b> (es lo más caro), después las PK y FK, y al final revisar 3NF. Al revés se pierde más.</p>`,
+  ojo:'Que la solución oficial del examen 2022 acepte DOS alternativas distintas para el mismo enunciado te dice algo importante: no hay una única respuesta correcta. Lo que se evalúa es la coherencia y que estén representados los hechos, no que adivines el modelo exacto que tenía el profe en la cabeza.'
+ },
+
+ {t:'★ Ojo: este control es sobre TU proyecto',
+  h:`<p>El anuncio del profe cambia una cosa importante respecto de un control normal: <b>hay que modelar el proyecto</b>, no un enunciado sorpresa.</p>
+  <p class="fx">"Deberán modelar el proyecto igual como lo hemos realizado las últimas clases.<br>En este día se van a enfrentar por primera vez frente al proyecto."</p>
+  <p><b>Qué significa en la práctica:</b> el dominio probablemente ya lo conoces o te lo van a describir ahí mismo. Lo que se evalúa es si sabes <b>traducir un dominio a relaciones</b>, no si te acordaste de una materia.</p>
+  <p>La carpeta <i>Proyecto → 01_practica_modelacion</i> en Canvas está <b>vacía</b> al momento de escribir esto. Si el profe sube algo antes del control, es lo primero que hay que mirar.</p>
+  <p><b>Sobre la nota:</b> el profe advirtió que <b>no es un promedio simple</b> entre la parte individual y la grupal — depende de cómo te va en cada una, y el detalle está en la clase 1. La lectura práctica: la nota individual no se puede compensar del todo con el grupo, así que la fase individual pesa más de lo que parece.</p>`,
+  ojo:'Esto conecta con la lámina 21: el profe ya dijo que iba a verificar comprensión individual. Un esquema de nota donde lo individual no se compensa con lo grupal es exactamente el mecanismo para hacerlo.'
+ },
+
  {t:'Qué hacer los últimos 10 minutos',
   h:`<p>En papel no hay quien te corrija, así que reserva tiempo para revisar. En este orden:</p>
   <ol>
