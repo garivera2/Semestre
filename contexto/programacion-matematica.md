@@ -52,6 +52,7 @@ Están en `app/guias/pm.js`:
 1. **Programación lineal y simplex** (`pm-u1`, semana 1-2) — forma estándar, solución gráfica, simplex, dos fases, dualidad, holgura complementaria, tabla de correspondencia primal–dual
 2. **Programación entera y branch and bound** (`pm-entera`, semana 3) — relajación lineal, ramificación, poda por cota, el algoritmo formal del profe (Algoritmo 1), ramificación en binarias, cuándo no hace falta seguir ramificando
 3. **Modelamiento: los modelos clásicos** (`pm-modelos`, semana 2) — dieta, transporte balanceado, mochila (binaria/acotada/continua), costo fijo y big-M, localización de plantas, y las restricciones que hay que linealizar
+4. **Modelamiento con variables binarias y mixtas** (`pm-logicas`, semana 5) — catálogo de restricciones lógicas, esqueleto de asignación, restricción de enlace `x ≤ M y`, localización con costo fijo, disyunciones y linealización del producto de binarias, checklist del modelo
 
 ## Repasos de controles y pruebas
 
@@ -63,6 +64,8 @@ Sección **aparte de las guías**, en `app/repasos/pm.js`. Acá va, por cada con
 Los ejercicios **no se resuelven ahí** — solo se listan. La resolución es ping-pong en el chat.
 
 Ya escrito: **`pm-c1` · Control 1 · Programación Matemática** (25 de agosto). Siete bloques de resumen — qué entra, formularios de dualidad, modelamiento, PL/gráfico y B&B, errores que cuestan puntos, y plan día por día — más un checklist de 17 ejercicios agrupados en 5 fuentes.
+
+**`pm-p1` · Prueba 1 · Programación Matemática** (7 de septiembre). Siete bloques — qué entra, formulario de restricciones lógicas, formulario de variables mixtas y costo fijo, B&B con cotas, dualidad/holgura/simplex, errores, y plan hasta el lunes — más 11 ejercicios en 4 fuentes.
 
 Cuando Gabo pida "arma el repaso del Control X", hay que:
 
@@ -77,12 +80,20 @@ Cuando Gabo pida "arma el repaso del Control X", hay que:
 
 ## Material disponible en Canvas (curso 48499)
 
-Revisado el 20 de agosto de 2026. La pestaña *Archivos* está deshabilitada; todo se llega por **Módulos**.
+Revisado el 4 de septiembre de 2026. La pestaña *Archivos* está deshabilitada; todo se llega por **Módulos**.
 
 - **Ayudantías 2026-20** — Ayudantía 1 (11 ago, enunciado + pauta) y Ayudantía 2 (18 ago, solo enunciado por ahora). Son las dos que entran al Control 1.
 - **Evaluaciones y Pautas 2026-10** — pautas del semestre pasado, mismo profesor: Controles 1, 2, 3 y recuperativo, y Pruebas 1, 2, 3 y recuperativa.
   - Relevante para el Control 1: **Control 1** (transporte/redes + PL gráfico + dual), **Prueba 1** (PL entero + gráfico + B&B, entera binaria con holgura complementaria, localización de plantas) y **solo el P3 del Control 2** (criterios de poda en B&B).
   - El resto (Controles 2 y 3, Pruebas 2 y 3, recuperativas) es optimización no lineal, KKT y programación dinámica: material de más adelante.
+- **Guias** (módulo nuevo, subido a fines de agosto) — las tres guías del profe que marcan el alcance de la Prueba 1:
+  - `Guía 1.2 Modelamiento con Variables Binarias.pdf` (2 págs, restricciones lógicas)
+  - `Guía 1.3 Modelamiento con Variables Mixtas.pdf` (9 págs — bodegas y localización, transporte, calderas y turbinas, asignación)
+  - `Guía 12 B&B.pdf` (3 págs)
+- **Ayudantía 3** (1 de septiembre, solo enunciado). Tres ejercicios: catering con equipos/pedidos/turnos y servicio externo (mixto con lógicas), B&B de `máx 7x₁+9x₂` **con cotas superiores e inferiores** y sin técnicas de acotamiento, y un PE mixto encadenado (relajado → dual → holgura complementaria → ramificar en x₃ → gráfico en P₁ → **simplex** en P₂).
+- **Clase 1** — se agregó `resumenProgEntera2.pdf` ("Algoritmo B&B"), el pseudocódigo en versión de **minimización** (`z′ < z̄`, incumbente parte en +∞). Ojo con cuál versión toca.
+- **Evaluaciones y Pautas 202620** — la **Pauta del Control 1 de este semestre** ya está publicada.
+- **Notas 2026-02** — `Notas Control 1 - Sección Carrasco.pdf`.
 - **Clase 1 (Sec. Bustamante)** — presentación, introducción y un PDF de teoría de juegos.
 - **Calendario** — planilla `Programación Mat 202620.xlsx`.
 - Ojo: la pauta del Control 1 de 2026-10 trae un error de tipeo en la parte de holgura complementaria (mezcla números de otro problema). El resultado correcto es π₁ = 5/2, π₂ = 1/4, w* = 23,75.

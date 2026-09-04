@@ -301,5 +301,131 @@ window.GUIAS = (window.GUIAS || []).concat([
  }
  ]
 }
+,
+
+/* ---- PM · BINARIAS Y MIXTAS ---- */
+{
+ id:'pm-logicas', ramo:'pm', tag:'Semana 5', sem:5,
+ titulo:'Modelamiento con variables binarias y mixtas',
+ bajada:'Restricciones lógicas, activación, disyunciones y modelos mixtos. La materia nueva después del Control 1, y el grueso de la Prueba 1.',
+ min:40,
+ secciones:[
+ {
+  t:'Cuándo aparece una binaria',
+  h:`<p>Una variable binaria no cuenta cantidades. <b>Representa una decisión de sí o no</b>, y aparece siempre que el enunciado tenga una de estas formas:</p>
+  <ul>
+  <li><b>Se hace o no se hace:</b> abrir una bodega, comprar una máquina, aceptar un proyecto</li>
+  <li><b>Se elige uno entre varios:</b> asignar un pedido a un equipo, elegir un destino</li>
+  <li><b>Hay un costo fijo:</b> algo que se paga una sola vez si la actividad ocurre, sin importar el volumen</li>
+  <li><b>Una condición manda sobre otra:</b> "solo si", "no puede junto con", "o una o la otra"</li>
+  </ul>
+  <p>La señal más clara es el <b>salto</b>. Si el costo o el beneficio cambia de golpe al pasar de cero a algo, no es lineal — y la binaria es lo que lo vuelve lineal.</p>
+  <p><b>Nombra bien las binarias.</b> Escribe siempre la frase completa: "y<sub>ij</sub> = 1 si el equipo i prepara el pedido del cliente j, 0 si no". No sirve "y<sub>ij</sub>: asignación".</p>`
+ },
+ {
+  t:'El catálogo de restricciones lógicas',
+  h:`<p>Esta tabla resuelve la mayoría del modelamiento con binarias. Vale la pena tenerla de memoria.</p>
+  <table class="tb"><tr><th>El enunciado dice</th><th>Se escribe</th></tr>
+  <tr><td>Exactamente uno de los j</td><td>Σⱼ y<sub>j</sub> = 1</td></tr>
+  <tr><td>A lo más uno</td><td>Σⱼ y<sub>j</sub> ≤ 1</td></tr>
+  <tr><td>Al menos uno</td><td>Σⱼ y<sub>j</sub> ≥ 1</td></tr>
+  <tr><td>A lo más k de n</td><td>Σⱼ y<sub>j</sub> ≤ k</td></tr>
+  <tr><td>A y B no pueden ir juntos</td><td>y<sub>A</sub> + y<sub>B</sub> ≤ 1</td></tr>
+  <tr><td><b>Si A entonces B</b></td><td>y<sub>A</sub> ≤ y<sub>B</sub></td></tr>
+  <tr><td>A y B van juntos o ninguno</td><td>y<sub>A</sub> = y<sub>B</sub></td></tr>
+  <tr><td>B solo si A (A es requisito)</td><td>y<sub>B</sub> ≤ y<sub>A</sub></td></tr>
+  </table>
+  <p><b>La de "si A entonces B" es la que más se equivoca.</b> Compruébala con los cuatro casos:</p>
+  <table class="tb"><tr><th>y<sub>A</sub></th><th>y<sub>B</sub></th><th>y<sub>A</sub> ≤ y<sub>B</sub></th><th>¿Correcto?</th></tr>
+  <tr><td>1</td><td>1</td><td>1 ≤ 1 ✓</td><td>hice A e hice B — bien</td></tr>
+  <tr><td>1</td><td>0</td><td>1 ≤ 0 ✗</td><td>hice A y no B — prohibido, correcto</td></tr>
+  <tr><td>0</td><td>1</td><td>0 ≤ 1 ✓</td><td>no hice A pero sí B — permitido, correcto</td></tr>
+  <tr><td>0</td><td>0</td><td>0 ≤ 0 ✓</td><td>no hice ninguno — bien</td></tr>
+  </table>
+  <p>Ese chequeo de cuatro filas toma treinta segundos y te salva de invertir la desigualdad.</p>`,
+  ojo:'En problemas de asignación, las condiciones "p y q por recursos distintos" y "r y s por el mismo recurso" van con ∀i — una restricción por cada recurso, no una sola. Quedan y_ip + y_iq ≤ 1 ∀i, y y_ir = y_is ∀i.'
+ },
+ {
+  t:'Asignación: el esqueleto',
+  h:`<p>Aparece disfrazado de mil formas — equipos y pedidos, camiones y rutas, personas y turnos — pero el esqueleto es siempre el mismo.</p>
+  <p class="fx">y<sub>ij</sub> = 1 si el recurso i atiende el trabajo j, 0 si no</p>
+  <table class="tb"><tr><th>Condición</th><th>Restricción</th></tr>
+  <tr><td>Cada trabajo se atiende exactamente una vez</td><td>Σᵢ y<sub>ij</sub> = 1 ∀j</td></tr>
+  <tr><td>Cada recurso hace a lo más L<sub>i</sub> trabajos</td><td>Σⱼ y<sub>ij</sub> ≤ L<sub>i</sub> ∀i</td></tr>
+  <tr><td>Capacidad del recurso i</td><td>Σⱼ R<sub>j</sub> y<sub>ij</sub> ≤ V<sub>i</sub> ∀i</td></tr>
+  <tr><td>Objetivo (utilidad)</td><td>max Σᵢ Σⱼ U<sub>ij</sub> y<sub>ij</sub></td></tr>
+  </table>
+  <p><b>Ojo con la diferencia entre "cada trabajo una vez" y "a lo más una vez".</b> Si el enunciado dice que hay que atender a <b>todos</b> los clientes, va <b>igualdad</b>. Si dice que se puede elegir a cuáles atender, va ≤.</p>
+  <p><b>Y con los turnos:</b> si un recurso puede hacer varios trabajos pero uno por turno, el tope de turnos L<sub>i</sub> ya te limita cuántos trabajos toma. Solo necesitas un índice de turno explícito si el enunciado pide algo <b>dentro</b> del turno — por ejemplo, que dos clientes vayan al mismo equipo pero en turnos distintos.</p>`
+ },
+ {
+  t:'Variables mixtas: la restricción de enlace',
+  h:`<p>Un modelo <b>lineal entero mixto</b> tiene variables continuas y binarias conviviendo. El reparto de papeles es siempre igual:</p>
+  <ul>
+  <li>La <b>continua</b> dice <b>cuánto</b> — toneladas, unidades, pesos</li>
+  <li>La <b>binaria</b> dice <b>si se activa</b> — se abre, se construye, se contrata</li>
+  <li>La <b>restricción de enlace</b> es lo que las conecta, y sin ella el modelo está mal</li>
+  </ul>
+  <p class="fx">x ≤ M y      con y ∈ {0,1}, x ≥ 0</p>
+  <p><b>Léela en los dos casos:</b></p>
+  <table class="tb"><tr><th>y</th><th>Queda</th><th>Significa</th></tr>
+  <tr><td>0</td><td>x ≤ 0, y como x ≥ 0 → <b>x = 0</b></td><td>no activaste, no puedes operar</td></tr>
+  <tr><td>1</td><td>x ≤ M</td><td>activaste, opera hasta el tope</td></tr>
+  </table>
+  <p><b>Por qué el modelo no la deduce solo.</b> Si no la escribes, el solver va a poner y = 0 (para no pagar el costo fijo) y x positiva igual — sale más barato y es lo que va a elegir. No es un caso raro: es el óptimo de tu modelo mal escrito.</p>
+  <p><b>Cómo elegir M.</b> Usa una cota superior real de x: la capacidad, la demanda total, el presupuesto. Si tienes una capacidad K, escribe directamente <b>x ≤ K y</b> — así la restricción hace dos cosas a la vez y no inventas ningún número.</p>`,
+  ojo:'Un M muy chico corta soluciones factibles y el modelo queda mal. Un M enorme es correcto pero se resuelve pésimo, porque la relajación queda muy floja y el árbol de B&B explota. El mejor M es el más chico que sigue siendo válido.'
+ },
+ {
+  t:'Localización con costo fijo',
+  h:`<p>Es el modelo mixto que más se pregunta, y el que aparece en la Guía 1.3 con bodegas.</p>
+  <p><b>Situación:</b> hay J lugares posibles, cada uno con capacidad K y costo fijo semanal F<sub>j</sub>. Hay I zonas con demanda d<sub>i</sub>. Mandar una unidad de j a i cuesta t<sub>ij</sub>.</p>
+  <p><b>Variables</b> — dos tipos, y ahí está el "mixto":</p>
+  <ul>
+  <li>x<sub>ij</sub> ≥ 0: unidades enviadas de la bodega j a la zona i <i>(continua)</i></li>
+  <li>y<sub>j</sub> ∈ {0,1}: 1 si se arrienda la bodega j <i>(binaria)</i></li>
+  </ul>
+  <p class="fx">min Σᵢ Σⱼ t<sub>ij</sub> x<sub>ij</sub> + Σⱼ F<sub>j</sub> y<sub>j</sub></p>
+  <table class="tb"><tr><th>Restricción</th><th>Qué dice</th></tr>
+  <tr><td>Σⱼ x<sub>ij</sub> = d<sub>i</sub>  ∀i</td><td>cada zona recibe su demanda</td></tr>
+  <tr><td><b>Σᵢ x<sub>ij</sub> ≤ K y<sub>j</sub>  ∀j</b></td><td>capacidad <b>y</b> enlace en una sola</td></tr>
+  <tr><td>x<sub>ij</sub> ≥ 0, y<sub>j</sub> ∈ {0,1}</td><td>naturaleza</td></tr>
+  </table>
+  <p>La segunda es el corazón: si y<sub>j</sub> = 1 limita a la capacidad K, y si y<sub>j</sub> = 0 obliga a que no salga nada de esa bodega. <b>M es la capacidad real</b>, no un número inventado.</p>
+  <p><b>Variantes que suelen agregar:</b></p>
+  <ul>
+  <li><b>Tope de bodegas abiertas:</b> Σⱼ y<sub>j</sub> ≤ k</li>
+  <li><b>Presupuesto de inversión:</b> Σⱼ F<sub>j</sub> y<sub>j</sub> ≤ B — ojo, solo los costos fijos</li>
+  <li><b>Cadena de dos etapas</b> (planta → bodega → zona): dos familias de variables continuas y una restricción de <b>balance</b> en la bodega: lo que entra = lo que sale</li>
+  </ul>`
+ },
+ {
+  t:'Disyunciones: "o una restricción o la otra"',
+  h:`<p>Cuando el enunciado dice que se cumple <b>una u otra</b> condición, pero no necesariamente las dos, no puedes escribir las dos juntas — eso exigiría ambas. Se usa una binaria que decide cuál manda.</p>
+  <p class="fx">g₁(x) ≤ b₁ + M(1 − y)      g₂(x) ≤ b₂ + M y</p>
+  <table class="tb"><tr><th>y</th><th>Primera queda</th><th>Segunda queda</th></tr>
+  <tr><td>1</td><td>g₁ ≤ b₁ <b>(activa)</b></td><td>g₂ ≤ b₂ + M <b>(se relaja)</b></td></tr>
+  <tr><td>0</td><td>g₁ ≤ b₁ + M <b>(se relaja)</b></td><td>g₂ ≤ b₂ <b>(activa)</b></td></tr>
+  </table>
+  <p>El M tiene que ser lo bastante grande para que la restricción relajada no estorbe. Como siempre: el más chico que sirva.</p>
+  <p><b>Producto de binarias.</b> Si necesitas "las dos cosas a la vez" como un término del objetivo, z = y₁·y₂ no es lineal. Se linealiza con tres restricciones:</p>
+  <p class="fx">z ≤ y₁      z ≤ y₂      z ≥ y₁ + y₂ − 1      z ≥ 0</p>
+  <p>Compruébalo: con y₁ = y₂ = 1 la tercera fuerza z ≥ 1 y las dos primeras z ≤ 1, entonces z = 1. Si alguna vale 0, la primera o la segunda fuerza z = 0.</p>`
+ },
+ {
+  t:'Checklist antes de entregar el modelo',
+  h:`<ol>
+  <li><b>Conjuntos</b> definidos con nombre: I = {equipos}, J = {clientes}</li>
+  <li><b>Variables</b> con unidad, índices y frase completa. Binarias con su "1 si… , 0 si no"</li>
+  <li><b>Función objetivo</b> con el sentido correcto y todos los términos — variables <b>y</b> costos fijos</li>
+  <li><b>Restricciones</b>: una por cada limitación del enunciado. Subraya cada frase que impone un límite y ve tachándolas</li>
+  <li><b>Restricciones de enlace</b>: por cada binaria de activación, ¿está la que la conecta con su continua?</li>
+  <li><b>Naturaleza</b> de todas las variables: ≥ 0, entera, binaria</li>
+  </ol>
+  <p><b>Y el barrido final:</b> ninguna restricción puede tener variables a los dos lados, ni cocientes, ni productos de variables. Si algo de eso quedó, no es lineal.</p>
+  <p><b>El test del solver perezoso:</b> pregúntate qué haría un solver que quiere hacer trampa. ¿Puede ahorrar sin activar? ¿Puede producir sin abrir la planta? ¿Puede cobrar el beneficio sin pagar el costo fijo? Si la respuesta es sí, te falta una restricción de enlace.</p>`
+ }
+ ]
+}
 
 ]);
